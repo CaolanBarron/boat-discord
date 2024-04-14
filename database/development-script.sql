@@ -54,14 +54,14 @@ CREATE TABLE item(
 DROP TABLE IF EXISTS flavor;
 
 CREATE TABLE flavor(
-  key TEXT PRIMARY KEY,
+  key INTEGER PRIMARY KEY,
   content TEXT
 );
 
 DROP TABLE IF EXISTS flavor_tags;
 
 CREATE TABLE flavor_tags(
-  flavor_id TEXT,
+  flavor_id INTEGER,
   tag_key TEXT
 );
 
