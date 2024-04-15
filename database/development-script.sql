@@ -70,3 +70,11 @@ DROP TABLE IF EXISTS tag;
 CREATE TABLE tag(
   key TEXT PRIMARY KEY
 );
+
+DROP TABLE IF EXISTS active_tags;
+
+CREATE TABLE active_tags(
+  key TEXT,
+  player_relation TEXT,
+  boat BOOLEAN
+)
