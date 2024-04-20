@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS player;
 
 CREATE TABLE player(
   id TEXT PRIMARY KEY,
+  boat_id TEXT,
   name TEXT
 );
 
@@ -55,14 +56,8 @@ DROP TABLE IF EXISTS flavor;
 
 CREATE TABLE flavor(
   key INTEGER PRIMARY KEY,
-  content TEXT
-);
-
-DROP TABLE IF EXISTS flavor_tags;
-
-CREATE TABLE flavor_tags(
-  flavor_id INTEGER,
-  tag_key TEXT
+  content TEXT,
+  tag TEXT
 );
 
 DROP TABLE IF EXISTS tag;

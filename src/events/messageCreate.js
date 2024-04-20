@@ -1,7 +1,7 @@
-const { Events } = require("discord.js");
-const db = require("better-sqlite3")(process.env.DATABASEURL);
-
-module.exports = {
+import { Events } from "discord.js";
+import Database from "better-sqlite3";
+const db = new Database(process.env.DATABASEURL);
+export default {
   name: Events.MessageCreate,
   async execute(interaction) {
     try {

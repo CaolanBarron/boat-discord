@@ -1,6 +1,6 @@
-const { Events, AttachmentBuilder, EmbedBuilder } = require("discord.js");
+import { Events, AttachmentBuilder, EmbedBuilder } from "discord.js";
 
-module.exports = {
+export default {
   name: Events.InteractionCreate,
   async execute(interaction) {
     if (!interaction.isChatInputCommand()) return;

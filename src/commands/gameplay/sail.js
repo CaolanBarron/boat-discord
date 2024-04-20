@@ -1,6 +1,10 @@
-const { SlashCommandBuilder } = require("discord.js");
+import { SlashCommandBuilder } from "discord.js";
+import Database from "better-sqlite3";
+import schedule from "node-schedule";
+const db = new Database(process.env.DATABASEURL);
+import ActivityService from "../../services/ActivityService.js";
 
-module.exports = {
+export default {
   data: new SlashCommandBuilder()
     .setName("sail")
     .setDescription("Sail in a direction. Sail++")
@@ -16,7 +20,18 @@ module.exports = {
           { name: "West", value: "west" }
         )
     ),
-  async execute(interation) {
-    await interation.reply(interation.options.getString("direction"));
+  async execute(interaction) {
+    const stmt = db.prepare(
+      "INSERT INTO active_tags(key, player_relation) VALUES(?, ?)"
+    );
+    stmt.run("SAILING", interaction.user.id);
+
+    const startTime = new Date(Date.now() + 5000);
+    schedule.scheduleJob(
+      startTime,
+      ActivityService.sailing.bind(null, interaction)
+    );
+
+    await interaction.reply(interaction.options.getString("direction"));
   },
 };

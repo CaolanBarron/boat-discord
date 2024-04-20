@@ -1,7 +1,8 @@
-const { SlashCommandBuilder } = require("discord.js");
-const db = require("better-sqlite3")(process.env.DATABASEURL);
+import { SlashCommandBuilder } from "discord.js";
+import Database from "better-sqlite3";
+const db = new Database(process.env.DATABASEURL);
 
-module.exports = {
+export default {
   data: new SlashCommandBuilder()
     .setName("create")
     .setDescription("Creates a player character!")
@@ -25,6 +26,16 @@ module.exports = {
       const characterName = interaction.options.getString("name");
       const inStmt = db.prepare("INSERT INTO player(id, name) VALUES (?, ?)");
       inStmt.run(interaction.user.id, characterName);
+
+      const playerSkillStmt = db.prepare(
+        "INSERT INTO player_skills(player_id, skill_key, xp) VALUES (?, ?, ?)"
+      );
+
+      playerSkillStmt.run(interaction.user.id, "FISH", 0);
+      playerSkillStmt.run(interaction.user.id, "SAIL", 0);
+      playerSkillStmt.run(interaction.user.id, "RESEARCH", 0);
+      playerSkillStmt.run(interaction.user.id, "CART", 0);
+      playerSkillStmt.run(interaction.user.id, "REPAIR", 0);
 
       await interaction.reply(`${characterName}... You are now on the boat.`);
     } catch (error) {
