@@ -14,8 +14,14 @@ export default {
     ),
   async execute(interaction) {
     try {
-      const checkStmt = db.prepare("SELECT * FROM player WHERE id = ?");
-      const checkResult = checkStmt.get(interaction.user.id);
+      console.log(interaction);
+      const checkStmt = db.prepare(
+        "SELECT * FROM player WHERE user_id = ? AND boat_id = ?"
+      );
+      const checkResult = checkStmt.get(
+        interaction.user.id,
+        interaction.guildId
+      );
       if (checkResult) {
         interaction.reply({
           content: "You already have a character created",
@@ -24,18 +30,24 @@ export default {
         return;
       }
       const characterName = interaction.options.getString("name");
-      const inStmt = db.prepare("INSERT INTO player(id, name) VALUES (?, ?)");
-      inStmt.run(interaction.user.id, characterName);
+      const inStmt = db.prepare(
+        "INSERT INTO player(user_id, boat_id, name) VALUES (?, ?, ?)"
+      );
+      const result = inStmt.run(
+        interaction.user.id,
+        interaction.guildId,
+        characterName
+      );
 
       const playerSkillStmt = db.prepare(
         "INSERT INTO player_skills(player_id, skill_key, xp) VALUES (?, ?, ?)"
       );
 
-      playerSkillStmt.run(interaction.user.id, "FISH", 0);
-      playerSkillStmt.run(interaction.user.id, "SAIL", 0);
-      playerSkillStmt.run(interaction.user.id, "RESEARCH", 0);
-      playerSkillStmt.run(interaction.user.id, "CART", 0);
-      playerSkillStmt.run(interaction.user.id, "REPAIR", 0);
+      playerSkillStmt.run(result.lastInsertRowid, "FISH", 0);
+      playerSkillStmt.run(result.lastInsertRowid, "SAIL", 0);
+      playerSkillStmt.run(result.lastInsertRowid, "RESEARCH", 0);
+      playerSkillStmt.run(result.lastInsertRowid, "CARTOGRAPHY", 0);
+      playerSkillStmt.run(result.lastInsertRowid, "REPAIR", 0);
 
       await interaction.reply(`${characterName}... You are now on the boat.`);
     } catch (error) {

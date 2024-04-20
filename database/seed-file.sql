@@ -36,5 +36,5 @@ VALUES
 ('FISH', 'Fishing'),
 ('SAIL', 'Sailing'),
 ('RESEARCH', 'Research'),
-('CART', 'Cartography'),
+('CARTOGRAPHY', 'Cartography'),
 ('REPAIR', 'Repair');

@@ -4,6 +4,7 @@ import "dotenv/config";
 
 import { fileURLToPath } from "url";
 import * as path from "path";
+import BoatService from "./services/BoatService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -65,7 +66,7 @@ for (const file of eventFiles) {
 }
 client.on(Events.GuildCreate, (created) => {
   // TODO: Create a boat when joining a server
-  console.log("Created: ", created);
+  BoatService.create(created.id);
 });
 
 client.once(Events.ClientReady, (readyClient) => {

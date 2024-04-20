@@ -13,10 +13,11 @@ export default {
   async execute(interaction) {
     // TODO: Check if you are currently doing any other activity
 
+    console.log(interaction.player);
     const stmt = db.prepare(
       "INSERT INTO active_tags(key, player_relation) VALUES(?, ?)"
     );
-    stmt.run("FISH", interaction.user.id);
+    stmt.run("FISH", interaction.player.id);
 
     const startTime = new Date(Date.now() + 5000);
     schedule.scheduleJob(

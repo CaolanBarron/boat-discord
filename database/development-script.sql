@@ -1,7 +1,8 @@
 DROP TABLE IF EXISTS player;
 
 CREATE TABLE player(
-  id TEXT PRIMARY KEY,
+  id INTEGER PRIMARY KEY,
+  user_id TEXT,
   boat_id TEXT,
   name TEXT
 );
@@ -70,6 +71,6 @@ DROP TABLE IF EXISTS active_tags;
 
 CREATE TABLE active_tags(
   key TEXT,
-  player_relation TEXT,
+  player_relation INTEGER,
   boat BOOLEAN
 )
