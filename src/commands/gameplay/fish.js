@@ -8,21 +8,20 @@ export default {
   data: new SlashCommandBuilder()
     .setName("fish")
     .setDescription(
-      "Cast your rod and fish for a while. Fishing++ (10 minutes)"
+      "Cast your rod and fish for a while. Fishing++ (10 minutes)",
     ),
   async execute(interaction) {
     // TODO: Check if you are currently doing any other activity
 
-    console.log(interaction.player);
     const stmt = db.prepare(
-      "INSERT INTO active_tags(key, player_relation) VALUES(?, ?)"
+      "INSERT INTO active_tags(key, player_relation) VALUES(?, ?)",
     );
     stmt.run("FISH", interaction.player.id);
 
     const startTime = new Date(Date.now() + 5000);
     schedule.scheduleJob(
       startTime,
-      ActivityService.fish.bind(null, interaction)
+      ActivityService.fish.bind(null, interaction),
     );
 
     //TODO: Change this reply

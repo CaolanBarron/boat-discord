@@ -1,5 +1,6 @@
 import { Events } from "discord.js";
 import Database from "better-sqlite3";
+import FlavorService from "../services/FlavorService.js";
 const db = new Database(process.env.DATABASEURL);
 export default {
   name: Events.MessageCreate,
@@ -33,32 +34,16 @@ export default {
 
       // TODO: Change this to be the actual characters name
       const characterName = user.name;
-      getFlavor(interaction, characterName);
+      const message = FlavorService.getFlavor(
+        interaction.content,
+        characterName,
+      );
+
+      interaction.channel.send(message);
+      interaction.delete();
     } catch (error) {
       console.error(error.message);
       await interaction.reply({ content: error.message, ephemeral: true });
     }
   },
 };
-
-function getFlavor(interaction, characterName) {
-  try {
-    String.prototype.format = function () {
-      var args = arguments;
-      return this.replace(/{([0-9]+)}/g, function (match, index) {
-        return typeof args[index] == "undefined" ? match : args[index];
-      });
-    };
-
-    const stmt = db.prepare("SELECT * FROM flavor").all();
-
-    const randomFlavor = Math.floor(Math.random() * stmt.length);
-
-    interaction.channel.send(
-      stmt[randomFlavor].content.format(interaction.content, characterName)
-    );
-    interaction.delete();
-  } catch (error) {
-    console.error(error);
-  }
-}
