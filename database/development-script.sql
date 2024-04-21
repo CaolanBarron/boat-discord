@@ -19,7 +19,7 @@ CREATE TABLE skills(
 DROP TABLE IF EXISTS player_skills;
 
 CREATE TABLE player_skills(
-  player_id TEXT,
+  player_id INTEGER,
   skill_key TEXT,
   xp INT
 );

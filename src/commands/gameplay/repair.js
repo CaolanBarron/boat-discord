@@ -12,13 +12,9 @@ export default {
     const stmt = db.prepare(
       "INSERT INTO active_tags(key, player_relation) VALUES(?, ?)"
     );
-    stmt.run("REPAIR", interaction.user.id);
+    stmt.run("REPAIR", interaction.player.id);
 
-    const startTime = new Date(Date.now() + 5000);
-    schedule.scheduleJob(
-      startTime,
-      ActivityService.repair.bind(null, interaction)
-    );
+    ActivityService.scheduleActivity("REPAIR", interaction);
 
     await interaction.reply("Repair");
   },

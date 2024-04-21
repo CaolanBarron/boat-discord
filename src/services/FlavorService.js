@@ -23,4 +23,4 @@ class FlavourService {
   environmentFlavor() {}
 }
 
-export default FlavourService;
+export default new FlavourService();

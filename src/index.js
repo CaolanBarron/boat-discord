@@ -5,6 +5,7 @@ import "dotenv/config";
 import { fileURLToPath } from "url";
 import * as path from "path";
 import BoatService from "./services/BoatService.js";
+import BotService from "./services/BotService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -71,11 +72,14 @@ client.on(Events.GuildCreate, (created) => {
 
 client.once(Events.ClientReady, (readyClient) => {
   // TODO: Restart activity jobs dropped after restart
+  BotService.restartActivities();
   console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
 // Log in to Discord with your client's token
 client.login(process.env.TOKEN);
+
+global.client = client;
 
 function fileUrl(filePath, options = {}) {
   if (typeof filePath !== "string") {
