@@ -23,7 +23,45 @@ class ActivityService {
     schedule.scheduleJob(startTime, activity.execute.bind(null, interaction));
   }
 
-  checkActive(playerId) {}
+  checkActive(playerId) {
+    const activityKeys = [
+      "FISH",
+      "CARTOGRAPHY",
+      "REPAIR",
+      "RESEARCH",
+      "SAILING",
+    ];
+    const sql = db.prepare(
+      `SELECT * FROM active_tags  WHERE player_relation = ? AND key IN (${activityKeys
+        .map(() => "?")
+        .join(",")})`
+    );
+
+    const user = sql.get(playerId, activityKeys);
+
+    let result;
+    if (user) {
+      result = "You're busy! ";
+      switch (user.key) {
+        case "FISH":
+          result = "Still fishing...";
+          break;
+        case "CARTOGRAPHY":
+          result = "Mapping the unknown...";
+          break;
+        case "REPAIR":
+          result = "Covered in engine grease...";
+          break;
+        case "RESEARCH":
+          result = "Poring over notes and samples...";
+          break;
+        case "SAILING":
+          result = "Barreling through the waves...";
+          break;
+      }
+    }
+    return result;
+  }
 
   /**
    * Data needed from interaction for the following functions:

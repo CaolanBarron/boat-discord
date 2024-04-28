@@ -9,6 +9,14 @@ export default {
     .setName("repair")
     .setDescription("Repair and maintain the boat. Repair++"),
   async execute(interaction) {
+    const existResult = ActivityService.checkActive(interaction.player.id);
+    if (existResult) {
+      await interaction.reply(
+        `${interaction.player.name} is currently busy... ` + existResult
+      );
+      return;
+    }
+
     const stmt = db.prepare(
       "INSERT INTO active_tags(key, player_relation) VALUES(?, ?)"
     );

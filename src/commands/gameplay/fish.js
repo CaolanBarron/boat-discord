@@ -13,11 +13,13 @@ export default {
   async execute(interaction) {
     // TODO: Check if you are currently doing any other activity
 
-    const activityExists = db
-      .prepare(
-        "SELECT * FROM active_tags WHERE key = ? AND player_relation = ?"
-      )
-      .get();
+    const existResult = ActivityService.checkActive(interaction.player.id);
+    if (existResult) {
+      await interaction.reply(
+        `${interaction.player.name} is currently busy... ` + existResult
+      );
+      return;
+    }
 
     const stmt = db.prepare(
       "INSERT INTO active_tags(key, player_relation) VALUES(?, ?)"

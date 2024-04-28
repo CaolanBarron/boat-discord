@@ -12,6 +12,14 @@ export default {
       option.setName("item").setDescription("Item from inventory to research")
     ),
   async execute(interaction) {
+    const existResult = ActivityService.checkActive(interaction.player.id);
+    if (existResult) {
+      await interaction.reply(
+        `${interaction.player.name} is currently busy... ` + existResult
+      );
+      return;
+    }
+
     // TODO: Need to save additional data for Object researching 😭
     // TODO: Need to put a lock on the object being researched💀
     const stmt = db.prepare(
