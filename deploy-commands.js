@@ -1,7 +1,13 @@
-const { REST, Routes } = require("discord.js");
-const fs = require("node:fs");
-const path = require("node:path");
-require("dotenv").config();
+import { REST, Routes } from "discord.js";
+import fs from "node:fs";
+import path from "node:path";
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const commands = [];
 // Grab all the command folders from the commands directory you created earlier
@@ -17,9 +23,11 @@ for (const folder of commandFolders) {
   // Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
   for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
-    if ("data" in command && "execute" in command) {
+    let command = await import(fileUrl(filePath));
+    command = command.default;
+    if (command && "execute" in command) {
       commands.push(command.data.toJSON());
+      console.log(commands);
     } else {
       console.log(
         `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`,
@@ -28,6 +36,7 @@ for (const folder of commandFolders) {
   }
 }
 
+console.log(commands);
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(process.env.TOKEN);
 
@@ -52,3 +61,27 @@ const rest = new REST().setToken(process.env.TOKEN);
     console.error(error);
   }
 })();
+
+function fileUrl(filePath, options = {}) {
+  if (typeof filePath !== "string") {
+    throw new TypeError(`Expected a string, got ${typeof filePath}`);
+  }
+
+  const { resolve = true } = options;
+
+  let pathName = filePath;
+  if (resolve) {
+    pathName = path.resolve(filePath);
+  }
+
+  pathName = pathName.replace(/\\/g, "/");
+
+  // Windows drive letter must be prefixed with a slash.
+  if (pathName[0] !== "/") {
+    pathName = `/${pathName}`;
+  }
+
+  // Escape required characters for path components.
+  // See: https://tools.ietf.org/html/rfc3986#section-3.3
+  return encodeURI(`file://${pathName}`).replace(/[?#]/g, encodeURIComponent);
+}

@@ -10,17 +10,17 @@ export default {
       option
         .setName("name")
         .setDescription("The player characters name")
-        .setRequired(true)
+        .setRequired(true),
     ),
   async execute(interaction) {
     try {
       console.log(interaction);
       const checkStmt = db.prepare(
-        "SELECT * FROM player WHERE user_id = ? AND boat_id = ?"
+        "SELECT * FROM player WHERE user_id = ? AND boat_id = ?",
       );
       const checkResult = checkStmt.get(
         interaction.user.id,
-        interaction.guildId
+        interaction.guildId,
       );
       if (checkResult) {
         interaction.reply({
@@ -31,16 +31,16 @@ export default {
       }
       const characterName = interaction.options.getString("name");
       const inStmt = db.prepare(
-        "INSERT INTO player(user_id, boat_id, name) VALUES (?, ?, ?)"
+        "INSERT INTO player(user_id, boat_id, name) VALUES (?, ?, ?)",
       );
       const result = inStmt.run(
         interaction.user.id,
         interaction.guildId,
-        characterName
+        characterName,
       );
 
       const playerSkillStmt = db.prepare(
-        "INSERT INTO player_skills(player_id, skill_key, xp) VALUES (?, ?, ?)"
+        "INSERT INTO player_skills(player_id, skill_key, xp) VALUES (?, ?, ?)",
       );
 
       playerSkillStmt.run(result.lastInsertRowid, "FISH", 0);
