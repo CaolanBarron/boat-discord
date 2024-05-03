@@ -6,7 +6,7 @@ class BoatService {
     try {
       if (!guildID) throw Error("No Guild ID????");
       const createStmt = db.prepare(
-        "INSERT INTO boat(id, condition, speed, x_coord, y_coord) VALUES(?, ?, ?, ?, ?)"
+        "INSERT INTO boat(id, condition, speed, x_coord, y_coord) VALUES(?, ?, ?, ?, ?)",
       );
 
       createStmt.run(guildID, 10, 5, 0.0, 0.0);
@@ -14,5 +14,7 @@ class BoatService {
       console.error(error);
     }
   }
+
+  sail() {}
 }
 export default new BoatService();

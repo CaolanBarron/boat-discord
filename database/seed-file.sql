@@ -38,3 +38,23 @@ VALUES
 ('RESEARCH', 'Research'),
 ('CARTOGRAPHY', 'Cartography'),
 ('REPAIR', 'Repair');
+
+DELETE FROM biomes;
+
+INSERT INTO biomes (key, Name)
+VALUES
+('SWAMP', 'Swamp'),
+('VOID', 'Void');
+
+DELETE FROM biome_coords;
+
+INSERT INTO biome_coords (biome_key, x_coord, y_coord)
+VALUES
+('SWAMP', 2, 2),
+('SWAMP', 3, 2),
+('SWAMP', 2, 3),
+('SWAMP', 3, 3),
+('VOID', -2, -2),
+('VOID', -3, -2),
+('VOID', -2, -3),
+('VOID', -3, -3);

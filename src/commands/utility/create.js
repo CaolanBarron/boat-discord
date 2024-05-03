@@ -14,7 +14,6 @@ export default {
     ),
   async execute(interaction) {
     try {
-      console.log(interaction);
       const checkStmt = db.prepare(
         "SELECT * FROM player WHERE user_id = ? AND boat_id = ?",
       );

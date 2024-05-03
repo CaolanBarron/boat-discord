@@ -73,4 +73,20 @@ CREATE TABLE active_tags(
   key TEXT,
   player_relation INTEGER,
   boat BOOLEAN
-)
+);
+
+DROP TABLE IF EXISTS biomes;
+
+CREATE TABLE biomes(
+  key TEXT,
+  name TEXT
+);
+
+DROP TABLE IF EXISTS biome_coords;
+
+CREATE TABLE biome_coords(
+  biome_key TEXT,
+  x_coord INTEGER,
+  y_coord INTEGER,
+  UNIQUE(x_coord, y_coord)
+);
