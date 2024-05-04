@@ -16,12 +16,11 @@ export default {
         .setRequired(true)
         .addChoices(
           { name: "map", value: "tool_map" },
-          { name: "boat", value: "tool_boat" }
-        )
+          { name: "boat", value: "tool_boat" },
+        ),
     ),
 
   async execute(interaction) {
-    console.log(interaction.options.getString("tools"));
     const row = new ActionRowBuilder();
     switch (interaction.options.getString("tools")) {
       case "tool_map":
@@ -45,26 +44,7 @@ export default {
       });
       if (confirmation.customId === "dev_display_map") {
         await confirmation.update({
-          content: `map:\n🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦\n
-🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦`,
+          content: "```" + generateMap(getMapData()) + "```",
           components: [],
         });
       }
@@ -85,25 +65,35 @@ export default {
 //    biomes: []
 // }
 export function generateMap(mapData) {
-  const map = [];
+  const map = {};
 
-  for (let outer = 0; outer < 20; outer++) {
-    const row = [];
-    for (let inner = 0; inner < 20; inner++) {
-      row.push("🟦");
+  const gridSize = 20;
+  const gridCenter = Math.floor(gridSize / 2);
+  for (let outer = -gridCenter; outer <= gridCenter; outer++) {
+    map[outer] = {};
+    for (let inner = -gridCenter; inner <= gridCenter; inner++) {
+      if (outer === 0 || inner === 0) map[outer][inner] = "⬜";
+      else map[outer][inner] = "🟦";
     }
-    map.push(row);
+    console.log(map);
   }
+  const convertCoords = (x, y) => {
+    const mid = Math.floor(gridSize / 2);
+    const x_coord = x + mid - 1;
+    const y_coord = y + mid - 1;
+    return { x_coord, y_coord };
+  };
 
   const { boats, biomes } = mapData;
+
+  // step through biomes and add each of them to the map
 
   // step through boats and add each of them to the map
 
   for (const boat of boats) {
-    map[boat.y_coord][boat.x_coord] = "⛵";
+    const location = convertCoords(boat.x_coord, boat.y_coord);
+    map[location.y_coord][location.x_coord] = "⛵";
   }
-
-  // step through biomes and add each of them to the map
 
   // construct map into a single string
   let finalMap = "";
@@ -118,4 +108,8 @@ export function generateMap(mapData) {
   return finalMap;
 }
 
-function getMapData() {}
+function getMapData() {
+  return {
+    boats: [{ x_coord: 1, y_coord: 1 }],
+  };
+}
