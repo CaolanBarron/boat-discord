@@ -20,7 +20,10 @@ export default {
           .get(interaction.guildId);
         const error = new Error();
         if (!guild) {
-          error.message = "This server does not have a boat present.";
+          error.message =
+            interaction.commandName === "dev"
+              ? "IGNORE"
+              : "This server does not have a boat present.";
         } else {
           error.message =
             interaction.commandName === "create"
@@ -32,7 +35,10 @@ export default {
 
       interaction.player = user;
 
-      if (interaction.channel.name !== process.env.GAMEPLAYCHANNEL) {
+      if (
+        interaction.channel.name !== process.env.GAMEPLAYCHANNEL &&
+        interaction.commandName !== "dev"
+      ) {
         const file = new AttachmentBuilder("src/assets/landlubber.jpg");
         const embed = new EmbedBuilder()
           .setTitle("Landlubber")

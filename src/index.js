@@ -38,7 +38,7 @@ for (const folder of commandFolders) {
         client.commands.set(command.data.name, command);
       } else {
         console.log(
-          `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`,
+          `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
         );
       }
     });
@@ -63,9 +63,29 @@ for (const file of eventFiles) {
     }
   });
 }
-client.on(Events.GuildCreate, (created) => {
-  // TODO: Create a boat when joining a server
+client.on(Events.GuildCreate, async (created) => {
+  // Validate that all required channels exist
+  const deckChannel = BotService.getChannelByName(
+    created.id,
+    process.env.GAMEPLAYCHANNEL
+  );
+  const foghornChannel = BotService.getChannelByName(
+    created.id,
+    process.env.NOTICHANNEL
+  );
+  if (!deckChannel || !foghornChannel) {
+    console.error(
+      `This server: ${created.name} is missing the required channels`
+    );
+    return;
+  }
   BoatService.create(created.id);
+  await deckChannel.send(BoatService.introductionNarrativeMessage());
+  await foghornChannel.send(BoatService.introductionGameplayMessage());
+});
+
+client.on(Events.GuildDelete, (deleted) => {
+  BoatService.delete(deleted.id);
 });
 
 client.once(Events.ClientReady, (readyClient) => {

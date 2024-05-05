@@ -30,10 +30,10 @@ DROP TABLE IF EXISTS boat;
 
 CREATE TABLE boat(
   id TEXT PRIMARY KEY,
-  condition INT,
-  speed INT,
-  x_coord FLOAT,
-  y_coord FLOAT
+  condition INTEGER,
+  speed INTEGER,
+  x_coord INTEGER,
+  y_coord INTEGER
 );
 
 DROP TABLE IF EXISTS boat_inventory;
