@@ -2,11 +2,7 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
-  Guild,
-  ModalBuilder,
   SlashCommandBuilder,
-  TextInputBuilder,
-  TextInputStyle,
 } from "discord.js";
 import { stripIndent } from "common-tags";
 import BoatService from "../../services/BoatService.js";
@@ -30,7 +26,7 @@ export default {
 
   async execute(interaction) {
     // Validate that the user of this command is LeftTale
-    if (interaction.user.id !== "172634330315751434") return;
+    if (interaction.user.id !== process.env.DEVID) return;
     const row = new ActionRowBuilder();
     let content = "Which tool would you like to use?";
     switch (interaction.options.getString("tools")) {
