@@ -51,7 +51,6 @@ for (const file of eventFiles) {
   const filePath = path.join(eventsPath, file);
   import(fileUrl(filePath)).then((event) => {
     event = event.default;
-    console.log(event);
     if (event.once) {
       client.once(event.name, (...args) => {
         event.execute(...args);

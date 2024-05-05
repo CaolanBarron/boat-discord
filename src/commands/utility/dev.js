@@ -29,6 +29,8 @@ export default {
     ),
 
   async execute(interaction) {
+    // Validate that the user of this command is LeftTale
+    if (interaction.user.id !== "172634330315751434") return;
     const row = new ActionRowBuilder();
     let content = "Which tool would you like to use?";
     switch (interaction.options.getString("tools")) {
