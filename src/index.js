@@ -4,7 +4,6 @@ import "dotenv/config";
 
 import { fileURLToPath } from "url";
 import * as path from "path";
-import BoatService from "./services/BoatService.js";
 import BotService from "./services/BotService.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -52,6 +51,7 @@ for (const file of eventFiles) {
   const filePath = path.join(eventsPath, file);
   import(fileUrl(filePath)).then((event) => {
     event = event.default;
+    console.log(event);
     if (event.once) {
       client.once(event.name, (...args) => {
         event.execute(...args);
@@ -63,36 +63,6 @@ for (const file of eventFiles) {
     }
   });
 }
-client.on(Events.GuildCreate, async (created) => {
-  // Validate that all required channels exist
-  const deckChannel = BotService.getChannelByName(
-    created.id,
-    process.env.GAMEPLAYCHANNEL
-  );
-  const foghornChannel = BotService.getChannelByName(
-    created.id,
-    process.env.NOTICHANNEL
-  );
-  if (!deckChannel || !foghornChannel) {
-    console.error(
-      `This server: ${created.name} is missing the required channels`
-    );
-    return;
-  }
-  BoatService.create(created.id);
-  await deckChannel.send(BoatService.introductionNarrativeMessage());
-  await foghornChannel.send(BoatService.introductionGameplayMessage());
-});
-
-client.on(Events.GuildDelete, (deleted) => {
-  BoatService.delete(deleted.id);
-});
-
-client.once(Events.ClientReady, (readyClient) => {
-  // TODO: Restart activity jobs dropped after restart
-  BotService.restartActivities();
-  console.log(`Ready! Logged in as ${readyClient.user.tag}`);
-});
 
 // Log in to Discord with your client's token
 client.login(process.env.TOKEN);
