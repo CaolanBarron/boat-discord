@@ -6,8 +6,8 @@ import {
 } from "discord.js";
 import { stripIndent } from "common-tags";
 import BoatService from "../../services/BoatService.js";
-import Database from "better-sqlite3";
-const db = new Database(process.env.DATABASEURL);
+import schedule from "node-schedule";
+import db from "../../../database/database.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -20,7 +20,8 @@ export default {
         .setRequired(true)
         .addChoices(
           { name: "map", value: "tool_map" },
-          { name: "boat", value: "tool_boat" }
+          { name: "boat", value: "tool_boat" },
+          { name: "activities", value: "tool_activities" }
         )
     ),
 
@@ -59,6 +60,14 @@ export default {
           .setLabel("Create Boat")
           .setStyle(ButtonStyle.Primary);
         row.addComponents(createBoat);
+        break;
+
+      case "tool_activities":
+        const showJobs = new ButtonBuilder()
+          .setCustomId("dev_display_jobs")
+          .setLabel("Display Jobs")
+          .setStyle(ButtonStyle.Primary);
+        row.addComponents(showJobs);
         break;
     }
 
@@ -118,6 +127,12 @@ export default {
         case "dev_create_boat":
           await confirmation.update({
             content: await createBoat(confirmation.guildId),
+            components: [],
+          });
+          break;
+        case "dev_display_jobs":
+          await confirmation.update({
+            content: await displayJobs(),
             components: [],
           });
           break;
@@ -247,4 +262,15 @@ async function createBoat(guildId) {
   } else {
     return "This server already has a boat";
   }
+}
+
+async function displayJobs() {
+  const scheduledJobs = schedule.scheduledJobs;
+  if (Object.keys(scheduledJobs).length === 0)
+    return "There are no jobs at the moment!";
+  const result = Object.keys(scheduledJobs).reduce((arr, curr) => {
+    return arr.concat(`${curr}\n`);
+  }, "");
+
+  return result;
 }

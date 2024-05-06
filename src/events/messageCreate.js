@@ -1,7 +1,7 @@
 import { Events } from "discord.js";
-import Database from "better-sqlite3";
 import FlavorService from "../services/FlavorService.js";
-const db = new Database(process.env.DATABASEURL);
+import db from "../../database/database.js";
+
 export default {
   name: Events.MessageCreate,
   async execute(interaction) {
@@ -36,7 +36,7 @@ export default {
       const characterName = user.name;
       const message = FlavorService.getFlavor(
         interaction.content,
-        characterName,
+        characterName
       );
 
       interaction.channel.send(message);

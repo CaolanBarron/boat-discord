@@ -1,7 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import schedule from "node-schedule";
-import Database from "better-sqlite3";
-const db = new Database(process.env.DATABASEURL);
+import db from "../../../database/database.js";
 import ActivityService from "../../services/ActivityService.js";
 
 export default {

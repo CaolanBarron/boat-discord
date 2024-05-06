@@ -1,11 +1,8 @@
 import BotService from "./BotService.js";
-import Database from "better-sqlite3";
-const db = new Database(process.env.DATABASEURL);
+import db from "../../database/database.js";
 import schedule from "node-schedule";
 import SkillService from "./SkillService.js";
-import { stripIndent } from "common-tags";
-import ItemService from "./ItemService.js";
-import { EmbedBuilder } from "discord.js";
+import FishService from "./Commands/FishService.js";
 
 class ActivityService {
   activityKeys = ["FISH", "CARTOGRAPHY", "REPAIR", "RESEARCH", "SAILING"];
@@ -13,7 +10,7 @@ class ActivityService {
     try {
       const activities = {
         // TODO: Set the correct time for fishing
-        FISH: { execute: this.fish, time: 600_000 },
+        FISH: { execute: FishService.announceEnd, time: 600_000 },
         // TODO: Set the correct time for mapping
         CARTOGRAPHY: { execute: this.map, time: 10000 },
         // TODO: Set the correct time for repairing
@@ -40,21 +37,47 @@ class ActivityService {
     }
   }
 
-  checkActive(player) {
-    const activeUser = this.getCurrent(player);
+  getCurrent(playerId) {
+    try {
+      const sql = db.prepare(
+        `SELECT * FROM active_tags  WHERE player_relation = ? AND key IN (${this.activityKeys
+          .map(() => "?")
+          .join(",")})`
+      );
+
+      const activity = sql.get(playerId, this.activityKeys);
+
+      return activity;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  //Checks if the player is doing an activity that would clash with player request
+  checkActive(playerId, requestedActivity) {
+    // Pass in the requested activity to check if player current matches
+    const activeUser = this.getCurrent(playerId);
 
     let result;
     if (activeUser) {
       result = "You're busy!";
       switch (activeUser.key) {
         case "FISH":
-          result = `You will have to put down your fishing rod if you want to do something else...`;
+          result =
+            requestedActivity === "FISH"
+              ? "You are already fishing!"
+              : `You will have to put down your fishing rod if you want to do something else...`;
           break;
         case "CARTOGRAPHY":
-          result = "Mapping the unknown...";
+          result =
+            requestedActivity === "CARTOGRAPHY"
+              ? "You are already studying the maps!"
+              : "You will have to pack away your maps and instruments if you want to do something else...";
           break;
         case "REPAIR":
-          result = "Covered in engine grease...";
+          result =
+            requestedActivity === "REPAIR"
+              ? "You are already tinkering with the engine!"
+              : "";
           break;
         case "RESEARCH":
           result = "Poring over notes and samples...";
@@ -67,24 +90,9 @@ class ActivityService {
     return result;
   }
 
-  getCurrent(player) {
-    try {
-      const sql = db.prepare(
-        `SELECT * FROM active_tags  WHERE player_relation = ? AND key IN (${this.activityKeys
-          .map(() => "?")
-          .join(",")})`
-      );
-
-      const user = sql.get(player.id, this.activityKeys);
-
-      return user;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
+  // Returns the current activity of the player to display to them
   async checkCurrent(player) {
-    const user = this.getCurrent(player);
+    const user = this.getCurrent(player.id);
     try {
       let result = "Yoyu are not doing anything at the moment.";
       if (user) {
@@ -109,48 +117,6 @@ class ActivityService {
         }
       }
       return result;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  /**
-   * Data needed from interaction for the following functions:
-   * - player
-   * - guildId
-   */
-  async fish(interaction) {
-    try {
-      const stmt = db.prepare(
-        "DELETE FROM active_tags WHERE player_relation = ? AND key = ?"
-      );
-      stmt.run(interaction.player.id, "FISH");
-
-      SkillService.increaseXP(interaction.player.id, "FISH");
-
-      const foghorn = BotService.getChannelByName(
-        interaction.guildId,
-        process.env.NOTICHANNEL
-      );
-
-      const catches = await ItemService.randomItemByLootTag("FISH");
-
-      await ItemService.addToInventory(
-        interaction.guildId,
-        catches.key,
-        interaction.player.id
-      );
-
-      const fishEmbed = new EmbedBuilder()
-        .setColor(0x0077be)
-        .setTitle(`${interaction.player.name} has finished Fishing!`)
-        .setDescription("I wonder what they caught...")
-        .addFields(
-          { name: "Caught:", value: `${catches.name}\n${catches.description}` },
-          { name: "Experience", value: "++Fishing" }
-        );
-
-      foghorn.send({ embeds: [fishEmbed] });
     } catch (error) {
       console.error(error);
     }

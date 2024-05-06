@@ -1,6 +1,5 @@
-import Database from "better-sqlite3";
 import ActivityService from "./ActivityService.js";
-const db = new Database(process.env.DATABASEURL);
+import db from "../../database/database.js";
 
 class BotService {
   getChannelByName(guildId, name) {

@@ -1,8 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 import schedule from "node-schedule";
+import db from "../../../database/database.js";
 import ActivityService from "../../services/ActivityService.js";
-import Database from "better-sqlite3";
-const db = new Database(process.env.DATABASEURL);
 
 export default {
   data: new SlashCommandBuilder()
@@ -10,7 +9,7 @@ export default {
     .setDescription("Stops whatever activity you are doing"),
   async execute(interaction) {
     try {
-      const current = ActivityService.getCurrent(interaction.player);
+      const current = ActivityService.getCurrent(interaction.player.id);
 
       if (!current) {
         await interaction.reply({

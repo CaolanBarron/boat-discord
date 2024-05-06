@@ -1,6 +1,5 @@
-import Database from "better-sqlite3";
 import { stripIndent } from "common-tags";
-const db = new Database(process.env.DATABASEURL);
+import db from "../../database/database.js";
 
 class BoatService {
   create(guildID, condition = 10, speed = 5, x_coord = 0, y_coord = 0) {

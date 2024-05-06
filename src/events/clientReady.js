@@ -1,6 +1,5 @@
 import { Events } from "discord.js";
 import BotService from "../services/BotService.js";
-import schedule from "node-schedule";
 
 export default {
   name: Events.ClientReady,

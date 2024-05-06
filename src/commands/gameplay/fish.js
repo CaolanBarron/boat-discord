@@ -1,7 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
-import Database from "better-sqlite3";
-const db = new Database(process.env.DATABASEURL);
-import ActivityService from "../../services/ActivityService.js";
+
+import FishService from "../../services/Commands/FishService.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -11,27 +10,12 @@ export default {
     ),
   async execute(interaction) {
     try {
-      // TODO: Check if you are currently doing any other activity
-
-      const existResult = ActivityService.checkActive(interaction.player);
-      if (existResult) {
-        await interaction.reply({
-          content: existResult,
-          ephemeral: true,
-        });
-        return;
-      }
-
-      const stmt = db.prepare(
-        "INSERT INTO active_tags(key, player_relation) VALUES(?, ?)"
+      const fishResult = await FishService.start(
+        interaction.guildId,
+        interaction.player
       );
-      stmt.run("FISH", interaction.player.id);
 
-      ActivityService.scheduleActivity("FISH", interaction);
-
-      await interaction.reply(
-        `${interaction.player.name} has taken the fishing rod and cast it into the water, they wait patiently...`
-      );
+      await interaction.reply(fishResult);
     } catch (error) {
       console.error(error);
     }

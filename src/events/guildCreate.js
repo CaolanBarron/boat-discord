@@ -1,4 +1,4 @@
-import { Events, AttachmentBuilder, EmbedBuilder } from "discord.js";
+import { Events } from "discord.js";
 import BotService from "../services/BotService.js";
 import BoatService from "../services/BoatService.js";
 export default {

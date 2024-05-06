@@ -1,5 +1,4 @@
-import Database from "better-sqlite3";
-const db = new Database(process.env.DATABASEURL);
+import db from "../../database/database.js";
 
 class ItemService {
   // This is a table to determine the random chance of getting an item
