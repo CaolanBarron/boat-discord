@@ -29,8 +29,6 @@ export default {
       // Delete the current job
       schedule.cancelJob(`${interaction.player.id}_${current.key}`);
 
-      console.log(schedule.scheduledJobs);
-
       await interaction.reply("STOP!");
     } catch (error) {
       console.error(error);

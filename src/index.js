@@ -91,3 +91,7 @@ function fileUrl(filePath, options = {}) {
   // See: https://tools.ietf.org/html/rfc3986#section-3.3
   return encodeURI(`file://${pathName}`).replace(/[?#]/g, encodeURIComponent);
 }
+
+process.on("unhandledRejection", (error) => {
+  console.error("Unhandled promise rejection:", error);
+});

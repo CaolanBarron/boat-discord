@@ -7,7 +7,6 @@ export default {
   once: true,
   async execute(readyClient) {
     BotService.restartActivities();
-    console.log(schedule.scheduledJobs);
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);
   },
 };

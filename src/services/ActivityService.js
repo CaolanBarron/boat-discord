@@ -41,13 +41,12 @@ class ActivityService {
   }
 
   checkActive(player) {
-    const user = this.getCurrent(player);
-    console.log(user);
+    const activeUser = this.getCurrent(player);
 
     let result;
-    if (user) {
+    if (activeUser) {
       result = "You're busy!";
-      switch (user.key) {
+      switch (activeUser.key) {
         case "FISH":
           result = `You will have to put down your fishing rod if you want to do something else...`;
           break;
