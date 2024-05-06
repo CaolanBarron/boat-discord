@@ -41,14 +41,24 @@ DROP TABLE IF EXISTS boat_inventory;
 CREATE TABLE boat_inventory(
   boat_id TEXT,
   item_key TEXT,
-  collected_by TEXT
+  collected_by INTEGER
 );
 
 DROP TABLE IF EXISTS item;
 
 CREATE TABLE item(
   key TEXT PRIMARY KEY,
-  name TEXT
+  name TEXT,
+  description TEXT
+);
+
+DROP TABLE IF EXISTS loot;
+
+CREATE TABLE loot(
+  key TEXT,
+  item_key TEXT,
+  rarity TEXT,
+  UNIQUE(key, item_key)
 );
 
 ---
@@ -89,4 +99,11 @@ CREATE TABLE biome_coords(
   x_coord INTEGER,
   y_coord INTEGER,
   UNIQUE(x_coord, y_coord)
+);
+
+DROP TABLE IF EXISTS feedback;
+
+CREATE TABLE feedback(
+  player_name TEXT,
+  message TEXT
 );

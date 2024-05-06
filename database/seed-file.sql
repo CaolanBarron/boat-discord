@@ -58,3 +58,25 @@ VALUES
 ('VOID', -3, -2),
 ('VOID', -2, -3),
 ('VOID', -3, -3);
+
+DELETE FROM item;
+
+INSERT INTO item(key, name, description)
+VALUES
+('GAS_FISH', 'Gasotrout', 'This fish seems to have....gasoline inside it??'),
+('TROUT', 'Trout', 'Awww no gasoline...'),
+('BOOT', 'Boot', 'I wouldnt wear that...'),
+('SALMON', 'Salmon', 'Ahh the humble salmon.. salmondays amirite?'),
+('STURGEON', 'Sturgeon', 'This should not be here...'),
+('LAVA_FISH', 'Lava fish', 'hot hot hot');
+
+DELETE FROM loot;
+
+INSERT INTO loot(key, item_key, rarity)
+VALUES
+('FISH', 'GAS_FISH', 'COMMON'),
+('FISH', 'TROUT', 'COMMON'),
+('FISH', 'BOOT', 'COMMON'),
+('FISH', 'SALMON', 'COMMON'),
+('FISH', 'STURGEON', 'RARE'),
+('FISH', 'LAVA_FISH', 'ODDITY');
