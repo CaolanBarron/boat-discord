@@ -1,9 +1,11 @@
 import * as fs from "fs";
 import { Client, Collection, GatewayIntentBits } from "discord.js";
-import "dotenv/config";
 
 import { fileURLToPath } from "url";
 import * as path from "path";
+import { validateEnvironment } from "./validateEnvironment.js";
+
+validateEnvironment();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,7 +38,7 @@ for (const folder of commandFolders) {
         client.commands.set(command.data.name, command);
       } else {
         console.log(
-          `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+          `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`,
         );
       }
     });

@@ -6,7 +6,7 @@ class BoatService {
     try {
       if (!guildID) throw Error("No Guild ID????");
       const createStmt = db.prepare(
-        "INSERT INTO boat(id, condition, speed, x_coord, y_coord) VALUES(?, ?, ?, ?, ?)"
+        "INSERT INTO boat(id, condition, speed, x_coord, y_coord) VALUES(?, ?, ?, ?, ?)",
       );
 
       createStmt.run(guildID, condition, speed, x_coord, y_coord);
@@ -27,7 +27,7 @@ class BoatService {
   }
   introductionGameplayMessage() {
     return stripIndent`
-      Welcome to The Boat!
+      # Welcome to The Boat!
       Here's a quick rundown of how the game works:
       **Channels:**
         - All gameplay will happen in the \`deck\` channel. It is HIGHLY recommended everyone in the server mutes this channel as when playing there may be a lot of messages sent.
