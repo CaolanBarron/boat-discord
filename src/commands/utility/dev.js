@@ -21,8 +21,8 @@ export default {
         .addChoices(
           { name: "map", value: "tool_map" },
           { name: "boat", value: "tool_boat" },
-          { name: "activities", value: "tool_activities" }
-        )
+          { name: "activities", value: "tool_activities" },
+        ),
     ),
 
   async execute(interaction) {
@@ -50,7 +50,7 @@ export default {
         row.addComponents(
           displayMapButton,
           inspectMapButton,
-          displayMapLegendButton
+          displayMapLegendButton,
         );
         break;
 
@@ -232,7 +232,7 @@ async function inspectMap(x, y) {
     for (const boat of boatStmt) {
       result = result.concat(
         `Boat:   
-        - ${boat.id}\n`
+        - ${boat.id}\n`,
       );
     }
 
@@ -269,7 +269,20 @@ async function displayJobs() {
   if (Object.keys(scheduledJobs).length === 0)
     return "There are no jobs at the moment!";
   const result = Object.keys(scheduledJobs).reduce((arr, curr) => {
-    return arr.concat(`${curr}\n`);
+    const date = scheduledJobs[curr].pendingInvocations[0].fireDate._date;
+
+    const userId = curr.split("_");
+    const userStmt = db
+      .prepare("SELECT * FROM player WHERE id = ?")
+      .get(userId[0]);
+
+    return arr.concat(
+      stripIndent`
+      Name: ${curr}
+      User: ${userStmt.name}
+      FireDate: ${date.toString()}
+      `,
+    );
   }, "");
 
   return result;
