@@ -30,4 +30,4 @@ class BotService {
   }
 }
 
-export default new BotService();
+export default BotService;

@@ -1,6 +1,6 @@
 import FishService from "../../services/Commands/FishService";
-import InitializeTestDb from "../utils/database";
 import schedule from "node-schedule";
+import InitializeTestDb from "../utils/database";
 
 beforeEach(() => {
   InitializeTestDb();
@@ -12,7 +12,7 @@ afterAll(async () => {
 
 const player = {
   id: 1,
-  name: "John",
+  name: "John B1",
 };
 
 describe("Fishing Start Activity", () => {

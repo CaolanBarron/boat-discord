@@ -2,6 +2,8 @@ import db from "../../../database/database.js";
 import ActivityService from "../../services/ActivityService.js";
 import SkillService from "../SkillService.js";
 import ItemService from "../ItemService.js";
+import BotService from "../BotService.js";
+import { EmbedBuilder } from "discord.js";
 
 class FishService {
   async start(guildId, player) {
@@ -11,6 +13,15 @@ class FishService {
     if (isBusy) {
       return {
         content: isBusy,
+        ephemeral: true,
+      };
+    }
+
+    const isOccupied = await ActivityService.checkOccupied("FISH", guildId);
+
+    if (isOccupied) {
+      return {
+        content: isOccupied,
         ephemeral: true,
       };
     }
@@ -49,7 +60,8 @@ class FishService {
   async announceEnd(interaction) {
     const catches = await this.endJob(interaction.guildId, interaction.player);
 
-    const foghorn = BotService.getChannelByName(
+    const bot = new BotService();
+    const foghorn = bot.getChannelByName(
       interaction.guildId,
       process.env.NOTICHANNEL
     );

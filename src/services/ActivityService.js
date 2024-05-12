@@ -10,11 +10,15 @@ class ActivityService {
     try {
       const activities = {
         // TODO: Set the correct time for fishing
-        FISH: { execute: FishService.announceEnd, time: 600_000 },
+        FISH: {
+          execute: FishService.announceEnd,
+          time: 600_000,
+          class: FishService,
+        },
         // TODO: Set the correct time for mapping
         CARTOGRAPHY: { execute: this.map, time: 10000 },
         // TODO: Set the correct time for repairing
-        REPAIR: { execute: this.repair, time: 10000 },
+        REPAIR: { execute: this.repair, time: 600_000 },
         // TODO: Set the correct time for researching
         RESEARCH: { execute: this.research, time: 10000 },
         // TODO: Set the correct time for sailing
@@ -30,7 +34,7 @@ class ActivityService {
       schedule.scheduleJob(
         `${interaction.player.id}_${key}`,
         startTime,
-        activity.execute.bind(null, interaction)
+        activity.execute.bind(activity.class, interaction)
       );
     } catch (error) {
       console.error(error);
@@ -94,7 +98,7 @@ class ActivityService {
   async checkCurrent(player) {
     const user = this.getCurrent(player.id);
     try {
-      let result = "Yoyu are not doing anything at the moment.";
+      let result = "You are not doing anything at the moment.";
       if (user) {
         switch (user.key) {
           case "FISH":
@@ -112,13 +116,41 @@ class ActivityService {
             break;
           case "SAILING":
             // TODO: Account for direction
-            result = `The bow splits the sea... you are currently sailing ${"asdasd"}`;
+            result = `The bow splits the sea... you are currently sailing }`;
             break;
         }
       }
       return result;
     } catch (error) {
       console.error(error);
+    }
+  }
+  async checkOccupied(activity, guildId) {
+    // Checks the current active tags under the activity
+    // if one exists return the correct response
+
+    // TODO: by key
+    const activityStmt = db
+      .prepare(
+        `SELECT *
+        FROM active_tags at
+        JOIN player p
+        ON at.player_relation = p.id
+        JOIN boat b
+        ON p.boat_id = b.id
+        WHERE b.id = ? AND at.key = ?;`
+      )
+      .get(guildId, activity);
+
+    if (activityStmt) {
+      switch (activity) {
+        case "FISH":
+          return `You look for the fishing rod but... ${activityStmt.name} is already fishing.`;
+        case "REPAIR":
+          return `You attempt to find some room at the research table but... ${activityStmt.name} is using the entire space.`;
+        default:
+          throw new Error("This key doesn't exist");
+      }
     }
   }
 

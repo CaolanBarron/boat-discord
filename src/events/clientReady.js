@@ -5,7 +5,8 @@ export default {
   name: Events.ClientReady,
   once: true,
   async execute(readyClient) {
-    BotService.restartActivities();
+    const bot = new BotService();
+    bot.restartActivities();
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);
   },
 };

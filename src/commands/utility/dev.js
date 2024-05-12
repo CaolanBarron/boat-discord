@@ -21,8 +21,8 @@ export default {
         .addChoices(
           { name: "map", value: "tool_map" },
           { name: "boat", value: "tool_boat" },
-          { name: "activities", value: "tool_activities" },
-        ),
+          { name: "activities", value: "tool_activities" }
+        )
     ),
 
   async execute(interaction) {
@@ -50,7 +50,7 @@ export default {
         row.addComponents(
           displayMapButton,
           inspectMapButton,
-          displayMapLegendButton,
+          displayMapLegendButton
         );
         break;
 
@@ -232,7 +232,7 @@ async function inspectMap(x, y) {
     for (const boat of boatStmt) {
       result = result.concat(
         `Boat:   
-        - ${boat.id}\n`,
+        - ${boat.id}\n`
       );
     }
 
@@ -278,10 +278,12 @@ async function displayJobs() {
 
     return arr.concat(
       stripIndent`
+      ---
       Name: ${curr}
       User: ${userStmt.name}
       FireDate: ${date.toString()}
-      `,
+      ---
+      `
     );
   }, "");
 

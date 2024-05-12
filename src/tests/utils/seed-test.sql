@@ -92,8 +92,9 @@ DELETE FROM player;
 
 INSERT INTO player(id, user_id, boat_id, name)
 VALUES
-(1, 1, 1, 'John'),
-(2, 2, 2, 'Martin');
+(1, 1, 1, 'John B1'),
+(2, 2, 2, 'Martin B2'),
+(3, 3, 1, 'Tim B1');
 
 
 DELETE FROM player_skills;
