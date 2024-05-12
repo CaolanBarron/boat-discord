@@ -1,6 +1,7 @@
 import FishService from "../../services/Commands/FishService";
 import schedule from "node-schedule";
 import InitializeTestDb from "../utils/database";
+import RepairService from "../../services/Commands/RepairService";
 
 beforeEach(() => {
   InitializeTestDb();
@@ -36,9 +37,14 @@ describe("Fishing Start Activity", () => {
     expect(response.ephemeral).toBeTruthy();
   });
 
-  it("Message for wanting to fish when doing another activity", async () => {
-    // TODO: Implement this test when other Activity commands are created
-    expect(true).toBe(false);
+  it("Trying to do a different activity while fishing", async () => {
+    await FishService.start(1, player);
+
+    const response = RepairService.start(1, player);
+
+    expect(response.content).toEqual(
+      "You will have to put down your fishing rod if you want to do something else..."
+    );
   });
 });
 

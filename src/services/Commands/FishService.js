@@ -18,7 +18,6 @@ class FishService {
     }
 
     const isOccupied = await ActivityService.checkOccupied("FISH", guildId);
-
     if (isOccupied) {
       return {
         content: isOccupied,
@@ -72,7 +71,7 @@ class FishService {
       .setDescription("I wonder what they caught...")
       .addFields(
         { name: "Caught:", value: `${catches.name}\n${catches.description}` },
-        { name: "Experience", value: "++Fishing" }
+        { name: "Experience:", value: "++Fishing" }
       );
 
     foghorn.send({ embeds: [fishEmbed] });

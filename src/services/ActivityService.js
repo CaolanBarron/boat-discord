@@ -3,6 +3,7 @@ import db from "../../database/database.js";
 import schedule from "node-schedule";
 import SkillService from "./SkillService.js";
 import FishService from "./Commands/FishService.js";
+import RepairService from "./Commands/RepairService.js";
 
 class ActivityService {
   activityKeys = ["FISH", "CARTOGRAPHY", "REPAIR", "RESEARCH", "SAILING"];
@@ -18,7 +19,11 @@ class ActivityService {
         // TODO: Set the correct time for mapping
         CARTOGRAPHY: { execute: this.map, time: 10000 },
         // TODO: Set the correct time for repairing
-        REPAIR: { execute: this.repair, time: 600_000 },
+        REPAIR: {
+          execute: RepairService.announceEnd,
+          time: 600_000,
+          class: RepairService,
+        },
         // TODO: Set the correct time for researching
         RESEARCH: { execute: this.research, time: 10000 },
         // TODO: Set the correct time for sailing
@@ -81,10 +86,11 @@ class ActivityService {
           result =
             requestedActivity === "REPAIR"
               ? "You are already tinkering with the engine!"
-              : "";
+              : "You will have to put away your tools if you want to do something else...";
           break;
         case "RESEARCH":
           result = "Poring over notes and samples...";
+          ``;
           break;
         case "SAILING":
           result = "Barreling through the waves...";
@@ -167,21 +173,6 @@ class ActivityService {
       process.env.NOTICHANNEL
     );
     foghorn.send(`${interaction.player.name} has finished mapping...`);
-  }
-
-  repair(interaction) {
-    const stmt = db.prepare(
-      "DELETE FROM active_tags WHERE player_relation = ? AND key = ?"
-    );
-    stmt.run(interaction.player.id, "REPAIR");
-
-    SkillService.increaseXP(interaction.player.id, "REPAIR");
-
-    const foghorn = BotService.getChannelByName(
-      interaction.guildId,
-      process.env.NOTICHANNEL
-    );
-    foghorn.send(`${interaction.player.name} has finished repairing...`);
   }
 
   research(interaction) {
