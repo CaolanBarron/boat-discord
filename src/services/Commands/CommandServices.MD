@@ -3,5 +3,6 @@ The services in this folder concern activities in game including starting, stopp
 
 **Structure**
 
-- start - starts the job and responds with the appropriate message
-- job - Actually starts and schedules the job (seperate because we need to call this when restarting activities)
+- start - Scheudles the job and responds with the appropriate message
+- endJob - Finishes the job
+- announceJob - Calls endJob and then sends the result ot the user

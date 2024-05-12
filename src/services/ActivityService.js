@@ -181,6 +181,27 @@ class ActivityService {
     );
     foghorn.send(`${interaction.player.name} has finished sailing...`);
   }
+
+  stopPhrase(key, playerName) {
+    try {
+      switch (key) {
+        case "FISH":
+          return `${playerName} packs away the fishing rod and contains their bait.`;
+        case "CARTOGRAPHY":
+          return `${playerName} puts away their papers and instruments. Perhaps they will try again later...`;
+        case "REPAIR":
+          return `${playerName} puts away their tools and washes the unpleasant oil off their hands.`;
+        case "RESEARCH":
+          return `${playerName} cleans their beakers as best they can and gives their brain some rest.`;
+        case "SAILING":
+          return `${playerName} unhands the helm and turns their eyes from the horizon.`;
+        default:
+          throw new Error(`This activity key ${key} does not exist`);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default new ActivityService();

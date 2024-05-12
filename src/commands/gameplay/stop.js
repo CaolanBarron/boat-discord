@@ -13,7 +13,7 @@ export default {
 
       if (!current) {
         await interaction.reply({
-          content: "Youre not doing anythinh anyway",
+          content: `${interaction.player.name} is not doing anything to stop at the moment`,
           ephemeral: true,
         });
       }
@@ -28,7 +28,12 @@ export default {
       // Delete the current job
       schedule.cancelJob(`${interaction.player.id}_${current.key}`);
 
-      await interaction.reply("STOP!");
+      const result = ActivityService.stopPhrase(
+        current.key,
+        interaction.player.name
+      );
+
+      await interaction.reply(result);
     } catch (error) {
       console.error(error);
     }
