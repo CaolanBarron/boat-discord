@@ -137,3 +137,5 @@ dist
 /database/database-development.db
 /database/database-test.db
 /src/debug
+
+assets
