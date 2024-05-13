@@ -1,7 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import schedule from "node-schedule";
-import db from "../../../database/database.js";
-import ActivityService from "../../services/ActivityService.js";
+import ResearchService from "../../services/Commands/ResearchService.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -11,23 +9,15 @@ export default {
       option.setName("item").setDescription("Item from inventory to research")
     ),
   async execute(interaction) {
-    const existResult = ActivityService.checkActive(interaction.player.id);
-    if (existResult) {
-      await interaction.reply(
-        `${interaction.player.name} is currently busy... ` + existResult
+    try {
+      const researchResult = await ResearchService.start(
+        interaction.guildId,
+        interaction.player
       );
-      return;
+
+      await interaction.reply(researchResult);
+    } catch (error) {
+      console.error(error);
     }
-
-    // TODO: Need to save additional data for Object researching 😭
-    // TODO: Need to put a lock on the object being researched💀
-    const stmt = db.prepare(
-      "INSERT INTO active_tags(key, player_relation) VALUES(?, ?)"
-    );
-    stmt.run("RESEARCH", interaction.player.id);
-
-    ActivityService.scheduleActivity("RESEARCH", interaction);
-
-    await interaction.reply("Research!");
   },
 };

@@ -7,8 +7,6 @@ import { EmbedBuilder } from "discord.js";
 
 class FishService {
   async start(guildId, player) {
-    // TODO: Check if you are currently doing any other activity
-
     const isBusy = ActivityService.checkActive(player.id, "FISH");
     if (isBusy) {
       return {
@@ -56,6 +54,7 @@ class FishService {
       console.error(error);
     }
   }
+
   async announceEnd(interaction) {
     const catches = await this.endJob(interaction.guildId, interaction.player);
 

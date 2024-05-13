@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 import db from "../../../database/database.js";
 import ActivityService from "../../services/ActivityService.js";
+import SailService from "../../services/Commands/SailService.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -19,21 +20,15 @@ export default {
         )
     ),
   async execute(interaction) {
-    const existResult = ActivityService.checkActive(interaction.player.id);
-    if (existResult) {
-      await interaction.reply(
-        `${interaction.player.name} is currently busy... ` + existResult
+    try {
+      const sailResult = await SailService.start(
+        interaction.guildId,
+        interaction.player
       );
-      return;
+
+      await interaction.reply(sailResult);
+    } catch (error) {
+      console.error(error);
     }
-    // TODO: Need to save additional data for sailing direction 😭
-    const stmt = db.prepare(
-      "INSERT INTO active_tags(key, player_relation) VALUES(?, ?)"
-    );
-    stmt.run("SAILING", interaction.player.id);
-
-    ActivityService.scheduleActivity("SAILING", interaction);
-
-    await interaction.reply(interaction.options.getString("direction"));
   },
 };

@@ -4,6 +4,9 @@ import schedule from "node-schedule";
 import SkillService from "./SkillService.js";
 import FishService from "./Commands/FishService.js";
 import RepairService from "./Commands/RepairService.js";
+import CartographyService from "./Commands/CartographyService.js";
+import ResearchService from "./Commands/ResearchService.js";
+import SailService from "./Commands/SailService.js";
 
 class ActivityService {
   activityKeys = ["FISH", "CARTOGRAPHY", "REPAIR", "RESEARCH", "SAILING"];
@@ -17,7 +20,11 @@ class ActivityService {
           class: FishService,
         },
         // TODO: Set the correct time for mapping
-        CARTOGRAPHY: { execute: this.map, time: 10000 },
+        CARTOGRAPHY: {
+          execute: CartographyService.announceEnd,
+          time: 10_000,
+          class: CartographyService,
+        },
         // TODO: Set the correct time for repairing
         REPAIR: {
           execute: RepairService.announceEnd,
@@ -25,9 +32,17 @@ class ActivityService {
           class: RepairService,
         },
         // TODO: Set the correct time for researching
-        RESEARCH: { execute: this.research, time: 10000 },
+        RESEARCH: {
+          execute: ResearchService.announceEnd,
+          time: 10000,
+          class: ResearchService,
+        },
         // TODO: Set the correct time for sailing
-        SAILING: { execute: this.sailing, time: 10000 },
+        SAILING: {
+          execute: SailService.announceEnd,
+          time: 10000,
+          class: SailService,
+        },
       };
 
       const activity = activities[key];
@@ -158,51 +173,6 @@ class ActivityService {
           throw new Error("This key doesn't exist");
       }
     }
-  }
-
-  map(interaction) {
-    const stmt = db.prepare(
-      "DELETE FROM active_tags WHERE player_relation = ? AND key = ?"
-    );
-    stmt.run(interaction.player.id, "CARTOGRAPHY");
-
-    SkillService.increaseXP(interaction.player.id, "CARTOGRAPHY");
-
-    const foghorn = BotService.getChannelByName(
-      interaction.guildId,
-      process.env.NOTICHANNEL
-    );
-    foghorn.send(`${interaction.player.name} has finished mapping...`);
-  }
-
-  research(interaction) {
-    const stmt = db.prepare(
-      "DELETE FROM active_tags WHERE player_relation = ? AND key = ?"
-    );
-    stmt.run(interaction.player.id, "RESEARCH");
-
-    SkillService.increaseXP(interaction.player.id, "RESEARCH");
-
-    const foghorn = BotService.getChannelByName(
-      interaction.guildId,
-      process.env.NOTICHANNEL
-    );
-    foghorn.send(`${interaction.player.name} has finished researching...`);
-  }
-
-  sailing(interaction) {
-    const stmt = db.prepare(
-      "DELETE FROM active_tags WHERE player_relation = ? AND key = ?"
-    );
-    stmt.run(interaction.player.id, "SAILING");
-
-    SkillService.increaseXP(interaction.player.id, "SAIL");
-
-    const foghorn = BotService.getChannelByName(
-      interaction.guildId,
-      process.env.NOTICHANNEL
-    );
-    foghorn.send(`${interaction.player.name} has finished sailing...`);
   }
 
   stopPhrase(key, playerName) {
