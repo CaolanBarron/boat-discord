@@ -9,19 +9,19 @@ export default {
       option
         .setName("direction")
         .setDescription("Where shall we sail?")
-        .setRequired(true)
         .addChoices(
-          { name: "North", value: "north" },
-          { name: "East", value: "east" },
-          { name: "South", value: "south" },
-          { name: "West", value: "west" }
+          { name: "North", value: "NORTH" },
+          { name: "East", value: "EAST" },
+          { name: "South", value: "SOUTH" },
+          { name: "West", value: "WEST" }
         )
     ),
   async execute(interaction) {
     try {
       const sailResult = await SailService.start(
         interaction.guildId,
-        interaction.player
+        interaction.player,
+        interaction.options.getString("direction")
       );
 
       await interaction.reply(sailResult);

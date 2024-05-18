@@ -7,7 +7,16 @@ import ResearchService from "./Commands/ResearchService.js";
 import SailService from "./Commands/SailService.js";
 
 class ActivityService {
-  activityKeys = ["FISH", "CARTOGRAPHY", "REPAIR", "RESEARCH", "SAILING"];
+  activityKeys = [
+    "FISH",
+    "CARTOGRAPHY",
+    "REPAIR",
+    "RESEARCH",
+    "NORTH_SAILING",
+    "SOUTH_SAILING",
+    "WEST_SAILING",
+    "EAST_SAILING",
+  ];
   scheduleActivity(key, interaction) {
     try {
       const activities = {
@@ -36,7 +45,22 @@ class ActivityService {
           class: ResearchService,
         },
         // TODO: Set the correct time for sailing
-        SAILING: {
+        SAILING_NORTH: {
+          execute: SailService.announceEnd,
+          time: 10000,
+          class: SailService,
+        },
+        SAILING_SOUTH: {
+          execute: SailService.announceEnd,
+          time: 10000,
+          class: SailService,
+        },
+        SAILING_WEST: {
+          execute: SailService.announceEnd,
+          time: 10000,
+          class: SailService,
+        },
+        SAILING_EAST: {
           execute: SailService.announceEnd,
           time: 10000,
           class: SailService,
@@ -105,7 +129,18 @@ class ActivityService {
           result = "Poring over notes and samples...";
           ``;
           break;
-        case "SAILING":
+        case "NORTH_SAILING":
+        case "SOUTH_SAILING":
+        case "WEST_SAILING":
+        case "EAST_SAILING":
+          result = [
+            "NORTH_SAILING",
+            "SOUTH_SAILING",
+            "WEST_SAILING",
+            "EAST_SAILING",
+          ].includes(requestedActivity)
+            ? "You are already sailing The Boat!"
+            : "You will have to stop sailing you want to do anything else...";
           result = "Barreling through the waves...";
           break;
       }
@@ -133,9 +168,17 @@ class ActivityService {
             result =
               "Vials rattle with the waves... you are currently researching!";
             break;
-          case "SAILING":
-            // TODO: Account for direction
-            result = `The bow splits the sea... you are currently sailing }`;
+          case "SAILING_NORTH":
+            result = `The bow splits the sea... you are currently sailing Northward!`;
+            break;
+          case "SAILING_EAST":
+            result = `The bow splits the sea... you are currently sailing Eastward!`;
+            break;
+          case "SAILING_WEST":
+            result = `The bow splits the sea... you are currently sailing Westward!`;
+            break;
+          case "SAILING_SOUTH":
+            result = `The bow splits the sea... you are currently sailing Southward!`;
             break;
         }
       }

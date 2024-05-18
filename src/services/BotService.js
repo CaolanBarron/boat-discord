@@ -14,7 +14,10 @@ class BotService {
       "CARTOGRAPHY",
       "REPAIR",
       "RESEARCH",
-      "SAILING",
+      "SAILING_NORTH",
+      "SAILING_SOUTH",
+      "SAILING_WEST",
+      "SAILING_EAST",
     ];
     const sql = `SELECT * FROM active_tags at JOIN player p ON at.player_relation = p.id WHERE at.key IN (${activityKeys
       .map(() => "?")
