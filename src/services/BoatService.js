@@ -46,5 +46,17 @@ class BoatService {
   }
 
   sail() {}
+
+  currentBiome(guildId) {
+    const boatStmt = db()
+      .prepare(`SELECT * FROM boat WHERE id = ?`)
+      .get(guildId);
+
+    const biomeStmt = db()
+      .prepare(`SELECT * FROM biome_coords WHERE x_coord = ? AND y_coord = ?`)
+      .get(boatStmt.x_coord, boatStmt.y_coord);
+
+    return biomeStmt;
+  }
 }
 export default new BoatService();

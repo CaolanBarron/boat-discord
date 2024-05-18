@@ -20,7 +20,7 @@ class ActivityService {
         // TODO: Set the correct time for mapping
         CARTOGRAPHY: {
           execute: CartographyService.announceEnd,
-          time: 10_000,
+          time: 600_000,
           class: CartographyService,
         },
         // TODO: Set the correct time for repairing
@@ -93,7 +93,7 @@ class ActivityService {
           result =
             requestedActivity === "CARTOGRAPHY"
               ? "You are already studying the maps!"
-              : "You will have to pack away your maps and instruments if you want to do something else...";
+              : "You are currently too engrossed in studying geographical documents to do anything else...";
           break;
         case "REPAIR":
           result =
@@ -169,8 +169,10 @@ class ActivityService {
           return `You look around for the toolbox but... ${activityStmt.name} is  fixing up the boat already.`;
         case "RESEARCH":
           return `You attempt to find some room at the research table but... ${activityStmt.name} is using the entire space.`;
+        case "CARTOGRAPHY":
+          return `You plan to sit down and pore over the maps to ease your boredom... Unfortunately ${activityStmt.name} would get in the way of that.`;
         default:
-          throw new Error("This key doesn't exist");
+          throw new Error("This key doesn't exist: " + activity);
       }
     }
   }

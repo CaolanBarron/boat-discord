@@ -3,6 +3,7 @@ import SkillService from "../SkillService.js";
 import db from "../../../database/database.js";
 import BotService from "../BotService.js";
 import { EmbedBuilder } from "discord.js";
+import MapService from "../MapService.js";
 
 class CartographyService {
   async start(guildId, player) {
@@ -34,7 +35,7 @@ class CartographyService {
 
     // TODO: CARTOGRAPHY response
     return {
-      content: `Mappings`,
+      content: `${player.name} gathers all the geographical documents they can find. Equipped with a compass and a planimeter they begin to study...`,
       ephemeral: false,
     };
   }
@@ -48,8 +49,14 @@ class CartographyService {
 
       SkillService.increaseXP(player.id, "CARTOGRAPHY");
 
-      // TODO: Gameplay
-      return "Mapped";
+      // Decide randomly what information to give
+      // - Biomes
+      // - Land
+      // - Location
+      // - nothing
+      const discovery = await MapService.randomDiscovery(guildId);
+
+      return discovery;
     } catch (error) {
       console.error(error);
     }
@@ -66,9 +73,12 @@ class CartographyService {
 
     const cartographyEmbed = new EmbedBuilder()
       .setColor(0x0077be)
-      .setTitle(`${interaction.player.name} mapping!`)
-      .setDescription("Mapping")
-      .addFields({ name: "Experience:", value: "++Cartography" });
+      .setTitle(`${interaction.player.name} has finished Mapping!`)
+      .setDescription("I wonder what they discovered...")
+      .addFields(
+        { name: "Discoveries:", value: results },
+        { name: "Experience:", value: "++Cartography" }
+      );
 
     foghorn.send({ embeds: [cartographyEmbed] });
   }
