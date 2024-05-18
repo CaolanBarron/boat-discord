@@ -3,8 +3,8 @@ import schedule from "node-schedule";
 import RepairService from "../../services/Commands/RepairService";
 import FishService from "../../services/Commands/FishService";
 
-beforeEach(() => {
-  InitializeTestDb();
+beforeEach(async () => {
+  await InitializeTestDb();
 });
 
 afterEach(async () => {
@@ -21,7 +21,7 @@ describe("Repair Start Activity", () => {
     const response = await RepairService.start(1, player);
 
     expect(response.content).toEqual(
-      "John unhooks the latches of their toolbox and gets to work."
+      "John B1 unhooks the latches of their toolbox and gets to work."
     );
 
     expect(response.ephemeral).toBeFalsy();
@@ -32,7 +32,9 @@ describe("Repair Start Activity", () => {
 
     const response = await RepairService.start(1, player);
 
-    expect(response.content).toEqual("You are already repairing!");
+    expect(response.content).toEqual(
+      "You are already tinkering with the engine!"
+    );
 
     expect(response.ephemeral).toBeTruthy();
   });
@@ -40,10 +42,10 @@ describe("Repair Start Activity", () => {
   it("Trying to do another activity while repairing", async () => {
     await RepairService.start(1, player);
 
-    const response = FishService.start(1, player);
+    const response = await FishService.start(1, player);
 
     expect(response.content).toEqual(
-      "You are currently elbow deep in a particularly volatile engine at the moment..."
+      "You will have to put away your tools if you want to do something else..."
     );
   });
 });

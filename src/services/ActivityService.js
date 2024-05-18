@@ -1,7 +1,5 @@
-import BotService from "./BotService.js";
 import db from "../../database/database.js";
 import schedule from "node-schedule";
-import SkillService from "./SkillService.js";
 import FishService from "./Commands/FishService.js";
 import RepairService from "./Commands/RepairService.js";
 import CartographyService from "./Commands/CartographyService.js";
@@ -63,7 +61,7 @@ class ActivityService {
 
   getCurrent(playerId) {
     try {
-      const sql = db.prepare(
+      const sql = db().prepare(
         `SELECT * FROM active_tags  WHERE player_relation = ? AND key IN (${this.activityKeys
           .map(() => "?")
           .join(",")})`
@@ -151,7 +149,7 @@ class ActivityService {
     // if one exists return the correct response
 
     // TODO: by key
-    const activityStmt = db
+    const activityStmt = db()
       .prepare(
         `SELECT *
         FROM active_tags at
@@ -168,6 +166,8 @@ class ActivityService {
         case "FISH":
           return `You look for the fishing rod but... ${activityStmt.name} is already fishing.`;
         case "REPAIR":
+          return `You look around for the toolbox but... ${activityStmt.name} is  fixing up the boat already.`;
+        case "RESEARCH":
           return `You attempt to find some room at the research table but... ${activityStmt.name} is using the entire space.`;
         default:
           throw new Error("This key doesn't exist");

@@ -14,12 +14,12 @@ export default {
         return;
 
       // TODO: Check if the user has character here and keep the character
-      const user = db
+      const user = db()
         .prepare("SELECT * FROM player WHERE user_id = ? AND boat_id = ?")
         .get(interaction.author.id, interaction.guildId);
 
       if (!user) {
-        const guild = db
+        const guild = db()
           .prepare("SELECT * FROM boat WHERE id = ?")
           .get(interaction.guildId);
         const error = new Error();

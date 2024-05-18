@@ -10,7 +10,7 @@ class FlavourService {
         });
       };
 
-      const stmt = db.prepare("SELECT * FROM flavor").all();
+      const stmt = db().prepare("SELECT * FROM flavor").all();
 
       const randomFlavor = Math.floor(Math.random() * stmt.length);
 

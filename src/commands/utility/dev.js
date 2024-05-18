@@ -211,8 +211,8 @@ export async function generateMap(mapData) {
 }
 
 function getMapData() {
-  const boatStmt = db.prepare("SELECT * FROM boat").all();
-  const biomeStmt = db.prepare("SELECT * FROM biome_coords").all();
+  const boatStmt = db().prepare("SELECT * FROM boat").all();
+  const biomeStmt = db().prepare("SELECT * FROM biome_coords").all();
   return {
     boats: boatStmt,
     biomes: biomeStmt,
@@ -224,7 +224,7 @@ async function inspectMap(x, y) {
     // Find all boats on this coordinate
     // Find all biomes on this cooridnate
     // Return this data in a nicely formatted way
-    const boatStmt = db
+    const boatStmt = db()
       .prepare("SELECT * FROM boat WHERE x_coord = ? AND y_coord = ?")
       .all(x, y);
 
@@ -236,7 +236,7 @@ async function inspectMap(x, y) {
       );
     }
 
-    const biomeStmt = db
+    const biomeStmt = db()
       .prepare("SELECT * FROM biome_coords WHERE x_coord = ? AND y_coord = ?")
       .get(x, y);
 
@@ -245,6 +245,7 @@ async function inspectMap(x, y) {
     } else {
       result = result.concat(`Biome: Open sea\n`);
     }
+
     return result;
   } catch (e) {
     console.error(e);
@@ -253,9 +254,10 @@ async function inspectMap(x, y) {
 }
 
 async function createBoat(guildId) {
-  const guildStmt = db
+  const guildStmt = db()
     .prepare("SELECT * FROM boat WHERE id = ?")
     .get(guildId.guildId);
+
   if (!guildStmt) {
     BoatService.create(guildId, 10, 5, 0, 0);
     return "A new boat has succesfully been created";
@@ -272,7 +274,7 @@ async function displayJobs() {
     const date = scheduledJobs[curr].pendingInvocations[0].fireDate._date;
 
     const userId = curr.split("_");
-    const userStmt = db
+    const userStmt = db()
       .prepare("SELECT * FROM player WHERE id = ?")
       .get(userId[0]);
 

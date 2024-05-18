@@ -9,12 +9,12 @@ export default {
 
       // TODO: check here if the user exists and if the server has a boat already
 
-      const user = db
+      const user = db()
         .prepare("SELECT * FROM player WHERE user_id = ? AND boat_id = ?")
         .get(interaction.user.id, interaction.guildId);
 
       if (!user) {
-        const guild = db
+        const guild = db()
           .prepare("SELECT * FROM boat WHERE id = ?")
           .get(interaction.guildId);
         const error = new Error();
@@ -48,7 +48,7 @@ export default {
       const command = interaction.client.commands.get(interaction.commandName);
       if (!command) {
         console.error(
-          `No command matching ${interaction.commandName} was found.`,
+          `No command matching ${interaction.commandName} was found.`
         );
         return;
       }

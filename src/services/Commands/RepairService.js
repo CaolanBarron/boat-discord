@@ -22,7 +22,7 @@ class RepairService {
       };
     }
 
-    const insertStmt = db.prepare(
+    const insertStmt = db().prepare(
       "INSERT INTO active_tags(key, player_relation) VALUES(?,?)"
     );
     insertStmt.run("REPAIR", player.id);
@@ -37,7 +37,7 @@ class RepairService {
 
   async endJob(guildId, player) {
     try {
-      const stmt = db.prepare(
+      const stmt = db().prepare(
         "DELETE FROM active_tags WHERE player_relation = ? AND key = ?"
       );
       stmt.run(player.id, "REPAIR");

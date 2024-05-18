@@ -5,8 +5,8 @@ class BoatService {
   create(guildID, condition = 10, speed = 5, x_coord = 0, y_coord = 0) {
     try {
       if (!guildID) throw Error("No Guild ID????");
-      const createStmt = db.prepare(
-        "INSERT INTO boat(id, condition, speed, x_coord, y_coord) VALUES(?, ?, ?, ?, ?)",
+      const createStmt = db().prepare(
+        "INSERT INTO boat(id, condition, speed, x_coord, y_coord) VALUES(?, ?, ?, ?, ?)"
       );
 
       createStmt.run(guildID, condition, speed, x_coord, y_coord);
@@ -16,7 +16,7 @@ class BoatService {
   }
 
   delete(guildID) {
-    const boatDeleteStmt = db.prepare("DELETE FROM boat WHERE id = ?");
+    const boatDeleteStmt = db().prepare("DELETE FROM boat WHERE id = ?");
     boatDeleteStmt.run(guildID);
   }
 

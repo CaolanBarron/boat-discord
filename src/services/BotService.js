@@ -19,7 +19,7 @@ class BotService {
     const sql = `SELECT * FROM active_tags at JOIN player p ON at.player_relation = p.id WHERE at.key IN (${activityKeys
       .map(() => "?")
       .join(",")})`;
-    const activities = db.prepare(sql).all(activityKeys);
+    const activities = db().prepare(sql).all(activityKeys);
 
     for (const activity of activities) {
       ActivityService.scheduleActivity(activity.key, {

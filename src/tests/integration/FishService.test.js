@@ -3,8 +3,8 @@ import schedule from "node-schedule";
 import InitializeTestDb from "../utils/database";
 import RepairService from "../../services/Commands/RepairService";
 
-beforeEach(() => {
-  InitializeTestDb();
+beforeEach(async () => {
+  await InitializeTestDb();
 });
 
 afterAll(async () => {
@@ -21,7 +21,7 @@ describe("Fishing Start Activity", () => {
     const response = await FishService.start(1, player);
 
     expect(response.content).toEqual(
-      "John has taken the fishing rod and cast it into the water, they wait patiently..."
+      "John B1 has taken the fishing rod and cast it into the water, they wait patiently..."
     );
 
     expect(response.ephemeral).toBeFalsy();
@@ -40,7 +40,7 @@ describe("Fishing Start Activity", () => {
   it("Trying to do a different activity while fishing", async () => {
     await FishService.start(1, player);
 
-    const response = RepairService.start(1, player);
+    const response = await RepairService.start(1, player);
 
     expect(response.content).toEqual(
       "You will have to put down your fishing rod if you want to do something else..."
@@ -68,7 +68,7 @@ describe("Fishing Job Activity", () => {
     await FishService.endJob(1, player);
     const response = await FishService.start(1, player);
     expect(response.content).toEqual(
-      "John has taken the fishing rod and cast it into the water, they wait patiently..."
+      "John B1 has taken the fishing rod and cast it into the water, they wait patiently..."
     );
   });
 });

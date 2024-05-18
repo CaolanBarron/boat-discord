@@ -23,17 +23,18 @@ class ItemService {
     let lootTable;
     while (!lootTable || lootTable.length === 0) {
       const rarity = await this.getRandomRarity();
-      lootTable = db
+      lootTable = db()
         .prepare(
           "SELECT * FROM loot JOIN item ON item.key = loot.item_key WHERE loot.key = ? AND loot.rarity = ?"
         )
         .all(lootKey, rarity);
     }
+
     return lootTable[Math.floor(Math.random() * lootTable.length)];
   }
 
   async addToInventory(guidId, itemKey, playerId) {
-    const inventoryStmt = db.prepare(
+    const inventoryStmt = db().prepare(
       "INSERT INTO boat_inventory(boat_id, item_key, collected_by) VALUES(?, ?, ?)"
     );
     inventoryStmt.run(guidId, itemKey, Math.floor(playerId));

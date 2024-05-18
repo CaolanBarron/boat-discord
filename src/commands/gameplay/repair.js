@@ -1,6 +1,4 @@
 import { SlashCommandBuilder } from "discord.js";
-import db from "../../../database/database.js";
-import ActivityService from "../../services/ActivityService.js";
 import RepairService from "../../services/Commands/RepairService.js";
 
 export default {

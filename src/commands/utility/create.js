@@ -13,7 +13,7 @@ export default {
     ),
   async execute(interaction) {
     try {
-      const checkStmt = db.prepare(
+      const checkStmt = db().prepare(
         "SELECT * FROM player WHERE user_id = ? AND boat_id = ?"
       );
       const checkResult = checkStmt.get(
@@ -28,7 +28,7 @@ export default {
         return;
       }
       const characterName = interaction.options.getString("name");
-      const inStmt = db.prepare(
+      const inStmt = db().prepare(
         "INSERT INTO player(user_id, boat_id, name) VALUES (?, ?, ?)"
       );
       const result = inStmt.run(
@@ -37,7 +37,7 @@ export default {
         characterName
       );
 
-      const playerSkillStmt = db.prepare(
+      const playerSkillStmt = db().prepare(
         "INSERT INTO player_skills(player_id, skill_key, xp) VALUES (?, ?, ?)"
       );
 

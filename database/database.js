@@ -6,6 +6,6 @@ const url =
     ? process.env.TESTDATABASEURL
     : process.env.DATABASEURL;
 
-const db = new Database(url);
+const db = () => new Database(url, { timeout: 10_000 });
 
 export default db;

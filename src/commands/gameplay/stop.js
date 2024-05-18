@@ -19,7 +19,7 @@ export default {
       }
 
       // Delete the active_tag from the database
-      const tagsStmt = db.prepare(
+      const tagsStmt = db().prepare(
         "DELETE FROM active_tags WHERE key = ? AND player_relation = ?"
       );
 

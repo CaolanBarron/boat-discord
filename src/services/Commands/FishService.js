@@ -23,7 +23,7 @@ class FishService {
       };
     }
 
-    const stmt = db.prepare(
+    const stmt = db().prepare(
       "INSERT INTO active_tags(key, player_relation) VALUES(?, ?)"
     );
     stmt.run("FISH", player.id);
@@ -38,7 +38,7 @@ class FishService {
 
   async endJob(guildId, player) {
     try {
-      const stmt = db.prepare(
+      const stmt = db().prepare(
         "DELETE FROM active_tags WHERE player_relation = ? AND key = ?"
       );
       stmt.run(player.id, "FISH");
