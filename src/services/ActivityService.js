@@ -47,22 +47,22 @@ class ActivityService {
         // TODO: Set the correct time for sailing
         NORTH_SAILING: {
           execute: SailService.announceEnd,
-          time: 600_000,
+          time: 100_000,
           class: SailService,
         },
         SOUTH_SAILING: {
           execute: SailService.announceEnd,
-          time: 600_000,
+          time: 100_000,
           class: SailService,
         },
         WEST_SAILING: {
           execute: SailService.announceEnd,
-          time: 600_000,
+          time: 100_000,
           class: SailService,
         },
         EAST_SAILING: {
           execute: SailService.announceEnd,
-          time: 600_000,
+          time: 100_000,
           class: SailService,
         },
       };

@@ -3,7 +3,9 @@ import SkillService from "../SkillService.js";
 import db from "../../../database/database.js";
 import BotService from "../BotService.js";
 import { EmbedBuilder } from "discord.js";
+import BoatService from "../BoatService.js";
 
+//TODO: Handle the first sailor stopping the job. Other players will keep the active tag without any scheduled jobs
 class SailService {
   keys = {
     NORTH: "NORTH_SAILING",
@@ -110,6 +112,24 @@ class SailService {
 
   async endJob(guildId, player) {
     try {
+      const direction = db()
+        .prepare(
+          `SELECT * FROM
+        active_tags 
+        JOIN player 
+        ON player.id = active_tags.player_relation 
+        WHERE player.boat_id = ? AND key IN (${Object.keys(this.keys)
+          .map(() => "?")
+          .join(",")})`
+        )
+        .all(
+          guildId,
+          "NORTH_SAILING",
+          "SOUTH_SAILING",
+          "WEST_SAILING",
+          "EAST_SAILING"
+        );
+
       const stmt = db().prepare(
         `DELETE FROM active_tags 
         WHERE EXISTS(
@@ -128,10 +148,23 @@ class SailService {
         "WEST_SAILING"
       );
 
+      BoatService.sail(guildId, direction[0].key);
+
       SkillService.increaseXP(player.id, "SAIL");
 
-      // TODO: Gameplay
-      return "Sailed";
+      const prettyDirection = {
+        NORTH_SAILING: "North",
+        SOUTH_SAILING: "South",
+        EAST_SAILING: "East",
+        WEST_SAILING: "West",
+      };
+
+      return {
+        content: `The boat has successfully sailed some distance to the ${
+          prettyDirection[direction[0].key]
+        }`,
+        players: direction.map((dir) => "- " + dir.name + " Sailing++"),
+      };
     } catch (error) {
       console.error(error);
     }
@@ -148,9 +181,9 @@ class SailService {
 
     const sailingEmbed = new EmbedBuilder()
       .setColor(0x0077be)
-      .setTitle(`${interaction.player.name} sailing!`)
-      .setDescription("Sailing")
-      .addFields({ name: "Experience:", value: "++Sailing" });
+      .setTitle(`Finished sailing!`)
+      .setDescription(results.content)
+      .addFields({ name: "Experience:", value: results.players.join("\n") });
 
     foghorn.send({ embeds: [sailingEmbed] });
   }

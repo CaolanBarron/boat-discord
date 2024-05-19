@@ -45,7 +45,30 @@ class BoatService {
           `;
   }
 
-  sail() {}
+  sail(guildId, direction) {
+    const boat = db().prepare("SELECT * FROM boat WHERE id = ?").get(guildId);
+    let new_x = boat.x_coord;
+    let new_y = boat.y_coord;
+
+    switch (direction) {
+      case "NORTH_SAILING":
+        new_y = new_y + 1;
+        break;
+      case "SOUTH_SAILING":
+        new_y = new_y - 1;
+        break;
+      case "WEST_SAILING":
+        new_x = new_x - 1;
+        break;
+      case "EAST_SAILING":
+        new_x = new_x + 1;
+        break;
+    }
+
+    db()
+      .prepare(`UPDATE boat SET x_coord = ?, y_coord = ? WHERE id = ?`)
+      .run(new_x, new_y, guildId);
+  }
 
   currentBiome(guildId) {
     const boatStmt = db()
