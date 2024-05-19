@@ -7,8 +7,6 @@ export default {
     try {
       if (!interaction.isChatInputCommand()) return;
 
-      // TODO: check here if the user exists and if the server has a boat already
-
       const user = db()
         .prepare("SELECT * FROM player WHERE user_id = ? AND boat_id = ?")
         .get(interaction.user.id, interaction.guildId);

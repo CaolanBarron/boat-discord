@@ -80,3 +80,16 @@ VALUES
 ('FISH', 'SALMON', 'COMMON'),
 ('FISH', 'STURGEON', 'RARE'),
 ('FISH', 'LAVA_FISH', 'ODDITY');
+
+DELETE FROM activities;
+
+INSERT INTO activities(key, name, allow_during_sail)
+VALUES
+('FISH', 'Fish', false),
+('CARTOGRAPHY', 'Cartography', false),
+('REPAIR', 'Repair', false),
+('RESEARCH', 'Research', false),
+('NORTH_SAILING', 'North Sailing', true),
+('SOUTH_SAILING', 'South Sailing', true),
+('WEST_SAILING', 'West Sailing', true),
+('EAST_SAILING', 'East Sailing', true);

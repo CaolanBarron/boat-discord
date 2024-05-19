@@ -14,15 +14,36 @@ class BotService {
       "CARTOGRAPHY",
       "REPAIR",
       "RESEARCH",
-      "SAILING_NORTH",
-      "SAILING_SOUTH",
-      "SAILING_WEST",
-      "SAILING_EAST",
+      "NORTH_SAILING",
+      "SOUTH_SAILING",
+      "WEST_SAILING",
+      "EAST_EAST",
     ];
     const sql = `SELECT * FROM active_tags at JOIN player p ON at.player_relation = p.id WHERE at.key IN (${activityKeys
       .map(() => "?")
       .join(",")})`;
-    const activities = db().prepare(sql).all(activityKeys);
+    let activities = db().prepare(sql).all(activityKeys);
+
+    let perBoatSailing = [];
+    activities = activities.map((act) => {
+      if (
+        ![
+          "NORTH_SAILING",
+          "SOUTH_SAILING",
+          "WEST_SAILING",
+          "EAST_EAST",
+        ].includes(act.key)
+      )
+        return act;
+      if (!perBoatSailing.includes(act.boat)) {
+        perBoatSailing.push(act.boat);
+        return act;
+      } else {
+        return [];
+      }
+    });
+
+    activities = activities.flat();
 
     for (const activity of activities) {
       ActivityService.scheduleActivity(activity.key, {

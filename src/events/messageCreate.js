@@ -13,7 +13,6 @@ export default {
       )
         return;
 
-      // TODO: Check if the user has character here and keep the character
       const user = db()
         .prepare("SELECT * FROM player WHERE user_id = ? AND boat_id = ?")
         .get(interaction.author.id, interaction.guildId);
@@ -32,7 +31,6 @@ export default {
         throw error;
       }
 
-      // TODO: Change this to be the actual characters name
       const characterName = user.name;
       const message = FlavorService.getFlavor(
         interaction.content,

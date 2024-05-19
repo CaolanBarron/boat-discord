@@ -80,7 +80,7 @@ CREATE TABLE tag(
 DROP TABLE IF EXISTS active_tags;
 
 CREATE TABLE active_tags(
-  key TEXT,
+  key TEXT NOT NULL,
   player_relation INTEGER,
   boat BOOLEAN
 );
@@ -88,7 +88,7 @@ CREATE TABLE active_tags(
 DROP TABLE IF EXISTS biomes;
 
 CREATE TABLE biomes(
-  key TEXT,
+  key TEXT PRIMARY KEY,
   name TEXT
 );
 
@@ -107,3 +107,11 @@ CREATE TABLE feedback(
   player_name TEXT,
   message TEXT
 );
+
+DROP TABLE IF EXISTS activities;
+
+CREATE TABLE activities(
+  key TEXT PRIMARY KEY,
+  name TEXT,
+  allow_during_sail BOOLEAN
+)

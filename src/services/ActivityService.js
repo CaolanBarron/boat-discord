@@ -45,24 +45,24 @@ class ActivityService {
           class: ResearchService,
         },
         // TODO: Set the correct time for sailing
-        SAILING_NORTH: {
+        NORTH_SAILING: {
           execute: SailService.announceEnd,
-          time: 10000,
+          time: 600_000,
           class: SailService,
         },
-        SAILING_SOUTH: {
+        SOUTH_SAILING: {
           execute: SailService.announceEnd,
-          time: 10000,
+          time: 600_000,
           class: SailService,
         },
-        SAILING_WEST: {
+        WEST_SAILING: {
           execute: SailService.announceEnd,
-          time: 10000,
+          time: 600_000,
           class: SailService,
         },
-        SAILING_EAST: {
+        EAST_SAILING: {
           execute: SailService.announceEnd,
-          time: 10000,
+          time: 600_000,
           class: SailService,
         },
       };
@@ -168,16 +168,16 @@ class ActivityService {
             result =
               "Vials rattle with the waves... you are currently researching!";
             break;
-          case "SAILING_NORTH":
+          case "NORTH_SAILING":
             result = `The bow splits the sea... you are currently sailing Northward!`;
             break;
-          case "SAILING_EAST":
+          case "EAST_SAILING":
             result = `The bow splits the sea... you are currently sailing Eastward!`;
             break;
-          case "SAILING_WEST":
+          case "WEST_SAILING":
             result = `The bow splits the sea... you are currently sailing Westward!`;
             break;
-          case "SAILING_SOUTH":
+          case "SOUTH_SAILING":
             result = `The bow splits the sea... you are currently sailing Southward!`;
             break;
         }
@@ -233,6 +233,11 @@ class ActivityService {
           return `${playerName} cleans their beakers as best they can and gives their brain some rest.`;
         case "SAILING":
           return `${playerName} unhands the helm and turns their eyes from the horizon.`;
+        case "NORTH_SAILING":
+        case "SOUTH_SAILING":
+        case "WEST_SAILING":
+        case "EAST_SAILING":
+          return `${playerName} gives up on their efforts to sail the boat... perhaps it should stay where it is...`;
         default:
           throw new Error(`This activity key ${key} does not exist`);
       }
