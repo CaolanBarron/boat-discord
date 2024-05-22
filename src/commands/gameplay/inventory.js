@@ -7,9 +7,11 @@ export default {
     .setDescription("Display the current boats inventory"),
   async execute(interaction) {
     try {
-      const inventoryResult = ItemService.displayInventory(interaction.guildId);
+      const inventoryResult = await ItemService.displayInventory(
+        interaction.guildId
+      );
 
-      await interaction.reply({ embeds: [inventoryResult] });
+      await interaction.reply({ embeds: [inventoryResult], ephemeral: true });
     } catch (error) {
       console.error(error);
     }

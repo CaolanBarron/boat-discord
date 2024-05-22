@@ -1,3 +1,4 @@
+import { EmbedBuilder } from "@discordjs/builders";
 import db from "../../database/database.js";
 import chooseRandomRarity from "./utils.js";
 
@@ -29,6 +30,29 @@ class ItemService {
       "INSERT INTO boat_inventory(boat_id, item_key, collected_by) VALUES(?, ?, ?)"
     );
     inventoryStmt.run(guidId, itemKey, Math.floor(playerId));
+  }
+
+  async displayInventory(guildId) {
+    try {
+      const inventoryStmt = db()
+        .prepare(
+          "SELECT * FROM boat_inventory JOIN item ON boat_inventory.item_key = item.key WHERE boat_id = ?"
+        )
+        .all(guildId);
+
+      const displayable = inventoryStmt.map(
+        (item) => `${item.id}\t|\t${item.name}`
+      );
+
+      const inventoryEmbed = new EmbedBuilder()
+        .setColor(0x0077be)
+        .setTitle("Inventory")
+        .setDescription(displayable.join("\n"));
+
+      return inventoryEmbed;
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 

@@ -39,6 +39,7 @@ CREATE TABLE boat(
 DROP TABLE IF EXISTS boat_inventory;
 
 CREATE TABLE boat_inventory(
+  id INTEGER PRIMARY KEY,
   boat_id TEXT,
   item_key TEXT,
   collected_by INTEGER
