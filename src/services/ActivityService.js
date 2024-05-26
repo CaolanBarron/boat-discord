@@ -20,28 +20,24 @@ class ActivityService {
   scheduleActivity(key, interaction) {
     try {
       const activities = {
-        // TODO: Set the correct time for fishing
         FISH: {
           execute: FishService.announceEnd,
           time: 600_000,
           class: FishService,
         },
-        // TODO: Set the correct time for mapping
         CARTOGRAPHY: {
           execute: CartographyService.announceEnd,
           time: 600_000,
           class: CartographyService,
         },
-        // TODO: Set the correct time for repairing
         REPAIR: {
           execute: RepairService.announceEnd,
           time: 600_000,
           class: RepairService,
         },
-        // TODO: Set the correct time for researching
         RESEARCH: {
           execute: ResearchService.announceEnd,
-          time: 10000,
+          time: 600_000,
           class: ResearchService,
         },
         // TODO: Set the correct time for sailing

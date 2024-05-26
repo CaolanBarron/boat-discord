@@ -18,6 +18,14 @@ export default {
         });
       }
 
+      if (current.key === "RESEARCH") {
+        db()
+          .prepare(
+            "UPDATE boat_inventory SET locked_by = ? WHERE locked_by = ?"
+          )
+          .run(null, interaction.player.id);
+      }
+
       // Delete the active_tag from the database
       const tagsStmt = db().prepare(
         "DELETE FROM active_tags WHERE key = ? AND player_relation = ?"
