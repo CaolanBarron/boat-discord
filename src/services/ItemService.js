@@ -44,7 +44,11 @@ class ItemService {
         displayable = "The Boats inventory is currently empty.";
       } else {
         displayable = inventoryStmt
-          .map((item) => `${item.id}\t|\t${item.name}`)
+          .map((item) => {
+            const result = `${item.id}\t|\t${item.name}`;
+            if (item.locked_by) return result.concat(":lock:");
+            return result;
+          })
           .join("\n");
       }
       const inventoryEmbed = new EmbedBuilder()
@@ -53,6 +57,17 @@ class ItemService {
         .setDescription(displayable);
 
       return inventoryEmbed;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async itemInfo(itemKey) {
+    try {
+      const response = db()
+        .prepare("SELECT * FROM item WHERE key = ?")
+        .get(itemKey);
+      return response.info;
     } catch (error) {
       console.error(error);
     }
