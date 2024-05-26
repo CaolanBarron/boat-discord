@@ -12,7 +12,8 @@ export default {
     try {
       const researchResult = await ResearchService.start(
         interaction.guildId,
-        interaction.player
+        interaction.player,
+        interaction.options.getString("item")
       );
 
       await interaction.reply(researchResult);

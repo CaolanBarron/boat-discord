@@ -5,7 +5,7 @@ import BotService from "../BotService.js";
 import { EmbedBuilder } from "discord.js";
 
 class ResearchService {
-  async start(guildId, player) {
+  async start(guildId, player, itemId) {
     const isBusy = ActivityService.checkActive(player.id, "RESEARCH");
     if (isBusy) {
       return {
@@ -20,6 +20,37 @@ class ResearchService {
         content: isOccupied,
         ephemeral: true,
       };
+    }
+
+    // Check if  the itemId is incorrectly formatted
+
+    if (itemId) {
+      if (!Boolean(Number.parseInt(itemId))) {
+        return {
+          content: "The item ID is not in the correct format",
+          ephemeral: true,
+        };
+      }
+
+      const item = db()
+        .prepare(
+          "SELECT boat_inventory.*, player.name AS locker_name FROM boat_inventory LEFT JOIN player on boat_inventory.locked_by = player.id WHERE boat_inventory.id = ?"
+        )
+        .get(itemId);
+
+      if (!item) {
+        return {
+          content:
+            "This item does not exist. Make sure you are using the correct ID.",
+          ephemeral: true,
+        };
+      }
+      if (item.locked_by) {
+        return {
+          content: `This item is already in use by ${item.locker_name}.`,
+          ephemeral: true,
+        };
+      }
     }
 
     const stmt = db().prepare(

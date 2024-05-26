@@ -39,15 +39,18 @@ class ItemService {
           "SELECT * FROM boat_inventory JOIN item ON boat_inventory.item_key = item.key WHERE boat_id = ?"
         )
         .all(guildId);
-
-      const displayable = inventoryStmt.map(
-        (item) => `${item.id}\t|\t${item.name}`
-      );
-
+      let displayable;
+      if (inventoryStmt.length === 0) {
+        displayable = "The Boats inventory is currently empty.";
+      } else {
+        displayable = inventoryStmt
+          .map((item) => `${item.id}\t|\t${item.name}`)
+          .join("\n");
+      }
       const inventoryEmbed = new EmbedBuilder()
         .setColor(0x0077be)
         .setTitle("Inventory")
-        .setDescription(displayable.join("\n"));
+        .setDescription(displayable);
 
       return inventoryEmbed;
     } catch (error) {

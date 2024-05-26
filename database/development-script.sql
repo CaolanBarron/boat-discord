@@ -42,7 +42,8 @@ CREATE TABLE boat_inventory(
   id INTEGER PRIMARY KEY,
   boat_id TEXT,
   item_key TEXT,
-  collected_by INTEGER
+  collected_by INTEGER,
+  locked_by INTEGER
 );
 
 DROP TABLE IF EXISTS item;
@@ -50,7 +51,8 @@ DROP TABLE IF EXISTS item;
 CREATE TABLE item(
   key TEXT PRIMARY KEY,
   name TEXT,
-  description TEXT
+  description TEXT,
+  info TEXT
 );
 
 DROP TABLE IF EXISTS loot;
@@ -60,6 +62,13 @@ CREATE TABLE loot(
   item_key TEXT,
   rarity TEXT,
   UNIQUE(key, item_key)
+);
+
+DROP TABLE IF EXISTS item_transformation;
+
+CREATE TABLE item_transformation(
+  original TEXT,
+  transformation TEXT
 );
 
 ---
@@ -90,7 +99,8 @@ DROP TABLE IF EXISTS biomes;
 
 CREATE TABLE biomes(
   key TEXT PRIMARY KEY,
-  name TEXT
+  name TEXT,
+  info TEXT
 );
 
 DROP TABLE IF EXISTS biome_coords;

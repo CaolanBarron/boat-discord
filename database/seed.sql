@@ -10,14 +10,14 @@ VALUES
     ('**"{0}"** {1} calls out from atop the boat, where they were attempting to adjust the receiver.'),
     ('**"{0}"** {1} grunts.'),
     ('**"{0}"** {1} states dismissively.'),
-    ('**"{0}"** {1} slurrs in between swigs of ale.'),
+    ('**"{0}"** {1} slurs in between swigs of ale.'),
     ('**"{0}"** {1} says.'),
     ('**"{0}"** {1} shouts from somewhere deep in the boat.'),
     ('**"{0}"** {1} whispers, afraid of whats listening.'),
     ('**"{0}"** {1} answers cryptically.'),
     ('**"{0}"** {1} exclaims, jumping to their feet!'),
     ('**"{0}"** {1} comments, thinking about the land.'),
-    ('**"{0}"** {1} announces, to the suprise of no one.');
+    ('**"{0}"** {1} announces, to the surprise of no one.');
 
 DELETE FROM tag;
 
@@ -41,10 +41,10 @@ VALUES
 
 DELETE FROM biomes;
 
-INSERT INTO biomes (key, Name)
+INSERT INTO biomes (key, name, info)
 VALUES
-('SWAMP', 'Swamp'),
-('VOID', 'Void');
+('SWAMP', 'Swamp', 'This is hidden information about the swamp biome'),
+('VOID', 'Void', 'This is hidden information about the Void biome');
 
 DELETE FROM biome_coords;
 
@@ -61,14 +61,29 @@ VALUES
 
 DELETE FROM item;
 
-INSERT INTO item(key, name, description)
+INSERT INTO item(key, name, description, info)
 VALUES
-('GAS_FISH', 'Gasotrout', 'This fish seems to have....gasoline inside it??'),
-('TROUT', 'Trout', 'Awww no gasoline...'),
-('BOOT', 'Boot', 'I wouldnt wear that...'),
-('SALMON', 'Salmon', 'Ahh the humble salmon.. salmondays amirite?'),
-('STURGEON', 'Sturgeon', 'This should not be here...'),
-('LAVA_FISH', 'Lava fish', 'hot hot hot');
+('GAS_FISH', 'Gasotrout', 'This fish seems to have....gasoline inside it??', 'This is hidden information about the Gasotrout item.'),
+('TROUT', 'Trout', 'Awww no gasoline...', 'This is hidden information about the Trout item.'),
+('BOOT', 'Boot', 'I wouldnt wear that...', 'This is hidden information about the Boot item.'),
+('SALMON', 'Salmon', 'Ahh the humble salmon.. salmondays amirite?', 'This is hidden information about the Salmon item.'),
+('STURGEON', 'Sturgeon', 'This should not be here...', 'This is hidden information about the Sturgeon item.'),
+('COMPASS', 'Compass', 'A guiding tool', 'This is hidden information about the Compass item.'),
+('MUSIC_BOX', 'Music Box', 'Wow sounds good', 'This is hidden information about the Music Box item.'),
+('LANTERN', 'Lantern', 'Something to light up the boat', 'This is hidden information about the Lantern item.'),
+('HOURGLASS', 'Hourglass', 'Hows time doing?', 'This is hidden information about the Hourglass item.'),
+('HARMONICA', 'Harmonica', 'hot hot hot', 'This is hidden information about the Harmonica item.'),
+('LAVA_FISH', 'Lava fish', 'hot hot hot', 'This is hidden information about the Lava fish item.');
+
+DELETE FROM item_transformation;
+
+INSERT INTO item_transformation(original, transformation)
+VALUES
+('BOOT', 'COMPASS'),
+('MUSIC_BOX', 'HARMONICA'),
+('TROUT', 'GAS_FISH'),
+('LANTERN', 'HOURGLASS'),
+('LAVA_FISH', 'STURGEON');
 
 DELETE FROM loot;
 
