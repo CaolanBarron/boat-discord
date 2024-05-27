@@ -9,6 +9,7 @@ export default {
     const guildIds = client.guilds.cache.map((guild) => guild.id);
     if (guildIds.length > 0) {
       GameEventService.startFlavorIntervals(guildIds);
+      GameEventService.startPromptIntervals(guildIds);
     }
 
     BotService.restartActivities();
