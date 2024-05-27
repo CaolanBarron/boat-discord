@@ -2,13 +2,13 @@ import ActivityService from "./ActivityService.js";
 import db from "../../database/database.js";
 
 class BotService {
-  getChannelByName(guildId, name) {
+  async getChannelByName(guildId, name) {
     return global.client.channels.cache.find(
       (channel) => channel.name === name && channel.guildId === guildId
     );
   }
 
-  restartActivities() {
+  async restartActivities() {
     const activityKeys = [
       "FISH",
       "CARTOGRAPHY",
@@ -54,4 +54,4 @@ class BotService {
   }
 }
 
-export default BotService;
+export default new BotService();

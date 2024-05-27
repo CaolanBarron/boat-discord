@@ -1,7 +1,7 @@
 import db from "../../database/database.js";
 
 class FlavourService {
-  getFlavor(content, characterName) {
+  getPlayerFlavor(content, characterName) {
     try {
       String.prototype.format = function () {
         var args = arguments;
@@ -10,7 +10,9 @@ class FlavourService {
         });
       };
 
-      const stmt = db().prepare("SELECT * FROM flavor").all();
+      const stmt = db()
+        .prepare("SELECT * FROM flavor WHERE subject = ?")
+        .all("PLAYER");
 
       const randomFlavor = Math.floor(Math.random() * stmt.length);
 
@@ -19,7 +21,17 @@ class FlavourService {
       console.error(error);
     }
   }
-  environmentFlavor() {}
+  getBoatFlavor() {
+    try {
+      const stmt = db()
+        .prepare("SELECT * FROM flavor WHERE subject = ?")
+        .all("BOAT");
+
+      return stmt[Math.floor(Math.random() * stmt.length)];
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
 
 export default new FlavourService();

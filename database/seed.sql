@@ -19,6 +19,18 @@ VALUES
     ('**"{0}"** {1} comments, thinking about the land.'),
     ('**"{0}"** {1} announces, to the surprise of no one.');
 
+INSERT INTO flavor (content, subject)
+VALUES
+('The wind blows in the wrong direction.', 'BOAT'),
+('The Boat sways against the waves.', 'BOAT'),
+('Something surfaces nearby... And then it doesn''t.', 'BOAT'),
+('Wind howling...', 'BOAT'),
+('The ocean looks darker today...', 'BOAT'),
+('The Boat creaks in whispers.', 'BOAT'),
+('Everyone on The Boat shudders.', 'BOAT'),
+('God does not reply.', 'BOAT'),
+('Nobody feels correct all of a sudden.', 'BOAT');
+
 DELETE FROM tag;
 
 INSERT INTO tag (key) 

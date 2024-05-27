@@ -78,7 +78,8 @@ DROP TABLE IF EXISTS flavor;
 CREATE TABLE flavor(
   key INTEGER PRIMARY KEY,
   content TEXT,
-  tag TEXT
+  tag TEXT,
+  subject TEXT NOT NULL DEFAULT 'PLAYER'
 );
 
 DROP TABLE IF EXISTS tag;

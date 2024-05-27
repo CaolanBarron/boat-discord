@@ -32,7 +32,7 @@ export default {
       }
 
       const characterName = user.name;
-      const message = FlavorService.getFlavor(
+      const message = FlavorService.getPlayerFlavor(
         interaction.content,
         characterName
       );
