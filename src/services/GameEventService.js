@@ -39,6 +39,12 @@ class GameEventService {
       if (!boatIds.includes(guild)) continue;
 
       const task = new Task(`${guild}_prompt`, async () => {
+        const users = db()
+          .prepare(`SELECT * FROM player WHERE boat_id = ?`)
+          .all(guild);
+
+        if (users.length === 0) return;
+
         const row = new ActionRowBuilder();
         const button = new ButtonBuilder()
           .setCustomId("asdasd")
