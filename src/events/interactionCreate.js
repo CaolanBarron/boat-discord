@@ -1,15 +1,84 @@
-import { Events, AttachmentBuilder, EmbedBuilder } from "discord.js";
+import {
+  Events,
+  AttachmentBuilder,
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  blockQuote,
+  codeBlock,
+  Colors,
+} from "discord.js";
 import db from "../../database/database.js";
+import PromptService from "../services/PromptService.js";
 
 export default {
   name: Events.InteractionCreate,
   async execute(interaction) {
     try {
-      if (!interaction.isChatInputCommand()) return;
-
       const user = db()
         .prepare("SELECT * FROM player WHERE user_id = ? AND boat_id = ?")
         .get(interaction.user.id, interaction.guildId);
+      interaction.player = user;
+
+      if (interaction.isButton() && interaction.customId) {
+        // Need to recreate the action row with the buttons disabled and then edit the message immediately
+        const customId = interaction.customId.split("_");
+
+        const message = interaction.message;
+        const components = message.components[0].components;
+
+        const row = new ActionRowBuilder();
+
+        for (const button of components) {
+          const newButton = new ButtonBuilder()
+            .setCustomId(button.data.custom_id)
+            .setLabel(button.data.label)
+            .setStyle(ButtonStyle.Primary)
+            .setDisabled(true);
+          row.addComponents(newButton);
+        }
+
+        if (customId[0] === "prompt") {
+          // Do not send a event half the amount of times
+          if (Math.random() < 0.5) return;
+
+          // Remove the prompt if it is too old
+          const timePassed = Date.now() - interaction.message.createdTimestamp;
+
+          if (timePassed / 1000 > 180) {
+            await message.edit({
+              content: "The time for this event has long passed...",
+              embeds: [],
+              components: [],
+            });
+            return;
+          }
+          await message.edit({
+            content: message.content,
+            components: [row],
+          });
+
+          const actionResponse = await PromptService.chooseAction(
+            customId[1],
+            user
+          );
+
+          const outcome =
+            actionResponse.outcome_type === "SUCCESS"
+              ? { color: Colors.Green }
+              : { color: Colors.Red };
+
+          const embed = new EmbedBuilder()
+            .setTitle(`${user.name} decided to take action`)
+            .setDescription(actionResponse.content)
+            .setColor(outcome.color);
+
+          await interaction.reply({ embeds: [embed] });
+        }
+      }
+
+      if (!interaction.isChatInputCommand()) return;
 
       if (!user) {
         const guild = db()
@@ -29,8 +98,6 @@ export default {
         }
         if (error.message !== "IGNORE") throw error;
       }
-
-      interaction.player = user;
 
       if (
         interaction.channel.name !== process.env.GAMEPLAYCHANNEL &&

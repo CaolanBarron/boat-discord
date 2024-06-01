@@ -3,6 +3,7 @@ import db from "../../database/database.js";
 import FlavorService from "./FlavorService.js";
 import BotService from "./BotService.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import PromptService from "./PromptService.js";
 
 class GameEventService {
   async startFlavorIntervals(guildIds) {
@@ -23,7 +24,7 @@ class GameEventService {
 
         await channel.send(flavor);
       });
-      const job = new SimpleIntervalJob({ seconds: 20 }, task);
+      const job = new SimpleIntervalJob({ seconds: 300 }, task);
 
       scheduler.addSimpleIntervalJob(job);
     }
@@ -45,22 +46,17 @@ class GameEventService {
 
         if (users.length === 0) return;
 
-        const row = new ActionRowBuilder();
-        const button = new ButtonBuilder()
-          .setCustomId("asdasd")
-          .setLabel("label")
-          .setStyle(ButtonStyle.Primary);
-        row.addComponents(button);
+        const promptMessage = await PromptService.getRandomPrompt();
 
         const channel = await BotService.getChannelByName(
           guild,
           process.env.GAMEPLAYCHANNEL
         );
 
-        await channel.send({ content: "Test", components: [row] });
+        await channel.send(promptMessage);
       });
 
-      const job = new SimpleIntervalJob({ seconds: 20 }, task);
+      const job = new SimpleIntervalJob({ seconds: 1800 }, task);
 
       scheduler.addSimpleIntervalJob(job);
     }

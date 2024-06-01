@@ -1,16 +1,20 @@
+PRAGMA foreign_keys = OFF;
+
 DROP TABLE IF EXISTS player;
 
 CREATE TABLE player(
   id INTEGER PRIMARY KEY,
   user_id TEXT,
   boat_id TEXT,
-  name TEXT
+  name TEXT,
+
+  FOREIGN KEY(boat_id) REFERENCES boat(id)
 );
 
 
-DROP TABLE IF EXISTS skills;
+DROP TABLE IF EXISTS skill;
 
-CREATE TABLE skills(
+CREATE TABLE skill(
   key TEXT PRIMARY KEY,
   name TEXT
 );
@@ -21,7 +25,10 @@ DROP TABLE IF EXISTS player_skills;
 CREATE TABLE player_skills(
   player_id INTEGER,
   skill_key TEXT,
-  xp INT
+  xp INT,
+
+  FOREIGN KEY(player_id) REFERENCES player(id),
+  FOREIGN key(skill_key) REFERENCES skill(key)
 );
 
 ---
@@ -43,8 +50,17 @@ CREATE TABLE boat_inventory(
   boat_id TEXT,
   item_key TEXT,
   collected_by INTEGER,
-  locked_by INTEGER
+  locked_by INTEGER,
+
+  FOREIGN KEY(boat_id) REFERENCES boat(id),
+  FOREIGN KEY(item_key) REFERENCES item(key),
+  FOREIGN KEY(collected_by) REFERENCES player(id),
+  FOREIGN KEY(locked_by) REFERENCES player(id)
 );
+
+DROP TABLE IF EXISTS item_transformation;
+
+DROP TABLE IF EXISTS loot;
 
 DROP TABLE IF EXISTS item;
 
@@ -55,32 +71,32 @@ CREATE TABLE item(
   info TEXT
 );
 
-DROP TABLE IF EXISTS loot;
 
 CREATE TABLE loot(
   key TEXT,
   item_key TEXT,
   rarity TEXT,
-  UNIQUE(key, item_key)
+
+  UNIQUE(key, item_key),
+
+  FOREIGN KEY(item_key) REFERENCES item(key)
 );
 
-DROP TABLE IF EXISTS item_transformation;
 
 CREATE TABLE item_transformation(
   original TEXT,
-  transformation TEXT
+  transformation TEXT,
+
+  UNIQUE(original, transformation),
+
+  FOREIGN KEY(original) REFERENCES item(key),
+  FOREIGN KEY(transformation) REFERENCES item(key)
+
 );
 
 ---
 
 DROP TABLE IF EXISTS flavor;
-
-CREATE TABLE flavor(
-  key INTEGER PRIMARY KEY,
-  content TEXT,
-  tag TEXT,
-  subject TEXT NOT NULL DEFAULT 'PLAYER'
-);
 
 DROP TABLE IF EXISTS tag;
 
@@ -88,29 +104,46 @@ CREATE TABLE tag(
   key TEXT PRIMARY KEY
 );
 
+CREATE TABLE flavor(
+  key INTEGER PRIMARY KEY,
+  content TEXT,
+  tag TEXT,
+  subject TEXT NOT NULL DEFAULT 'PLAYER',
+
+  FOREIGN KEY(tag) REFERENCES tag(key)
+);
+
+
+
 DROP TABLE IF EXISTS active_tags;
 
 CREATE TABLE active_tags(
   key TEXT NOT NULL,
-  player_relation INTEGER,
-  boat BOOLEAN
+  player_id INTEGER,
+  boat BOOLEAN,
+
+  FOREIGN KEY(player_id) REFERENCES player(id)
 );
 
-DROP TABLE IF EXISTS biomes;
+DROP TABLE IF EXISTS biome_coords;
 
-CREATE TABLE biomes(
+DROP TABLE IF EXISTS biome;
+
+CREATE TABLE biome(
   key TEXT PRIMARY KEY,
   name TEXT,
   info TEXT
 );
 
-DROP TABLE IF EXISTS biome_coords;
 
 CREATE TABLE biome_coords(
   biome_key TEXT,
   x_coord INTEGER,
   y_coord INTEGER,
-  UNIQUE(x_coord, y_coord)
+  
+  UNIQUE(x_coord, y_coord),
+
+  FOREIGN KEY(biome_key) REFERENCES biome(key) 
 );
 
 DROP TABLE IF EXISTS feedback;
@@ -143,5 +176,47 @@ DROP TABLE IF EXISTS boat_effect;
 
 CREATE TABLE boat_effect (
   boat_id INTEGER,
-  effect_id INTEGER
+  effect_id INTEGER,
+
+  FOREIGN KEY(boat_id) REFERENCES boat(id),
+  FOREIGN KEY(effect_id) REFERENCES effect(id)
 );
+
+--- PROMPTS
+
+DROP TABLE IF EXISTS prompt_message;
+
+CREATE TABLE prompt_message(
+  id INTEGER PRIMARY KEY,
+  content TEXT
+);
+
+DROP TABLE IF EXISTS prompt_action;
+
+CREATE TABLE prompt_action(
+  id INTEGER PRIMARY KEY,
+  message_id INTEGER NOT NULL,
+  content TEXT NOT NULL,
+  challenge_skill TEXT,
+  challenge_value INTEGER,
+
+  FOREIGN KEY(message_id) REFERENCES prompt_message(id),
+  FOREIGN KEY (challenge_skill) REFERENCES skill(key)
+);
+
+DROP TABLE IF EXISTS prompt_outcome;
+
+CREATE TABLE prompt_outcome(
+  id INTEGER PRIMARY KEY,
+  action_id INTEGER,
+  content TEXT NOT NULL,
+  outcome_type TEXT CHECK(outcome_type IN ('SUCCESS', 'FAILURE')) NOT NULL DEFAULT 'SUCCESS',
+  effect_id INTEGER,
+ 
+  UNIQUE(action_id, outcome_type),
+
+  FOREIGN KEY(action_id) REFERENCES prompt_action(id),
+  FOREIGN KEY(effect_id) REFERENCES effect(id)
+);
+
+PRAGMA foreign_keys = ON;

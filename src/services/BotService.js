@@ -19,7 +19,7 @@ class BotService {
       "WEST_SAILING",
       "EAST_EAST",
     ];
-    const sql = `SELECT * FROM active_tags at JOIN player p ON at.player_relation = p.id WHERE at.key IN (${activityKeys
+    const sql = `SELECT * FROM active_tags at JOIN player p ON at.player_id = p.id WHERE at.key IN (${activityKeys
       .map(() => "?")
       .join(",")})`;
     let activities = db().prepare(sql).all(activityKeys);

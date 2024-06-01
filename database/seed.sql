@@ -41,9 +41,9 @@ VALUES
     ('CARTOGRAPHY'),
     ('REPAIR');
 
-DELETE FROM skills;
+DELETE FROM skill;
 
-INSERT INTO skills (key, name)
+INSERT INTO skill (key, name)
 VALUES
 ('FISH', 'Fishing'),
 ('SAIL', 'Sailing'),
@@ -51,9 +51,9 @@ VALUES
 ('CARTOGRAPHY', 'Cartography'),
 ('REPAIR', 'Repair');
 
-DELETE FROM biomes;
+DELETE FROM biome;
 
-INSERT INTO biomes (key, name, info)
+INSERT INTO biome (key, name, info)
 VALUES
 ('SWAMP', 'Swamp', 'This is hidden information about the swamp biome'),
 ('VOID', 'Void', 'This is hidden information about the Void biome');
@@ -124,7 +124,56 @@ VALUES
 
 DELETE FROM effect;
 
-INSERT INTO effect (key, name, description, effect_type)
+INSERT INTO effect (id, key, name, description, effect_type)
 VALUES
-('SPEED_INC', 'Speed Increase', 'The Boat is traveling faster than usual', 'BUFF'),
-('SPEED_DEC', 'Speed Decrease', 'The Boat is traveling slower than usual', 'DEBUFF');
+(1, 'SPEED_INC', 'Speed Increase', 'The Boat is traveling faster than usual', 'BUFF'),
+(2, 'SPEED_DEC', 'Speed Decrease', 'The Boat is traveling slower than usual', 'DEBUFF'),
+(3, 'RESEARCH_IMP', 'Research Improved', 'The research activity will yield more results', 'BUFF'),
+(4, 'RESEARCH_NEG', 'Research Negative', 'The research activity will yield less result', 'DEBUFF'),
+(5, 'FATIGUE', 'Fatigue', 'You find yourself not able to do much', 'DEBUFF'),
+(6, 'BLESSED', 'Blessed', 'All activities are more successful', 'BUFF'),
+(7, 'CURSED', 'Cursed', 'All activities are less successful', 'DEBUFF');
+
+
+DELETE FROM prompt_message;
+
+INSERT INTO prompt_message
+VALUES
+(1, 'The engine has suddenly stopped working'),
+(2, 'A mermaid has been sighted overboard'),
+(3, 'A strange figure appears on the ship');
+
+DELETE FROM prompt_action;
+
+INSERT INTO prompt_action
+VALUES
+(1, 1, 'Attempt to fix it', 'REPAIR', 3),
+(3, 1, 'Study the algae growing on it', 'RESEARCH', 6),
+(4, 2, 'Take as many notes as you can', 'RESEARCH', 6);
+
+
+INSERT INTO prompt_action(id, message_id, content)
+VALUES
+(2, 1, 'Ignore it and hope'),
+(5, 2, 'Turn a blind eye to the creature'),
+(6, 2, 'Reach out and help her'),
+(7, 3, 'Step towards them'),
+(8, 3, 'Find a spot and hide');
+
+DELETE FROM prompt_outcome;
+
+INSERT INTO prompt_outcome(action_id, content, outcome_type, effect_id)
+VALUES
+( 1, 'The boat is fixed! and improved...', 'SUCCESS', 1),
+( 1, 'Well that could have gone better...', 'FAILURE', 2),
+( 2, 'The engine only gets worse...', 'FAILURE', null),
+( 3, 'Perhaps a the unique biological makeup of this strange algae could be used to enhance the engine...', 'SUCCESS', 1),
+( 3, 'The algae grows thicker...', 'FAILURE', 2),
+( 4, 'This information could prove invaluable...', 'SUCCESS', 3),
+( 4, 'She doesnt like being looked at...', 'FAILURE', 4),
+( 5, 'The privacy is respectful, When you turn around she is gone...', 'SUCCESS', null),
+( 6, 'You do not belong in her world...', 'SUCCESS', 5),
+( 7, 'A flash of light and a warm feeling... Some just need to be guided to a material place', 'SUCCESS', 6),
+( 8, 'A dark shadow descends over The Boat... Ignoring problems is not always wise...', 'FAILURE', 7);
+
+
