@@ -28,7 +28,7 @@ export default {
 
       // Delete the active_tag from the database
       const tagsStmt = db().prepare(
-        "DELETE FROM active_tags WHERE key = ? AND player_relation = ?"
+        "DELETE FROM active_tags WHERE key = ? AND player_id = ?"
       );
 
       tagsStmt.run(current.key, interaction.player.id);

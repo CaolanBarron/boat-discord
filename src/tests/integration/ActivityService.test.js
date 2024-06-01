@@ -23,7 +23,7 @@ const player2 = {
 
 describe("Check occupied function", () => {
   it("Should return when Fish activity is occupied", async () => {
-    await FishService.start(1, player2);
+    console.log(await FishService.start(1, player2));
 
     const response = await ActivityService.checkOccupied("FISH", 1);
     expect(response).toEqual(

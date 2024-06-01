@@ -52,7 +52,7 @@ class SailService {
         `SELECT key FROM
         active_tags 
         JOIN player 
-        ON player.id = active_tags.player_relation 
+        ON player.id = active_tags.player_id 
         WHERE player.boat_id = ? AND key IN (${Object.keys(this.keys)
           .map(() => "?")
           .join(",")})`
@@ -86,7 +86,7 @@ class SailService {
     }
 
     const stmt = db().prepare(
-      "INSERT INTO active_tags(key, player_relation, boat) VALUES(?, ?, true)"
+      "INSERT INTO active_tags(key, player_id, boat) VALUES(?, ?, true)"
     );
     stmt.run(tag, player.id);
 
@@ -117,7 +117,7 @@ class SailService {
           `SELECT * FROM
         active_tags 
         JOIN player 
-        ON player.id = active_tags.player_relation 
+        ON player.id = active_tags.player_id 
         WHERE player.boat_id = ? AND key IN (${Object.keys(this.keys)
           .map(() => "?")
           .join(",")})`
@@ -135,7 +135,7 @@ class SailService {
         WHERE EXISTS(
           SELECT 1 
           FROM player
-          WHERE player.boat_id = ? AND player.id = active_tags.player_relation) 
+          WHERE player.boat_id = ? AND player.id = active_tags.player_id) 
           AND key IN (${Object.keys(this.keys)
             .map(() => "?")
             .join(",")})`
@@ -193,7 +193,7 @@ class SailService {
       .prepare(
         `SELECT * FROM active_tags 
         JOIN player 
-        ON active_tags.player_relation = player.id 
+        ON active_tags.player_id = player.id 
         WHERE player.boat_id = ? AND 
         active_tags.key IN (${Object.keys(this.keys)
           .map(() => "?")
@@ -217,7 +217,7 @@ class SailService {
       .prepare(
         `SELECT * 
       FROM active_tags at 
-      JOIN player p ON at.player_relation = p.id 
+      JOIN player p ON at.player_id = p.id 
       WHERE p.boat_id = ? 
       AND at.key in (SELECT key FROM activities WHERE allow_during_sail = false)`
       )

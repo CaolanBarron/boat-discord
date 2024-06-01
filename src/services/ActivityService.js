@@ -82,7 +82,7 @@ class ActivityService {
   getCurrent(playerId) {
     try {
       const sql = db().prepare(
-        `SELECT * FROM active_tags  WHERE player_relation = ? AND key IN (${this.activityKeys
+        `SELECT * FROM active_tags  WHERE player_id = ? AND key IN (${this.activityKeys
           .map(() => "?")
           .join(",")})`
       );
@@ -193,7 +193,7 @@ class ActivityService {
         `SELECT *
         FROM active_tags at
         JOIN player p
-        ON at.player_relation = p.id
+        ON at.player_id = p.id
         JOIN boat b
         ON p.boat_id = b.id
         WHERE b.id = ? AND at.key = ?;`
