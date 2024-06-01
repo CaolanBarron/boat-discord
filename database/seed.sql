@@ -120,3 +120,11 @@ VALUES
 ('SOUTH_SAILING', 'South Sailing', true),
 ('WEST_SAILING', 'West Sailing', true),
 ('EAST_SAILING', 'East Sailing', true);
+
+
+DELETE FROM effect;
+
+INSERT INTO effect (key, name, description, effect_type)
+VALUES
+('SPEED_INC', 'Speed Increase', 'The Boat is traveling faster than usual', 'BUFF'),
+('SPEED_DEC', 'Speed Decrease', 'The Boat is traveling slower than usual', 'DEBUFF');

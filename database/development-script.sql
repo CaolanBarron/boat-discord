@@ -126,4 +126,22 @@ CREATE TABLE activities(
   key TEXT PRIMARY KEY,
   name TEXT,
   allow_during_sail BOOLEAN
-)
+);
+
+
+DROP TABLE IF EXISTS effect;
+
+CREATE TABLE effect (
+  id INTEGER PRIMARY KEY,
+  key TEXT NOT NULL,
+  name TEXT NOT NULL,
+  description TEXT NOT NULL,
+  effect_type TEXT CHECK(effect_type IN ('BUFF', 'DEBUFF')) NOT NULL DEFAULT 'BUFF'
+);
+
+DROP TABLE IF EXISTS boat_effect;
+
+CREATE TABLE boat_effect (
+  boat_id INTEGER,
+  effect_id INTEGER
+);
