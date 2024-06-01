@@ -15,6 +15,8 @@ class GameEventService {
     for (const guild of guildIds) {
       if (!boatIds.includes(guild)) continue;
       const task = new Task(`${guild}_boat_flavor`, async () => {
+        // Do not send a event half the amount of times
+        if (Math.random() < 0.5) return;
         const flavor = FlavorService.getBoatFlavor();
 
         const channel = await BotService.getChannelByName(
@@ -40,6 +42,8 @@ class GameEventService {
       if (!boatIds.includes(guild)) continue;
 
       const task = new Task(`${guild}_prompt`, async () => {
+        // Do not send a event half the amount of times
+        if (Math.random() < 0.5) return;
         const users = db()
           .prepare(`SELECT * FROM player WHERE boat_id = ?`)
           .all(guild);

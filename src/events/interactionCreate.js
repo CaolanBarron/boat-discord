@@ -40,9 +40,6 @@ export default {
         }
 
         if (customId[0] === "prompt") {
-          // Do not send a event half the amount of times
-          if (Math.random() < 0.5) return;
-
           // Remove the prompt if it is too old
           const timePassed = Date.now() - interaction.message.createdTimestamp;
 
