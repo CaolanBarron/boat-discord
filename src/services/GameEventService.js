@@ -2,7 +2,6 @@ import { ToadScheduler, SimpleIntervalJob, Task } from "toad-scheduler";
 import db from "../../database/database.js";
 import FlavorService from "./FlavorService.js";
 import BotService from "./BotService.js";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import PromptService from "./PromptService.js";
 
 class GameEventService {
@@ -14,6 +13,7 @@ class GameEventService {
 
     for (const guild of guildIds) {
       if (!boatIds.includes(guild)) continue;
+      console.log(`Spinning up flavor interval for ${guild}`);
       const task = new Task(`${guild}_boat_flavor`, async () => {
         // Do not send a event half the amount of times
         if (Math.random() < 0.5) return;
@@ -21,7 +21,7 @@ class GameEventService {
 
         const channel = await BotService.getChannelByName(
           guild,
-          process.env.GAMEPLAYCHANNEL
+          process.env.GAMEPLAYCHANNEL,
         );
 
         await channel.send(flavor);
@@ -40,6 +40,7 @@ class GameEventService {
 
     for (const guild of guildIds) {
       if (!boatIds.includes(guild)) continue;
+      console.log(`Spinning up prompt interval for ${guild}`);
 
       const task = new Task(`${guild}_prompt`, async () => {
         // Do not send a event half the amount of times
@@ -54,7 +55,7 @@ class GameEventService {
 
         const channel = await BotService.getChannelByName(
           guild,
-          process.env.GAMEPLAYCHANNEL
+          process.env.GAMEPLAYCHANNEL,
         );
 
         await channel.send(promptMessage);

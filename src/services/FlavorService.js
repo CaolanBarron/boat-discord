@@ -22,6 +22,7 @@ class FlavourService {
       console.error(error);
     }
   }
+
   getBoatFlavor(guildId) {
     try {
       const currentBiome = BoatService.currentBiome(guildId);
@@ -29,7 +30,7 @@ class FlavourService {
 
       const stmt = db()
         .prepare(
-          "SELECT * FROM flavor WHERE subject = ? AND tag IS null OR tag = ?"
+          "SELECT * FROM flavor WHERE subject = ? AND tag IS null OR tag = ?",
         )
         .all("BOAT", biome_key);
 

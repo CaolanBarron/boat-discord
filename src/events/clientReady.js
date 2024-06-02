@@ -12,7 +12,8 @@ export default {
       GameEventService.startPromptIntervals(guildIds);
     }
 
-    BotService.restartActivities();
+    await BotService.restartActivities();
+    await BotService.restartEffects();
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);
   },
 };

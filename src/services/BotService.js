@@ -1,10 +1,12 @@
 import ActivityService from "./ActivityService.js";
 import db from "../../database/database.js";
+import BoatService from "./BoatService.js";
+import schedule from "node-schedule";
 
 class BotService {
   async getChannelByName(guildId, name) {
     return global.client.channels.cache.find(
-      (channel) => channel.name === name && channel.guildId === guildId
+      (channel) => channel.name === name && channel.guildId === guildId,
     );
   }
 
@@ -50,6 +52,26 @@ class BotService {
         guildId: activity.boat_id,
         player: { id: activity.id, name: activity.name },
       });
+    }
+  }
+
+  async restartEffects() {
+    // Check for all active effects in the game
+    const activeEffects = db().prepare(`SELECT * FROM boat_effect`).all();
+    if (activeEffects.length === 0) return;
+    // for every one schedule the removeEffect
+    // TODO: A seperate schedule function should probably be created for these
+    const executeTime = Date.now() + 10_000;
+    for (const effect of activeEffects) {
+      schedule.scheduleJob(
+        `effect_${effect.effect_id}_${effect.boat_id}`,
+        executeTime,
+        BoatService.removeEffect.bind(
+          BoatService,
+          effect.boat_id,
+          effect.effect_id,
+        ),
+      );
     }
   }
 }

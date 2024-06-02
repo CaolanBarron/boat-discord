@@ -70,9 +70,9 @@ class ActivityService {
 
       const startTime = Date.now() + activity.time;
       schedule.scheduleJob(
-        `${interaction.player.id}_${key}`,
+        `activity_${key}_${interaction.player.id}`,
         startTime,
-        activity.execute.bind(activity.class, interaction)
+        activity.execute.bind(activity.class, interaction),
       );
     } catch (error) {
       console.error(error);
@@ -84,7 +84,7 @@ class ActivityService {
       const sql = db().prepare(
         `SELECT * FROM active_tags  WHERE player_id = ? AND key IN (${this.activityKeys
           .map(() => "?")
-          .join(",")})`
+          .join(",")})`,
       );
 
       const activity = sql.get(playerId, this.activityKeys);
@@ -196,7 +196,7 @@ class ActivityService {
         ON at.player_id = p.id
         JOIN boat b
         ON p.boat_id = b.id
-        WHERE b.id = ? AND at.key = ?;`
+        WHERE b.id = ? AND at.key = ?;`,
       )
       .get(guildId, activity);
 

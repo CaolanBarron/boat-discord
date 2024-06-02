@@ -1,4 +1,5 @@
 import { stripIndent } from "common-tags";
+import schedule from "node-schedule";
 import db from "../../database/database.js";
 import GameEventService from "./GameEventService.js";
 import EffectService from "./EffectService.js";
@@ -8,7 +9,7 @@ class BoatService {
     try {
       if (!guildID) throw Error("No Guild ID????");
       const createStmt = db().prepare(
-        "INSERT INTO boat(id, condition, speed, x_coord, y_coord) VALUES(?, ?, ?, ?, ?)"
+        "INSERT INTO boat(id, condition, speed, x_coord, y_coord) VALUES(?, ?, ?, ?, ?)",
       );
 
       createStmt.run(guildID, condition, speed, x_coord, y_coord);
@@ -23,7 +24,7 @@ class BoatService {
       ];
 
       const defaultItemStmt = db().prepare(
-        `INSERT INTO boat_inventory(boat_id, item_key) VALUES (@boat_id, @item_key)`
+        `INSERT INTO boat_inventory(boat_id, item_key) VALUES (@boat_id, @item_key)`,
       );
 
       const insertValues = defaultItems.map((item) => ({
@@ -52,6 +53,7 @@ class BoatService {
     PENDING
     `;
   }
+
   introductionGameplayMessage() {
     return stripIndent`
       # Welcome to The Boat!
@@ -102,7 +104,7 @@ class BoatService {
 
     db()
       .prepare(
-        `INSERT INTO boat_travel_history(boat_id, x_coord, y_coord, biome) VALUES(?, ?, ?, ?)`
+        `INSERT INTO boat_travel_history(boat_id, x_coord, y_coord, biome) VALUES(?, ?, ?, ?)`,
       )
       .run(guildId, new_x, new_y, biome_key);
   }
@@ -127,7 +129,7 @@ class BoatService {
       // Exit if the effect is already applied
       const boatAlreadyEffected = db()
         .prepare(
-          "SELECT * FROM boat_effect WHERE boat_id = ? AND effect_id = ?"
+          "SELECT * FROM boat_effect WHERE boat_id = ? AND effect_id = ?",
         )
         .get(guildId, effect_id);
       if (boatAlreadyEffected) return;
@@ -136,6 +138,12 @@ class BoatService {
         .prepare("INSERT INTO boat_effect VALUES(?, ?)")
         .run(guildId, effect_id);
       // TODO: Schedule effect expiration
+      const executeTime = Date.now() + 10_000;
+      schedule.scheduleJob(
+        `effect_${effect_id}_${guildId}`,
+        executeTime,
+        this.removeEffect.bind(this, guildId, effect_id),
+      );
     } catch (e) {
       console.error(e);
       throw e;
@@ -150,10 +158,10 @@ class BoatService {
         FROM boat_effect be 
         JOIN effect e 
         ON be.effect_id = e.id 
-        WHERE boat_id = ? AND effect_id = ?`
+        WHERE boat_id = ? AND effect_id = ?`,
         )
         .get(guildId, effectId);
-      if (!effect) return `The ${effect.name} effect is not in use`;
+      if (!effect) return `The ${effectId} effect is not in use`;
 
       db()
         .prepare("DELETE FROM boat_effect WHERE boat_id = ? AND effect_id  =?")

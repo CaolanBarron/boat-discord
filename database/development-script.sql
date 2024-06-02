@@ -188,7 +188,7 @@ CREATE TABLE effect (
 DROP TABLE IF EXISTS boat_effect;
 
 CREATE TABLE boat_effect (
-  boat_id INTEGER,
+  boat_id TEXT,
   effect_id INTEGER,
 
   FOREIGN KEY(boat_id) REFERENCES boat(id),
