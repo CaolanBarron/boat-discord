@@ -12,6 +12,28 @@ class BoatService {
 
       createStmt.run(guildID, condition, speed, x_coord, y_coord);
 
+      // TODO: Replace these with proper item keys before release
+      const defaultItems = [
+        "GAS_FISH",
+        "GAS_FISH",
+        "GAS_FISH",
+        "COMPASS",
+        "LANTERN",
+      ];
+
+      const defaultItemStmt = db().prepare(
+        `INSERT INTO boat_inventory(boat_id, item_key) VALUES (@boat_id, @item_key)`
+      );
+
+      const insertValues = defaultItems.map((item) => ({
+        boat_id: guildID,
+        item_key: item,
+      }));
+
+      for (const value of insertValues) {
+        defaultItemStmt.run(value);
+      }
+
       GameEventService.startFlavorIntervals([guildID]);
       GameEventService.startPromptIntervals([guildID]);
     } catch (error) {

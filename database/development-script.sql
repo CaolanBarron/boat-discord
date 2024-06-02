@@ -47,8 +47,8 @@ DROP TABLE IF EXISTS boat_inventory;
 
 CREATE TABLE boat_inventory(
   id INTEGER PRIMARY KEY,
-  boat_id TEXT,
-  item_key TEXT,
+  boat_id TEXT NOT NULL,
+  item_key TEXT NOT NULL,
   collected_by INTEGER,
   locked_by INTEGER,
 
