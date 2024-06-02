@@ -173,8 +173,7 @@ class SailService {
   async announceEnd(interaction) {
     const results = await this.endJob(interaction.guildId, interaction.player);
 
-    const bot = new BotService();
-    const foghorn = bot.getChannelByName(
+    const foghorn = await BotService.getChannelByName(
       interaction.guildId,
       process.env.NOTICHANNEL
     );

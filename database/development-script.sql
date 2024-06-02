@@ -58,6 +58,19 @@ CREATE TABLE boat_inventory(
   FOREIGN KEY(locked_by) REFERENCES player(id)
 );
 
+DROP TABLE IF EXISTS boat_travel_history;
+
+CREATE TABLE boat_travel_history(
+  id INTEGER PRIMARY KEY,
+  boat_id INTEGER NOT NULL,
+  x_coord INTEGER NOT NULL,
+  y_coord INTEGER NOT NULL,
+  biome TEXT,
+  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY(boat_id) REFERENCES boat(id)
+);
+
 DROP TABLE IF EXISTS item_transformation;
 
 DROP TABLE IF EXISTS loot;

@@ -94,6 +94,16 @@ class BoatService {
     db()
       .prepare(`UPDATE boat SET x_coord = ?, y_coord = ? WHERE id = ?`)
       .run(new_x, new_y, guildId);
+
+    const currentBiome = this.currentBiome(guildId);
+
+    const biome_key = currentBiome ? currentBiome.biome_key : null;
+
+    db()
+      .prepare(
+        `INSERT INTO boat_travel_history(boat_id, x_coord, y_coord, biome) VALUES(?, ?, ?, ?)`
+      )
+      .run(guildId, new_x, new_y, biome_key);
   }
 
   currentBiome(guildId) {
