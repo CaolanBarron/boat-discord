@@ -1,3 +1,15 @@
+DELETE FROM tag;
+
+INSERT INTO tag (key) 
+VALUES
+    ('FISHING'),
+    ('SAILING'),
+    ('RESEARCH'),
+    ('CARTOGRAPHY'),
+    ('REPAIR'),
+    ('VOID'),
+    ('SWAMP');
+
 DELETE FROM flavor;
 
 INSERT INTO flavor (content)
@@ -31,15 +43,10 @@ VALUES
 ('God does not reply.', 'BOAT'),
 ('Nobody feels correct all of a sudden.', 'BOAT');
 
-DELETE FROM tag;
-
-INSERT INTO tag (key) 
+INSERT INTO flavor (content, tag, subject)
 VALUES
-    ('FISHING'),
-    ('SAILING'),
-    ('RESEARCH'),
-    ('CARTOGRAPHY'),
-    ('REPAIR');
+('The brackish water bubbles', 'SWAMP', 'BOAT'),
+('Something in the dark shifts...', 'VOID', 'BOAT');
 
 DELETE FROM skill;
 

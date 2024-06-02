@@ -17,7 +17,7 @@ class GameEventService {
       const task = new Task(`${guild}_boat_flavor`, async () => {
         // Do not send a event half the amount of times
         if (Math.random() < 0.5) return;
-        const flavor = FlavorService.getBoatFlavor();
+        const flavor = FlavorService.getBoatFlavor(guild);
 
         const channel = await BotService.getChannelByName(
           guild,
