@@ -1,6 +1,7 @@
 import { ActionRowBuilder } from "@discordjs/builders";
 import db from "../../database/database.js";
 import { ButtonBuilder, ButtonStyle, Colors, EmbedBuilder } from "discord.js";
+import BoatService from "./BoatService.js";
 
 class PromptService {
   async getRandomPrompt() {
@@ -34,7 +35,7 @@ class PromptService {
     }
   }
 
-  async chooseAction(actionId, player) {
+  async chooseAction(actionId, player, boatId) {
     const outcomes = db()
       .prepare(
         `
@@ -70,7 +71,7 @@ class PromptService {
     // TODO: if the final outcome has an effect_id apply it to the boat/player
 
     if (response.effect_id) {
-      console.log("Apply effect");
+      BoatService.applyEffect(boatId, response.effect_id);
     }
     // return the final response content/other info
 

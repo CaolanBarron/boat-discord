@@ -60,7 +60,7 @@ class GameEventService {
         await channel.send(promptMessage);
       });
 
-      const job = new SimpleIntervalJob({ seconds: 1800 }, task);
+      const job = new SimpleIntervalJob({ seconds: 10 }, task);
 
       scheduler.addSimpleIntervalJob(job);
     }

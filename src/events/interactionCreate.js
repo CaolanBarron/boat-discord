@@ -58,7 +58,8 @@ export default {
 
           const actionResponse = await PromptService.chooseAction(
             customId[1],
-            user
+            user,
+            interaction.guildId
           );
 
           const outcome =
