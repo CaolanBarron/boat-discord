@@ -13,7 +13,7 @@ export default {
         FROM boat 
         LEFT JOIN biome_coords 
         ON boat.x_coord = biome_coords.x_coord AND boat.y_coord = biome_coords.y_coord 
-        LEFT JOIN biomes ON biome_coords.biome_key = biomes.key 
+        LEFT JOIN biome ON biome_coords.biome_key = biome.key 
         WHERE boat.id = ?`
         )
         .get(interaction.guildId);
