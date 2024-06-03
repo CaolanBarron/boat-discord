@@ -92,7 +92,8 @@ VALUES
 ('LANTERN', 'Lantern', 'Something to light up the boat', 'This is hidden information about the Lantern item.'),
 ('HOURGLASS', 'Hourglass', 'Hows time doing?', 'This is hidden information about the Hourglass item.'),
 ('HARMONICA', 'Harmonica', 'hot hot hot', 'This is hidden information about the Harmonica item.'),
-('LAVA_FISH', 'Lava fish', 'hot hot hot', 'This is hidden information about the Lava fish item.');
+('LAVA_FISH', 'Lava fish', 'hot hot hot', 'This is hidden information about the Lava fish item.'),
+('SALVAGE_FUEL', 'Salvage fuel', 'Allows operation of the salvage arm', 'This is hidden information about the Lava fish item.');
 
 DELETE FROM item_transformation;
 

@@ -235,6 +235,7 @@ CREATE TABLE prompt_outcome(
 DROP TABLE IF EXISTS treasure;
 
 CREATE TABLE treasure(
+  id INTEGER PRIMARY KEY,
   boat_id TEXT NOT NULL, 
   item_key TEXT NOT NULL,
   x_coord INTEGER NOT NULL,
