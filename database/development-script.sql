@@ -232,4 +232,18 @@ CREATE TABLE prompt_outcome(
   FOREIGN KEY(effect_id) REFERENCES effect(id)
 );
 
+DROP TABLE IF EXISTS treasure;
+
+CREATE TABLE treasure(
+  boat_id TEXT NOT NULL, 
+  item_key TEXT NOT NULL,
+  x_coord INTEGER NOT NULL,
+  y_coord INTEGER NOT NULL,
+
+  UNIQUE(boat_id, x_coord, y_coord)
+
+  FOREIGN KEY (boat_id) REFERENCES boat(id),
+  FOREIGN KEY (item_key) REFERENCES item(key)
+);
+
 PRAGMA foreign_keys = ON;

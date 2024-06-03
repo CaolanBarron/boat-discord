@@ -10,6 +10,7 @@ export default {
     if (guildIds.length > 0) {
       GameEventService.startFlavorIntervals(guildIds);
       GameEventService.startPromptIntervals(guildIds);
+      GameEventService.startTreasureShufflesIntervals(guildIds);
     }
 
     await BotService.restartActivities();
