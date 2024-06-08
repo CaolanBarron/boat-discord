@@ -7,7 +7,10 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "migrate": "npx tsx drizzle/migrate.ts",
+    "generate": "npx drizzle-kit generate",
+    "seed": ""
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +31,7 @@
   },
   "devDependencies": {
     "drizzle-kit": "^0.22.2",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "tsx": "^4.14.0"
   }
 }
