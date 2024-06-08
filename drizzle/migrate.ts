@@ -6,4 +6,4 @@ import { db, connection } from "./db";
 await migrate(db, { migrationsFolder: "./drizzle/migrations" });
 
 // Don't forget to close the connection, otherwise the script will hang
-await connection.end();
+await connection.close();
