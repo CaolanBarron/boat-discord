@@ -1,1054 +1,966 @@
 {
-  "id": "00000000-0000-0000-0000-000000000000",
-  "prevId": "",
-  "version": "6",
-  "dialect": "sqlite",
-  "tables": {
-    "player": {
-      "name": "player",
-      "columns": {
-        "id": {
-          "autoincrement": false,
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": false
+    "id": "00000000-0000-0000-0000-000000000000",
+    "prevId": "",
+    "version": "6",
+    "dialect": "sqlite",
+    "tables": {
+        "player": {
+            "name": "player",
+            "columns": {
+                "id": {
+                    "autoincrement": false,
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "user_id": {
+                    "autoincrement": false,
+                    "name": "user_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "boat_id": {
+                    "autoincrement": false,
+                    "name": "boat_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "name": {
+                    "autoincrement": false,
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "player_boat_id_boat_id_fk": {
+                    "name": "player_boat_id_boat_id_fk",
+                    "tableFrom": "player",
+                    "tableTo": "boat",
+                    "columnsFrom": ["boat_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
         },
-        "user_id": {
-          "autoincrement": false,
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
+        "skill": {
+            "name": "skill",
+            "columns": {
+                "key": {
+                    "autoincrement": false,
+                    "name": "key",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "name": {
+                    "autoincrement": false,
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {},
+            "uniqueConstraints": {}
         },
-        "boat_id": {
-          "autoincrement": false,
-          "name": "boat_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "name": {
-          "autoincrement": false,
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "player_boat_id_boat_id_fk": {
-          "name": "player_boat_id_boat_id_fk",
-          "tableFrom": "player",
-          "tableTo": "boat",
-          "columnsFrom": [
-            "boat_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "skill": {
-      "name": "skill",
-      "columns": {
-        "key": {
-          "autoincrement": false,
-          "name": "key",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "name": {
-          "autoincrement": false,
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {},
-      "uniqueConstraints": {}
-    },
-    "player_skills": {
-      "name": "player_skills",
-      "columns": {
-        "player_id": {
-          "autoincrement": false,
-          "name": "player_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "skill_key": {
-          "autoincrement": false,
-          "name": "skill_key",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "xp": {
-          "autoincrement": false,
-          "name": "xp",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "player_skills_skill_key_skill_key_fk": {
-          "name": "player_skills_skill_key_skill_key_fk",
-          "tableFrom": "player_skills",
-          "tableTo": "skill",
-          "columnsFrom": [
-            "skill_key"
-          ],
-          "columnsTo": [
-            "key"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "player_skills_player_id_player_id_fk": {
-          "name": "player_skills_player_id_player_id_fk",
-          "tableFrom": "player_skills",
-          "tableTo": "player",
-          "columnsFrom": [
-            "player_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "boat": {
-      "name": "boat",
-      "columns": {
-        "id": {
-          "autoincrement": false,
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "condition": {
-          "autoincrement": false,
-          "name": "condition",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "speed": {
-          "autoincrement": false,
-          "name": "speed",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "x_coord": {
-          "autoincrement": false,
-          "name": "x_coord",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "y_coord": {
-          "autoincrement": false,
-          "name": "y_coord",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {},
-      "uniqueConstraints": {}
-    },
-    "boat_inventory": {
-      "name": "boat_inventory",
-      "columns": {
-        "id": {
-          "autoincrement": false,
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "boat_id": {
-          "autoincrement": false,
-          "name": "boat_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "item_key": {
-          "autoincrement": false,
-          "name": "item_key",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "collected_by": {
-          "autoincrement": false,
-          "name": "collected_by",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "locked_by": {
-          "autoincrement": false,
-          "name": "locked_by",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "boat_inventory_locked_by_player_id_fk": {
-          "name": "boat_inventory_locked_by_player_id_fk",
-          "tableFrom": "boat_inventory",
-          "tableTo": "player",
-          "columnsFrom": [
-            "locked_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "boat_inventory_collected_by_player_id_fk": {
-          "name": "boat_inventory_collected_by_player_id_fk",
-          "tableFrom": "boat_inventory",
-          "tableTo": "player",
-          "columnsFrom": [
-            "collected_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "boat_inventory_item_key_item_key_fk": {
-          "name": "boat_inventory_item_key_item_key_fk",
-          "tableFrom": "boat_inventory",
-          "tableTo": "item",
-          "columnsFrom": [
-            "item_key"
-          ],
-          "columnsTo": [
-            "key"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "boat_inventory_boat_id_boat_id_fk": {
-          "name": "boat_inventory_boat_id_boat_id_fk",
-          "tableFrom": "boat_inventory",
-          "tableTo": "boat",
-          "columnsFrom": [
-            "boat_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "boat_travel_history": {
-      "name": "boat_travel_history",
-      "columns": {
-        "id": {
-          "autoincrement": false,
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "boat_id": {
-          "autoincrement": false,
-          "name": "boat_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "x_coord": {
-          "autoincrement": false,
-          "name": "x_coord",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "y_coord": {
-          "autoincrement": false,
-          "name": "y_coord",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "biome": {
-          "autoincrement": false,
-          "name": "biome",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "timestamp": {
-          "default": "(CURRENT_TIMESTAMP)",
-          "autoincrement": false,
-          "name": "timestamp",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "boat_travel_history_boat_id_boat_id_fk": {
-          "name": "boat_travel_history_boat_id_boat_id_fk",
-          "tableFrom": "boat_travel_history",
-          "tableTo": "boat",
-          "columnsFrom": [
-            "boat_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "item": {
-      "name": "item",
-      "columns": {
-        "key": {
-          "autoincrement": false,
-          "name": "key",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "name": {
-          "autoincrement": false,
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "description": {
-          "autoincrement": false,
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "info": {
-          "autoincrement": false,
-          "name": "info",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {},
-      "uniqueConstraints": {}
-    },
-    "loot": {
-      "name": "loot",
-      "columns": {
-        "key": {
-          "autoincrement": false,
-          "name": "key",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "item_key": {
-          "autoincrement": false,
-          "name": "item_key",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "rarity": {
-          "autoincrement": false,
-          "name": "rarity",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "loot_item_key_item_key_fk": {
-          "name": "loot_item_key_item_key_fk",
-          "tableFrom": "loot",
-          "tableTo": "item",
-          "columnsFrom": [
-            "item_key"
-          ],
-          "columnsTo": [
-            "key"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "item_transformation": {
-      "name": "item_transformation",
-      "columns": {
-        "original": {
-          "autoincrement": false,
-          "name": "original",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "transformation": {
-          "autoincrement": false,
-          "name": "transformation",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "item_transformation_transformation_item_key_fk": {
-          "name": "item_transformation_transformation_item_key_fk",
-          "tableFrom": "item_transformation",
-          "tableTo": "item",
-          "columnsFrom": [
-            "transformation"
-          ],
-          "columnsTo": [
-            "key"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "item_transformation_original_item_key_fk": {
-          "name": "item_transformation_original_item_key_fk",
-          "tableFrom": "item_transformation",
-          "tableTo": "item",
-          "columnsFrom": [
-            "original"
-          ],
-          "columnsTo": [
-            "key"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "tag": {
-      "name": "tag",
-      "columns": {
-        "key": {
-          "autoincrement": false,
-          "name": "key",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {},
-      "uniqueConstraints": {}
-    },
-    "flavor": {
-      "name": "flavor",
-      "columns": {
-        "key": {
-          "autoincrement": false,
-          "name": "key",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "content": {
-          "autoincrement": false,
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "tag": {
-          "autoincrement": false,
-          "name": "tag",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "subject": {
-          "default": "'PLAYER'",
-          "autoincrement": false,
-          "name": "subject",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "flavor_tag_tag_key_fk": {
-          "name": "flavor_tag_tag_key_fk",
-          "tableFrom": "flavor",
-          "tableTo": "tag",
-          "columnsFrom": [
-            "tag"
-          ],
-          "columnsTo": [
-            "key"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "active_tags": {
-      "name": "active_tags",
-      "columns": {
-        "key": {
-          "autoincrement": false,
-          "name": "key",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "player_id": {
-          "autoincrement": false,
-          "name": "player_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
+        "player_skills": {
+            "name": "player_skills",
+            "columns": {
+                "player_id": {
+                    "autoincrement": false,
+                    "name": "player_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "skill_key": {
+                    "autoincrement": false,
+                    "name": "skill_key",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "xp": {
+                    "autoincrement": false,
+                    "name": "xp",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "player_skills_skill_key_skill_key_fk": {
+                    "name": "player_skills_skill_key_skill_key_fk",
+                    "tableFrom": "player_skills",
+                    "tableTo": "skill",
+                    "columnsFrom": ["skill_key"],
+                    "columnsTo": ["key"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                },
+                "player_skills_player_id_player_id_fk": {
+                    "name": "player_skills_player_id_player_id_fk",
+                    "tableFrom": "player_skills",
+                    "tableTo": "player",
+                    "columnsFrom": ["player_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
         },
         "boat": {
-          "autoincrement": false,
-          "name": "boat",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false
+            "name": "boat",
+            "columns": {
+                "id": {
+                    "autoincrement": false,
+                    "name": "id",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "condition": {
+                    "autoincrement": false,
+                    "name": "condition",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "speed": {
+                    "autoincrement": false,
+                    "name": "speed",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "x_coord": {
+                    "autoincrement": false,
+                    "name": "x_coord",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "y_coord": {
+                    "autoincrement": false,
+                    "name": "y_coord",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {},
+            "uniqueConstraints": {}
+        },
+        "boat_inventory": {
+            "name": "boat_inventory",
+            "columns": {
+                "id": {
+                    "autoincrement": false,
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "boat_id": {
+                    "autoincrement": false,
+                    "name": "boat_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "item_key": {
+                    "autoincrement": false,
+                    "name": "item_key",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "collected_by": {
+                    "autoincrement": false,
+                    "name": "collected_by",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "locked_by": {
+                    "autoincrement": false,
+                    "name": "locked_by",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "boat_inventory_locked_by_player_id_fk": {
+                    "name": "boat_inventory_locked_by_player_id_fk",
+                    "tableFrom": "boat_inventory",
+                    "tableTo": "player",
+                    "columnsFrom": ["locked_by"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                },
+                "boat_inventory_collected_by_player_id_fk": {
+                    "name": "boat_inventory_collected_by_player_id_fk",
+                    "tableFrom": "boat_inventory",
+                    "tableTo": "player",
+                    "columnsFrom": ["collected_by"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                },
+                "boat_inventory_item_key_item_key_fk": {
+                    "name": "boat_inventory_item_key_item_key_fk",
+                    "tableFrom": "boat_inventory",
+                    "tableTo": "item",
+                    "columnsFrom": ["item_key"],
+                    "columnsTo": ["key"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                },
+                "boat_inventory_boat_id_boat_id_fk": {
+                    "name": "boat_inventory_boat_id_boat_id_fk",
+                    "tableFrom": "boat_inventory",
+                    "tableTo": "boat",
+                    "columnsFrom": ["boat_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
+        },
+        "boat_travel_history": {
+            "name": "boat_travel_history",
+            "columns": {
+                "id": {
+                    "autoincrement": false,
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "boat_id": {
+                    "autoincrement": false,
+                    "name": "boat_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "x_coord": {
+                    "autoincrement": false,
+                    "name": "x_coord",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "y_coord": {
+                    "autoincrement": false,
+                    "name": "y_coord",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "biome": {
+                    "autoincrement": false,
+                    "name": "biome",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "timestamp": {
+                    "default": "(CURRENT_TIMESTAMP)",
+                    "autoincrement": false,
+                    "name": "timestamp",
+                    "type": "numeric",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "boat_travel_history_boat_id_boat_id_fk": {
+                    "name": "boat_travel_history_boat_id_boat_id_fk",
+                    "tableFrom": "boat_travel_history",
+                    "tableTo": "boat",
+                    "columnsFrom": ["boat_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
+        },
+        "item": {
+            "name": "item",
+            "columns": {
+                "key": {
+                    "autoincrement": false,
+                    "name": "key",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "name": {
+                    "autoincrement": false,
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "description": {
+                    "autoincrement": false,
+                    "name": "description",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "info": {
+                    "autoincrement": false,
+                    "name": "info",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {},
+            "uniqueConstraints": {}
+        },
+        "loot": {
+            "name": "loot",
+            "columns": {
+                "key": {
+                    "autoincrement": false,
+                    "name": "key",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "item_key": {
+                    "autoincrement": false,
+                    "name": "item_key",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "rarity": {
+                    "autoincrement": false,
+                    "name": "rarity",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "loot_item_key_item_key_fk": {
+                    "name": "loot_item_key_item_key_fk",
+                    "tableFrom": "loot",
+                    "tableTo": "item",
+                    "columnsFrom": ["item_key"],
+                    "columnsTo": ["key"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
+        },
+        "item_transformation": {
+            "name": "item_transformation",
+            "columns": {
+                "original": {
+                    "autoincrement": false,
+                    "name": "original",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "transformation": {
+                    "autoincrement": false,
+                    "name": "transformation",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "item_transformation_transformation_item_key_fk": {
+                    "name": "item_transformation_transformation_item_key_fk",
+                    "tableFrom": "item_transformation",
+                    "tableTo": "item",
+                    "columnsFrom": ["transformation"],
+                    "columnsTo": ["key"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                },
+                "item_transformation_original_item_key_fk": {
+                    "name": "item_transformation_original_item_key_fk",
+                    "tableFrom": "item_transformation",
+                    "tableTo": "item",
+                    "columnsFrom": ["original"],
+                    "columnsTo": ["key"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
+        },
+        "tag": {
+            "name": "tag",
+            "columns": {
+                "key": {
+                    "autoincrement": false,
+                    "name": "key",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {},
+            "uniqueConstraints": {}
+        },
+        "flavor": {
+            "name": "flavor",
+            "columns": {
+                "key": {
+                    "autoincrement": false,
+                    "name": "key",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "content": {
+                    "autoincrement": false,
+                    "name": "content",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "tag": {
+                    "autoincrement": false,
+                    "name": "tag",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "subject": {
+                    "default": "'PLAYER'",
+                    "autoincrement": false,
+                    "name": "subject",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "flavor_tag_tag_key_fk": {
+                    "name": "flavor_tag_tag_key_fk",
+                    "tableFrom": "flavor",
+                    "tableTo": "tag",
+                    "columnsFrom": ["tag"],
+                    "columnsTo": ["key"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
+        },
+        "active_tags": {
+            "name": "active_tags",
+            "columns": {
+                "key": {
+                    "autoincrement": false,
+                    "name": "key",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "player_id": {
+                    "autoincrement": false,
+                    "name": "player_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "boat": {
+                    "autoincrement": false,
+                    "name": "boat",
+                    "type": "numeric",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "active_tags_player_id_player_id_fk": {
+                    "name": "active_tags_player_id_player_id_fk",
+                    "tableFrom": "active_tags",
+                    "tableTo": "player",
+                    "columnsFrom": ["player_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
+        },
+        "biome": {
+            "name": "biome",
+            "columns": {
+                "key": {
+                    "autoincrement": false,
+                    "name": "key",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "name": {
+                    "autoincrement": false,
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "info": {
+                    "autoincrement": false,
+                    "name": "info",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {},
+            "uniqueConstraints": {}
+        },
+        "biome_coords": {
+            "name": "biome_coords",
+            "columns": {
+                "biome_key": {
+                    "autoincrement": false,
+                    "name": "biome_key",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "x_coord": {
+                    "autoincrement": false,
+                    "name": "x_coord",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "y_coord": {
+                    "autoincrement": false,
+                    "name": "y_coord",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "biome_coords_biome_key_biome_key_fk": {
+                    "name": "biome_coords_biome_key_biome_key_fk",
+                    "tableFrom": "biome_coords",
+                    "tableTo": "biome",
+                    "columnsFrom": ["biome_key"],
+                    "columnsTo": ["key"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
+        },
+        "feedback": {
+            "name": "feedback",
+            "columns": {
+                "player_name": {
+                    "autoincrement": false,
+                    "name": "player_name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "message": {
+                    "autoincrement": false,
+                    "name": "message",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {},
+            "uniqueConstraints": {}
+        },
+        "activities": {
+            "name": "activities",
+            "columns": {
+                "key": {
+                    "autoincrement": false,
+                    "name": "key",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "name": {
+                    "autoincrement": false,
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "allow_during_sail": {
+                    "autoincrement": false,
+                    "name": "allow_during_sail",
+                    "type": "numeric",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {},
+            "uniqueConstraints": {}
+        },
+        "effect": {
+            "name": "effect",
+            "columns": {
+                "id": {
+                    "autoincrement": false,
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "key": {
+                    "autoincrement": false,
+                    "name": "key",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "name": {
+                    "autoincrement": false,
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "description": {
+                    "autoincrement": false,
+                    "name": "description",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "effect_type": {
+                    "default": "'BUFF'",
+                    "autoincrement": false,
+                    "name": "effect_type",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {},
+            "uniqueConstraints": {}
+        },
+        "boat_effect": {
+            "name": "boat_effect",
+            "columns": {
+                "boat_id": {
+                    "autoincrement": false,
+                    "name": "boat_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "effect_id": {
+                    "autoincrement": false,
+                    "name": "effect_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "boat_effect_effect_id_effect_id_fk": {
+                    "name": "boat_effect_effect_id_effect_id_fk",
+                    "tableFrom": "boat_effect",
+                    "tableTo": "effect",
+                    "columnsFrom": ["effect_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                },
+                "boat_effect_boat_id_boat_id_fk": {
+                    "name": "boat_effect_boat_id_boat_id_fk",
+                    "tableFrom": "boat_effect",
+                    "tableTo": "boat",
+                    "columnsFrom": ["boat_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
+        },
+        "prompt_message": {
+            "name": "prompt_message",
+            "columns": {
+                "id": {
+                    "autoincrement": false,
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "content": {
+                    "autoincrement": false,
+                    "name": "content",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {},
+            "uniqueConstraints": {}
+        },
+        "prompt_action": {
+            "name": "prompt_action",
+            "columns": {
+                "id": {
+                    "autoincrement": false,
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "message_id": {
+                    "autoincrement": false,
+                    "name": "message_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "content": {
+                    "autoincrement": false,
+                    "name": "content",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "challenge_skill": {
+                    "autoincrement": false,
+                    "name": "challenge_skill",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "challenge_value": {
+                    "autoincrement": false,
+                    "name": "challenge_value",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "prompt_action_challenge_skill_skill_key_fk": {
+                    "name": "prompt_action_challenge_skill_skill_key_fk",
+                    "tableFrom": "prompt_action",
+                    "tableTo": "skill",
+                    "columnsFrom": ["challenge_skill"],
+                    "columnsTo": ["key"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                },
+                "prompt_action_message_id_prompt_message_id_fk": {
+                    "name": "prompt_action_message_id_prompt_message_id_fk",
+                    "tableFrom": "prompt_action",
+                    "tableTo": "prompt_message",
+                    "columnsFrom": ["message_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
+        },
+        "prompt_outcome": {
+            "name": "prompt_outcome",
+            "columns": {
+                "id": {
+                    "autoincrement": false,
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "action_id": {
+                    "autoincrement": false,
+                    "name": "action_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "content": {
+                    "autoincrement": false,
+                    "name": "content",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "outcome_type": {
+                    "default": "'SUCCESS'",
+                    "autoincrement": false,
+                    "name": "outcome_type",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "effect_id": {
+                    "autoincrement": false,
+                    "name": "effect_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "prompt_outcome_effect_id_effect_id_fk": {
+                    "name": "prompt_outcome_effect_id_effect_id_fk",
+                    "tableFrom": "prompt_outcome",
+                    "tableTo": "effect",
+                    "columnsFrom": ["effect_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                },
+                "prompt_outcome_action_id_prompt_action_id_fk": {
+                    "name": "prompt_outcome_action_id_prompt_action_id_fk",
+                    "tableFrom": "prompt_outcome",
+                    "tableTo": "prompt_action",
+                    "columnsFrom": ["action_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
+        },
+        "treasure": {
+            "name": "treasure",
+            "columns": {
+                "id": {
+                    "autoincrement": false,
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": false
+                },
+                "boat_id": {
+                    "autoincrement": false,
+                    "name": "boat_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "item_key": {
+                    "autoincrement": false,
+                    "name": "item_key",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "x_coord": {
+                    "autoincrement": false,
+                    "name": "x_coord",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "y_coord": {
+                    "autoincrement": false,
+                    "name": "y_coord",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "compositePrimaryKeys": {},
+            "indexes": {},
+            "foreignKeys": {
+                "treasure_item_key_item_key_fk": {
+                    "name": "treasure_item_key_item_key_fk",
+                    "tableFrom": "treasure",
+                    "tableTo": "item",
+                    "columnsFrom": ["item_key"],
+                    "columnsTo": ["key"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                },
+                "treasure_boat_id_boat_id_fk": {
+                    "name": "treasure_boat_id_boat_id_fk",
+                    "tableFrom": "treasure",
+                    "tableTo": "boat",
+                    "columnsFrom": ["boat_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "uniqueConstraints": {}
         }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "active_tags_player_id_player_id_fk": {
-          "name": "active_tags_player_id_player_id_fk",
-          "tableFrom": "active_tags",
-          "tableTo": "player",
-          "columnsFrom": [
-            "player_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
     },
-    "biome": {
-      "name": "biome",
-      "columns": {
-        "key": {
-          "autoincrement": false,
-          "name": "key",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "name": {
-          "autoincrement": false,
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "info": {
-          "autoincrement": false,
-          "name": "info",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {},
-      "uniqueConstraints": {}
-    },
-    "biome_coords": {
-      "name": "biome_coords",
-      "columns": {
-        "biome_key": {
-          "autoincrement": false,
-          "name": "biome_key",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "x_coord": {
-          "autoincrement": false,
-          "name": "x_coord",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "y_coord": {
-          "autoincrement": false,
-          "name": "y_coord",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "biome_coords_biome_key_biome_key_fk": {
-          "name": "biome_coords_biome_key_biome_key_fk",
-          "tableFrom": "biome_coords",
-          "tableTo": "biome",
-          "columnsFrom": [
-            "biome_key"
-          ],
-          "columnsTo": [
-            "key"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "feedback": {
-      "name": "feedback",
-      "columns": {
-        "player_name": {
-          "autoincrement": false,
-          "name": "player_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "message": {
-          "autoincrement": false,
-          "name": "message",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {},
-      "uniqueConstraints": {}
-    },
-    "activities": {
-      "name": "activities",
-      "columns": {
-        "key": {
-          "autoincrement": false,
-          "name": "key",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "name": {
-          "autoincrement": false,
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "allow_during_sail": {
-          "autoincrement": false,
-          "name": "allow_during_sail",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {},
-      "uniqueConstraints": {}
-    },
-    "effect": {
-      "name": "effect",
-      "columns": {
-        "id": {
-          "autoincrement": false,
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "key": {
-          "autoincrement": false,
-          "name": "key",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "autoincrement": false,
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "autoincrement": false,
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "effect_type": {
-          "default": "'BUFF'",
-          "autoincrement": false,
-          "name": "effect_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {},
-      "uniqueConstraints": {}
-    },
-    "boat_effect": {
-      "name": "boat_effect",
-      "columns": {
-        "boat_id": {
-          "autoincrement": false,
-          "name": "boat_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "effect_id": {
-          "autoincrement": false,
-          "name": "effect_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "boat_effect_effect_id_effect_id_fk": {
-          "name": "boat_effect_effect_id_effect_id_fk",
-          "tableFrom": "boat_effect",
-          "tableTo": "effect",
-          "columnsFrom": [
-            "effect_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "boat_effect_boat_id_boat_id_fk": {
-          "name": "boat_effect_boat_id_boat_id_fk",
-          "tableFrom": "boat_effect",
-          "tableTo": "boat",
-          "columnsFrom": [
-            "boat_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "prompt_message": {
-      "name": "prompt_message",
-      "columns": {
-        "id": {
-          "autoincrement": false,
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "content": {
-          "autoincrement": false,
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {},
-      "uniqueConstraints": {}
-    },
-    "prompt_action": {
-      "name": "prompt_action",
-      "columns": {
-        "id": {
-          "autoincrement": false,
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "message_id": {
-          "autoincrement": false,
-          "name": "message_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "content": {
-          "autoincrement": false,
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "challenge_skill": {
-          "autoincrement": false,
-          "name": "challenge_skill",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "challenge_value": {
-          "autoincrement": false,
-          "name": "challenge_value",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "prompt_action_challenge_skill_skill_key_fk": {
-          "name": "prompt_action_challenge_skill_skill_key_fk",
-          "tableFrom": "prompt_action",
-          "tableTo": "skill",
-          "columnsFrom": [
-            "challenge_skill"
-          ],
-          "columnsTo": [
-            "key"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "prompt_action_message_id_prompt_message_id_fk": {
-          "name": "prompt_action_message_id_prompt_message_id_fk",
-          "tableFrom": "prompt_action",
-          "tableTo": "prompt_message",
-          "columnsFrom": [
-            "message_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "prompt_outcome": {
-      "name": "prompt_outcome",
-      "columns": {
-        "id": {
-          "autoincrement": false,
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "action_id": {
-          "autoincrement": false,
-          "name": "action_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "content": {
-          "autoincrement": false,
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "outcome_type": {
-          "default": "'SUCCESS'",
-          "autoincrement": false,
-          "name": "outcome_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "effect_id": {
-          "autoincrement": false,
-          "name": "effect_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "prompt_outcome_effect_id_effect_id_fk": {
-          "name": "prompt_outcome_effect_id_effect_id_fk",
-          "tableFrom": "prompt_outcome",
-          "tableTo": "effect",
-          "columnsFrom": [
-            "effect_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "prompt_outcome_action_id_prompt_action_id_fk": {
-          "name": "prompt_outcome_action_id_prompt_action_id_fk",
-          "tableFrom": "prompt_outcome",
-          "tableTo": "prompt_action",
-          "columnsFrom": [
-            "action_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "treasure": {
-      "name": "treasure",
-      "columns": {
-        "id": {
-          "autoincrement": false,
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": false
-        },
-        "boat_id": {
-          "autoincrement": false,
-          "name": "boat_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "item_key": {
-          "autoincrement": false,
-          "name": "item_key",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "x_coord": {
-          "autoincrement": false,
-          "name": "x_coord",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "y_coord": {
-          "autoincrement": false,
-          "name": "y_coord",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "treasure_item_key_item_key_fk": {
-          "name": "treasure_item_key_item_key_fk",
-          "tableFrom": "treasure",
-          "tableTo": "item",
-          "columnsFrom": [
-            "item_key"
-          ],
-          "columnsTo": [
-            "key"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "treasure_boat_id_boat_id_fk": {
-          "name": "treasure_boat_id_boat_id_fk",
-          "tableFrom": "treasure",
-          "tableTo": "boat",
-          "columnsFrom": [
-            "boat_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
+    "enums": {},
+    "_meta": {
+        "schemas": {},
+        "tables": {},
+        "columns": {}
     }
-  },
-  "enums": {},
-  "_meta": {
-    "schemas": {},
-    "tables": {},
-    "columns": {}
-  }
 }
