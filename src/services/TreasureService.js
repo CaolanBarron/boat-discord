@@ -46,7 +46,7 @@ class TreasureService {
         // Add these to the treasure table
 
         const defaultTreasureStmt = db().prepare(
-            `INSERT INTO treasure VALUES(@boat_id, @item_key, @x_coord, @y_coord)`
+            `INSERT INTO treasure(boat_id, item_key, x_coord, y_coord) VALUES(@boat_id, @item_key, @x_coord, @y_coord)`
         );
 
         for (const treasure of treasures) {

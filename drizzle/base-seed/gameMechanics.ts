@@ -197,10 +197,10 @@ export const item = [
         info: 'This is hidden information about the Lava fish item.',
     },
     {
-        key: 'SALVAGE_FUEL',
-        name: 'Salvage fuel',
+        key: 'WINCH',
+        name: 'Winch',
         description: 'Allows operation of the salvage arm',
-        info: 'This is hidden information about the Lava fish item.',
+        info: 'The water of the ocean is not caustic, yet when the salvage arm rises each time the rope is destroyed...',
     },
 ];
 
@@ -219,6 +219,11 @@ export const loot = [
     { key: 'FISH', itemKey: 'SALMON', rarity: 'COMMON' },
     { key: 'FISH', itemKey: 'STURGEON', rarity: 'RARE' },
     { key: 'FISH', itemKey: 'LAVA_FISH', rarity: 'ODDITY' },
+    { key: 'TREASURE', itemKey: 'WINCH', rarity: 'ODDITY' },
+    { key: 'TREASURE', itemKey: 'HARMONICA', rarity: 'ODDITY' },
+    { key: 'TREASURE', itemKey: 'HOURGLASS', rarity: 'ODDITY' },
+    { key: 'TREASURE', itemKey: 'LANTERN', rarity: 'ODDITY' },
+    { key: 'TREASURE', itemKey: 'MUSIC_BOX', rarity: 'ODDITY' },
 ];
 
 export const activities = [

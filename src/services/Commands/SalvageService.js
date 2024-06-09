@@ -23,27 +23,27 @@ class SalvageService {
             }
 
             // RENAME
-            // Check if the boat_inventory has any SALVAGE_FUEL
+            // Check if the boat_inventory has any WINCH
 
-            const hasFuel = db()
+            const hasWinch = db()
                 .prepare(
                     `SELECT * 
           FROM boat_inventory 
           WHERE boat_id = ? AND item_key = ?`
                 )
-                .all(boat.id, 'SALVAGE_FUEL');
+                .all(boat.id, 'WINCH');
 
-            if (hasFuel.length === 0) {
+            if (hasWinch.length === 0) {
                 return {
                     content:
-                        'The Boat does not have enough SALVAGE_FUEL to operate the salvage arm',
+                        'The Boat does not have enough Winch to operate the salvage arm',
                     ephemeral: false,
                 };
             }
-            // remove the fuel from the inventory
+            // remove the winch from the inventory
             db()
                 .prepare(`DELETE FROM boat_inventory WHERE id = ?`)
-                .run(hasFuel[0].id);
+                .run(hasWinch[0].id);
             // Remove the treasure from the world
             db()
                 .prepare(`DELETE FROM treasure where id = ?`)

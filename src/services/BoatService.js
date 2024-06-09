@@ -21,9 +21,9 @@ class BoatService {
                 'GAS_FISH',
                 'COMPASS',
                 'LANTERN',
-                'SALVAGE_KEY',
-                'SALVAGE_KEY',
-                'SALVAGE_KEY',
+                'WINCH',
+                'WINCH',
+                'WINCH',
             ];
 
             const defaultItemStmt = db().prepare(

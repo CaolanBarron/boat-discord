@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 
-import SalvageService from '../../services/Commands/SalvageService';
+import SalvageService from '../../services/Commands/SalvageService.js';
 
 //TODO: item that is consumed
 export default {
