@@ -27,7 +27,7 @@ class ActivityService {
                 },
                 CARTOGRAPHY: {
                     execute: CartographyService.announceEnd,
-                    time: 600_000,
+                    time: 6000,
                     class: CartographyService,
                 },
                 REPAIR: {

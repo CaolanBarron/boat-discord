@@ -4,8 +4,8 @@ import chooseRandomRarity from './utils.js';
 
 class MapService {
     rarities = {
-        BIOME: 60,
-        LAND: 20,
+        BIOME: 55,
+        LAND: 25,
         TREASURE: 15,
         NOTHING: 5,
     };
@@ -18,7 +18,7 @@ class MapService {
             case 'LAND':
                 return `TODO land creation`;
             case 'TREASURE':
-                return `TODO treasure creation`;
+                return await this.nearbyTreasure(guildId);
             case 'NOTHING':
                 return `Unfortunately this time they could not divine anything from the blasted documents.`;
             default:
@@ -40,8 +40,8 @@ class MapService {
           WHERE x_coord = ? AND y_coord IN (${yRange
               .map(() => '?')
               .join(',')}) OR y_coord = ? AND x_coord IN (${xRange
-                    .map(() => '?')
-                    .join(',')})`
+              .map(() => '?')
+              .join(',')})`
             )
             .all(boatStmt.x_coord, yRange, boatStmt.y_coord, xRange);
 
@@ -101,8 +101,110 @@ class MapService {
         }
     }
 
+    async nearbyTreasure(boatId) {
+        try {
+            // TODO: Should this simply find existing treasure or make new treasure?
+            // Maybe both. Look for treasure that exists and if none is found then make some
+
+            const boatStmt = db()
+                .prepare('SELECT x_coord, y_coord FROM boat WHERE id = ?')
+                .get(boatId);
+
+            const xRange = this.range(10, boatStmt.x_coord - 5);
+            const yRange = this.range(10, boatStmt.y_coord - 5);
+
+            const treasureSurroundingStmt = db()
+                .prepare(
+                    `SELECT * FROM treasure 
+                          WHERE boat_id = ? AND x_coord = ? AND y_coord IN (${yRange
+                              .map(() => '?')
+                              .join(
+                                  ','
+                              )}) OR y_coord = ? AND x_coord IN (${xRange
+                              .map(() => '?')
+                              .join(',')})`
+                )
+                .all(
+                    boatId,
+                    boatStmt.x_coord,
+                    yRange,
+                    boatStmt.y_coord,
+                    xRange
+                );
+
+            if (treasureSurroundingStmt.length > 0) {
+                const treasure = treasureSurroundingStmt[0];
+                const direction = this.directionFinder(
+                    { x: boatStmt.x_coord, y: boatStmt.y_coord },
+                    { x: treasure.x_coord, y: treasure.y_coord }
+                );
+
+                return `Some of these documents make reference to treasure in a ${direction}ward direction`;
+            }
+
+            // Choose a random treasure
+            // Randomly choose a direction cardinal to the boat direction
+            const treasures = db()
+                .prepare(`SELECT * FROM loot WHERE key = ?`)
+                .all('TREASURE');
+
+            const treasure =
+                treasures[Math.floor(Math.random() * treasures.length)];
+
+            const direction = Math.floor(Math.random() * 4);
+            const position = { x: boatStmt.x_coord, y: boatStmt.y_coord };
+            let directionName;
+
+            // TODO: Add validation so the position does not go out of bounds
+            switch (direction) {
+                case 0:
+                    // North
+                    position.y += 1;
+                    directionName = 'North';
+                    break;
+                case 1:
+                    //East
+                    position.x += 1;
+                    directionName = 'East';
+                    break;
+                case 2:
+                    //South
+                    position.y -= 1;
+                    directionName = 'South';
+                    break;
+                case 3:
+                    //West
+                    position.x -= 1;
+                    directionName = 'West';
+                    break;
+                default:
+                    throw new Error('Invalid direction');
+            }
+
+            db()
+                .prepare(
+                    'INSERT INTO treasure(boat_id, item_key, x_coord, y_coord) VALUES(?, ?, ?, ?)'
+                )
+                .run(boatId, treasure.item_key, position.x, position.y);
+
+            return `Some of these documents make reference to treasure in a ${directionName}ward direction`;
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     range(size, startAt = 0) {
         return [...Array(size).keys()].map((i) => i + startAt);
+    }
+
+    directionFinder(originalPos, comparePos) {
+        if (originalPos.x === comparePos.x) {
+            if (originalPos.y < comparePos.y) return 'South';
+            else return 'North';
+        } else {
+            if (originalPos.x > comparePos.x) return 'West';
+            else return 'East';
+        }
     }
 }
 

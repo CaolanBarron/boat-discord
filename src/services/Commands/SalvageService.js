@@ -1,3 +1,4 @@
+import { stripIndent } from 'common-tags';
 import db from '../../../database/database.js';
 
 class SalvageService {
@@ -17,7 +18,7 @@ class SalvageService {
 
             if (!treasureExists) {
                 return {
-                    content: 'The hauling arm resurfaces carrying nothing',
+                    content: stripIndent`The salvage lowers. The rope singes and twists.\nEventually it resurfaces, carying nothing.`,
                     ephemeral: false,
                 };
             }
@@ -59,7 +60,7 @@ class SalvageService {
                 .prepare('SELECT * FROM item WHERE key = ?')
                 .get(treasureExists.item_key);
             return {
-                content: `The salvage arm has surface, in its clutches: An ${item.name}.`,
+                content: stripIndent`The salvage arm lowers, the rope singes and twists.\nEventually the salvage arm resurfaces, in its clutches: A ${item.name}.`,
                 ephemeral: false,
             };
         } catch (e) {

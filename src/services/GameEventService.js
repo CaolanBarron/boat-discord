@@ -28,7 +28,7 @@ class GameEventService {
 
                 await channel.send(flavor);
             });
-            const job = new SimpleIntervalJob({ seconds: 300 }, task);
+            const job = new SimpleIntervalJob({ seconds: 3000 }, task);
 
             this.scheduler.addSimpleIntervalJob(job);
         }
@@ -61,7 +61,7 @@ class GameEventService {
                 await channel.send(promptMessage);
             });
 
-            const job = new SimpleIntervalJob({ seconds: 10 }, task);
+            const job = new SimpleIntervalJob({ seconds: 1800 }, task);
 
             this.scheduler.addSimpleIntervalJob(job);
         }
@@ -77,7 +77,7 @@ class GameEventService {
             const task = new Task(`${guild}_boat_treasure`, async () => {
                 await TreasureService.shuffleTreasure(guild);
             });
-            const job = new SimpleIntervalJob({ seconds: 10 }, task);
+            const job = new SimpleIntervalJob({ seconds: 180 }, task);
 
             this.scheduler.addSimpleIntervalJob(job);
         }

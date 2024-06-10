@@ -61,8 +61,7 @@ class FishService {
             interaction.player
         );
 
-        const bot = new BotService();
-        const foghorn = bot.getChannelByName(
+        const foghorn = await BotService.getChannelByName(
             interaction.guildId,
             process.env.NOTICHANNEL
         );
