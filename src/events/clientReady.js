@@ -6,6 +6,7 @@ export default {
     name: Events.ClientReady,
     once: true,
     async execute(readyClient) {
+        // eslint-disable-next-line no-undef
         const guildIds = client.guilds.cache.map((guild) => guild.id);
         if (guildIds.length > 0) {
             GameEventService.startFlavorIntervals(guildIds);

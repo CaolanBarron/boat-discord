@@ -5,8 +5,6 @@ import {
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
-    blockQuote,
-    codeBlock,
     Colors,
 } from 'discord.js';
 import db from '../../database/database.js';

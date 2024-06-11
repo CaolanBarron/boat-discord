@@ -218,28 +218,24 @@ class ActivityService {
     }
 
     stopPhrase(key, playerName) {
-        try {
-            switch (key) {
-                case 'FISH':
-                    return `${playerName} packs away the fishing rod and contains their bait.`;
-                case 'CARTOGRAPHY':
-                    return `${playerName} puts away their papers and instruments. Perhaps they will try again later...`;
-                case 'REPAIR':
-                    return `${playerName} puts away their tools and washes the unpleasant oil off their hands.`;
-                case 'RESEARCH':
-                    return `${playerName} cleans their beakers as best they can and gives their brain some rest.`;
-                case 'SAILING':
-                    return `${playerName} unhands the helm and turns their eyes from the horizon.`;
-                case 'NORTH_SAILING':
-                case 'SOUTH_SAILING':
-                case 'WEST_SAILING':
-                case 'EAST_SAILING':
-                    return `${playerName} gives up on their efforts to sail the boat... perhaps it should stay where it is...`;
-                default:
-                    throw new Error(`This activity key ${key} does not exist`);
-            }
-        } catch (error) {
-            throw error;
+        switch (key) {
+            case 'FISH':
+                return `${playerName} packs away the fishing rod and contains their bait.`;
+            case 'CARTOGRAPHY':
+                return `${playerName} puts away their papers and instruments. Perhaps they will try again later...`;
+            case 'REPAIR':
+                return `${playerName} puts away their tools and washes the unpleasant oil off their hands.`;
+            case 'RESEARCH':
+                return `${playerName} cleans their beakers as best they can and gives their brain some rest.`;
+            case 'SAILING':
+                return `${playerName} unhands the helm and turns their eyes from the horizon.`;
+            case 'NORTH_SAILING':
+            case 'SOUTH_SAILING':
+            case 'WEST_SAILING':
+            case 'EAST_SAILING':
+                return `${playerName} gives up on their efforts to sail the boat... perhaps it should stay where it is...`;
+            default:
+                throw new Error(`This activity key ${key} does not exist`);
         }
     }
 }

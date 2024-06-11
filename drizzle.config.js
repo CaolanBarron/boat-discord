@@ -4,7 +4,7 @@ export default defineConfig({
     dialect: 'sqlite',
     schema: './drizzle/schemas/*.ts',
     out: './drizzle/migrations/',
-    url: './database/database-test.db',
-    dbCredentials: { url: './database/database-test.db' },
+    url: './database/database-development.db',
+    dbCredentials: { url: './database/database-development.db' },
     introspect: { casing: 'casing' },
 });

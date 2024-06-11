@@ -31,7 +31,7 @@ class ResearchService {
 
         let item;
         if (itemId) {
-            if (!Boolean(Number.parseInt(itemId))) {
+            if (!Number.parseInt(itemId)) {
                 return {
                     content: 'The item ID is not in the correct format',
                     ephemeral: true,

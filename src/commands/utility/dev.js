@@ -31,7 +31,7 @@ export default {
         const row = new ActionRowBuilder();
         let content = 'Which tool would you like to use?';
         switch (interaction.options.getString('tools')) {
-            case 'tool_map':
+            case 'tool_map': {
                 const displayMapButton = new ButtonBuilder()
                     .setCustomId('dev_display_map')
                     .setLabel('Display Map')
@@ -53,22 +53,23 @@ export default {
                     displayMapLegendButton
                 );
                 break;
-
-            case 'tool_boat':
+            }
+            case 'tool_boat': {
                 const createBoat = new ButtonBuilder()
                     .setCustomId('dev_create_boat')
                     .setLabel('Create Boat')
                     .setStyle(ButtonStyle.Primary);
                 row.addComponents(createBoat);
                 break;
-
-            case 'tool_activities':
+            }
+            case 'tool_activities': {
                 const showJobs = new ButtonBuilder()
                     .setCustomId('dev_display_jobs')
                     .setLabel('Display Jobs')
                     .setStyle(ButtonStyle.Primary);
                 row.addComponents(showJobs);
                 break;
+            }
         }
 
         const response = await interaction.reply({
@@ -91,7 +92,7 @@ export default {
                         components: [],
                     });
                     break;
-                case 'dev_inspect_map':
+                case 'dev_inspect_map': {
                     const collectorFilter = (m) =>
                         m.author.id === interaction.user.id;
                     const collector =
@@ -112,10 +113,11 @@ export default {
                         collector.stop();
                     });
 
-                    collector.on('end', (collector) => {
+                    collector.on('end', () => {
                         console.log('Dev map inspector finished');
                     });
                     break;
+                }
                 case 'dev_legend_map':
                     await confirmation.update({
                         content: stripIndent`

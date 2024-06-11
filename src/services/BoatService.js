@@ -2,7 +2,6 @@ import { stripIndent } from 'common-tags';
 import schedule from 'node-schedule';
 import db from '../../database/database.js';
 import GameEventService from './GameEventService.js';
-import EffectService from './EffectService.js';
 
 class BoatService {
     create(guildID, condition = 10, speed = 5, x_coord = 0, y_coord = 0) {
