@@ -104,7 +104,7 @@ class SailService {
 
             response = `Engines roar to life and the bow splits the waves, ${player.name} starts to sail The Boat ${prettyDirections[tag]}`;
         } else {
-            response = `${player.name} joins the others in sailing the ship! Surely things will sail smoother now.`;
+            response = `${player.name} joins the others in sailing The Boat! Surely things will sail smoother now.`;
         }
 
         return {

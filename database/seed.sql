@@ -149,7 +149,7 @@ INSERT INTO prompt_message
 VALUES
 (1, 'The engine has suddenly stopped working'),
 (2, 'A mermaid has been sighted overboard'),
-(3, 'A strange figure appears on the ship');
+(3, 'A strange figure appears on The Boat');
 
 DELETE FROM prompt_action;
 

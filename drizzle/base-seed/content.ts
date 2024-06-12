@@ -99,7 +99,7 @@ export const prompts = [
         ],
     },
     {
-        content: 'A strange figure appears on the ship',
+        content: 'A strange figure appears on The Boat',
         actions: [
             {
                 content: 'Step towards them',

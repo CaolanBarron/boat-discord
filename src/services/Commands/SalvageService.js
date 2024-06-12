@@ -41,6 +41,7 @@ class SalvageService {
                     ephemeral: false,
                 };
             }
+
             // remove the winch from the inventory
             db()
                 .prepare(`DELETE FROM boat_inventory WHERE id = ?`)
@@ -59,6 +60,7 @@ class SalvageService {
             const item = db()
                 .prepare('SELECT * FROM item WHERE key = ?')
                 .get(treasureExists.item_key);
+
             return {
                 content: stripIndent`The salvage arm lowers, the rope singes and twists.\nEventually the salvage arm resurfaces, in its clutches: A ${item.name}.`,
                 ephemeral: false,

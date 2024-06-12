@@ -140,7 +140,7 @@ class BoatService {
                 )
                 .get(guildId, effect_id);
             if (boatAlreadyEffected) return;
-            // Apply the effect to the ship
+            // Apply the effect to The Boat
             db()
                 .prepare('INSERT INTO boat_effect VALUES(?, ?)')
                 .run(guildId, effect_id);
