@@ -2,8 +2,10 @@ import db from '../../database/database.js';
 import BoatService from './BoatService.js';
 
 class FlavourService {
-    getPlayerFlavor(content, characterName) {
+    getPlayerFlavor(content, player) {
         try {
+            // allows the format function of strings to insert values into the flavor
+            // strings stored in the database
             String.prototype.format = function () {
                 var args = arguments;
                 return this.replace(/{([0-9]+)}/g, function (match, index) {
@@ -14,12 +16,31 @@ class FlavourService {
             };
 
             const stmt = db()
-                .prepare('SELECT * FROM flavor WHERE subject = ?')
-                .all('PLAYER');
+                .prepare(
+                    `SELECT * FROM flavor 
+                    WHERE subject = ?
+                    AND tag IS NULL 
+                    OR tag IN (
+                      SELECT key 
+                      FROM active_tags 
+                      WHERE player_id = ?)`
+                )
+                .all('PLAYER', player.id);
 
-            const randomFlavor = Math.floor(Math.random() * stmt.length);
+            const tagOnlyFlavors = stmt.filter((f) => f.tag !== null);
 
-            return stmt[randomFlavor].content.format(content, characterName);
+            let flavorMessage;
+            if (tagOnlyFlavors.length > 0) {
+                flavorMessage = tagOnlyFlavors[
+                    Math.floor(Math.random() * tagOnlyFlavors.length)
+                ].content.format(content, player.name);
+            } else {
+                flavorMessage = stmt[
+                    Math.floor(Math.random() * stmt.length)
+                ].content.format(content, player.name);
+            }
+
+            return flavorMessage;
         } catch (error) {
             console.error(error);
         }

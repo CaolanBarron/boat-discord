@@ -33,10 +33,9 @@ export default {
                 throw error;
             }
 
-            const characterName = user.name;
             const message = FlavorService.getPlayerFlavor(
                 interaction.content,
-                characterName
+                user
             );
 
             interaction.channel.send(message);
