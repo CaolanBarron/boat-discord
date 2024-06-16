@@ -5,6 +5,7 @@ import { relations } from 'drizzle-orm';
 export const itemTransformation = sqliteTable('item_transformation', {
     original: text('original').references(() => item.key),
     transformation: text('transformation').references(() => item.key),
+    rarity: text('rarity').default('COMMON').notNull(),
 });
 
 export const itemTransformationRelations = relations(

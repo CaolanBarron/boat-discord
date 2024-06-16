@@ -5,6 +5,7 @@ import BotService from '../BotService.js';
 import { EmbedBuilder } from 'discord.js';
 import { stripIndent } from 'common-tags';
 import ItemService from '../ItemService.js';
+import chooseRandomRarity from '../utils.js';
 
 class ResearchService {
     async start(guildId, player, itemId) {
@@ -154,12 +155,22 @@ class ResearchService {
             .run(null, player.id);
 
         // Two options: transform the item or deliver information about the item
-        if (Math.random() < 0.5) {
+        if (Math.random() < 0.7) {
+            const skillXp = await SkillService.getSkillXP(
+                player.id,
+                'RESEARCH'
+            );
+            const skillLevel = await SkillService.getCurrentLevel(skillXp);
+
+            const rarity = chooseRandomRarity(ItemService.rarities, skillLevel);
             const transformations = db()
                 .prepare(
-                    `SELECT * FROM item_transformation JOIN item ON item.key = transformation WHERE original = ?`
+                    `SELECT * 
+                    FROM item_transformation 
+                    JOIN item ON item.key = transformation 
+                    WHERE original = ? AND item_transformation.rarity = ?`
                 )
-                .all(item.key);
+                .all(item.key, rarity);
 
             if (transformations.length === 0)
                 return stripIndent`Some information has been revealed about this item...\n ${await ItemService.itemInfo(

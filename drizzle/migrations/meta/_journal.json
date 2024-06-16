@@ -15,6 +15,13 @@
       "when": 1718533445416,
       "tag": "0001_famous_loners",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1718541927695,
+      "tag": "0002_youthful_micromax",
+      "breakpoints": true
     }
   ]
 }

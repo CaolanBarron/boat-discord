@@ -1,0 +1,1 @@
+ALTER TABLE `item_transformation` ADD `rarity` text DEFAULT 'COMMON' NOT NULL;

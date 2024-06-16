@@ -37,7 +37,7 @@ class ActivityService {
                 },
                 RESEARCH: {
                     execute: ResearchService.announceEnd,
-                    time: 600_000,
+                    time: 6000,
                     class: ResearchService,
                 },
                 // TODO: Set the correct time for sailing
