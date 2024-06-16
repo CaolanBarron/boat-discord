@@ -9,6 +9,7 @@ export const effect = sqliteTable('effect', {
     name: text('name').notNull(),
     description: text('description').notNull(),
     effectType: text('effect_type').default('BUFF').notNull(),
+    rarity: text('rarity').default('COMMON').notNull(),
 });
 
 export const effectRelations = relations(effect, ({ many }) => ({

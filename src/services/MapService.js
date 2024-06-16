@@ -8,7 +8,7 @@ class MapService {
     rarities = {
         BIOME: 55,
         // LAND: 25,
-        TREASURE: 35,
+        TREASURE: 40,
         NOTHING: 5,
     };
 
