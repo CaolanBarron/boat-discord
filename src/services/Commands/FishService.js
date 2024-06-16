@@ -43,9 +43,15 @@ class FishService {
             );
             stmt.run(player.id, 'FISH');
 
-            SkillService.increaseXP(player.id, 'FISH');
+            await SkillService.addRandomXP(player.id, 'FISH', 4);
 
-            const catches = await ItemService.randomItemByLootTag('FISH');
+            const skillXP = await SkillService.getSkillXP(player.id, 'FISH');
+            const skillLevel = await SkillService.getCurrentLevel(skillXP);
+
+            const catches = await ItemService.randomItemByLootTag(
+                'FISH',
+                skillLevel
+            );
 
             await ItemService.addToInventory(guildId, catches.key, player.id);
 

@@ -153,7 +153,7 @@ class SailService {
 
             BoatService.sail(guildId, direction[0].key);
 
-            SkillService.increaseXP(player.id, 'SAIL');
+            await SkillService.addRandomXP(player.id, 'SAIL', 4);
 
             const prettyDirection = {
                 NORTH_SAILING: 'North',

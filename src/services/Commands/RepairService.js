@@ -45,7 +45,7 @@ class RepairService {
             );
             stmt.run(player.id, 'REPAIR');
 
-            SkillService.increaseXP(player.id, 'REPAIR');
+            await SkillService.addRandomXP(player.id, 'REPAIR', 4);
 
             // TODO: Handle boat repairs and buffing here
             return 'Boat fixed';

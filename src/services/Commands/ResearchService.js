@@ -115,7 +115,7 @@ class ResearchService {
                     content: await this.researchBiome(guildId),
                 };
             }
-            SkillService.increaseXP(player.id, 'RESEARCH');
+            await SkillService.addRandomXP(player.id, 'RESEARCH', 4);
 
             return response;
         } catch (error) {

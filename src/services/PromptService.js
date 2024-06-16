@@ -2,6 +2,7 @@ import { ActionRowBuilder } from '@discordjs/builders';
 import db from '../../database/database.js';
 import { ButtonBuilder, ButtonStyle, Colors, EmbedBuilder } from 'discord.js';
 import BoatService from './BoatService.js';
+import SkillService from './SkillService.js';
 
 class PromptService {
     async getRandomPrompt() {
@@ -51,13 +52,13 @@ class PromptService {
         // Check if the action has a challenge_skill
         // if it does then get the users relevant skill and check it against the value
         if (outcomes[0].challenge_skill) {
-            const playerSkills = db()
-                .prepare(
-                    `SELECT * FROM player_skills WHERE player_id = ? AND skill_key = ?`
-                )
-                .get(player.id, outcomes[0].challenge_skill);
+            const skillXP = await SkillService.getSkillXP(
+                player.id,
+                outcomes[0].challenge_skill
+            );
+            const skillLevel = await SkillService.getCurrentLevel(skillXP);
 
-            if (playerSkills.xp > outcomes[0].challenge_value) {
+            if (skillLevel > outcomes[0].challenge_value) {
                 [response] = outcomes.filter(
                     (i) => i.outcome_type === 'SUCCESS'
                 );
@@ -72,7 +73,6 @@ class PromptService {
         if (outcomes.length === 1) {
             response = outcomes[0];
         }
-        // TODO: if the final outcome has an effect_id apply it to the boat/player
 
         if (response.effect_id) {
             BoatService.applyEffect(boatId, response.effect_id);

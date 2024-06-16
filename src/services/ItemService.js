@@ -11,10 +11,14 @@ class ItemService {
         ODDITY: 5,
     };
 
-    async randomItemByLootTag(lootKey) {
+    async randomItemByLootTag(lootKey, skillModifier) {
         let lootTable;
         while (!lootTable || lootTable.length === 0) {
-            const rarity = await chooseRandomRarity(this.rarities);
+            const rarity = await chooseRandomRarity(
+                this.rarities,
+                skillModifier
+            );
+
             lootTable = db()
                 .prepare(
                     'SELECT * FROM loot JOIN item ON item.key = loot.item_key WHERE loot.key = ? AND loot.rarity = ?'

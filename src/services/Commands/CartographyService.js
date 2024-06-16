@@ -47,14 +47,17 @@ class CartographyService {
             );
             stmt.run(player.id, 'CARTOGRAPHY');
 
-            SkillService.increaseXP(player.id, 'CARTOGRAPHY');
+            await SkillService.addRandomXP(player.id, 'CARTOGRAPHY', 4);
 
             // Decide randomly what information to give
             // - Biomes
             // - Land
             // - Location
             // - nothing
-            const discovery = await MapService.randomDiscovery(guildId);
+            const discovery = await MapService.randomDiscovery(
+                guildId,
+                player.id
+            );
 
             return discovery;
         } catch (error) {

@@ -1,16 +1,18 @@
 import db from '../../database/database.js';
 import BoatService from './BoatService.js';
+import ItemService from './ItemService.js';
 import chooseRandomRarity from './utils.js';
+import SkillService from './SkillService.js';
 
 class MapService {
     rarities = {
         BIOME: 55,
-        LAND: 25,
-        TREASURE: 15,
+        // LAND: 25,
+        TREASURE: 35,
         NOTHING: 5,
     };
 
-    async randomDiscovery(guildId) {
+    async randomDiscovery(guildId, playerId) {
         const choice = await chooseRandomRarity(this.rarities);
         switch (choice) {
             case 'BIOME':
@@ -18,7 +20,7 @@ class MapService {
             case 'LAND':
                 return `TODO land creation`;
             case 'TREASURE':
-                return await this.nearbyTreasure(guildId);
+                return await this.nearbyTreasure(guildId, playerId);
             case 'NOTHING':
                 return `Unfortunately this time they could not divine anything from the blasted documents.`;
             default:
@@ -40,8 +42,8 @@ class MapService {
           WHERE x_coord = ? AND y_coord IN (${yRange
               .map(() => '?')
               .join(',')}) OR y_coord = ? AND x_coord IN (${xRange
-              .map(() => '?')
-              .join(',')})`
+                    .map(() => '?')
+                    .join(',')})`
             )
             .all(boatStmt.x_coord, yRange, boatStmt.y_coord, xRange);
 
@@ -101,7 +103,7 @@ class MapService {
         }
     }
 
-    async nearbyTreasure(boatId) {
+    async nearbyTreasure(boatId, playerId) {
         try {
             // TODO: Should this simply find existing treasure or make new treasure?
             // Maybe both. Look for treasure that exists and if none is found then make some
@@ -121,8 +123,8 @@ class MapService {
                               .join(
                                   ','
                               )}) OR y_coord = ? AND x_coord IN (${xRange
-                              .map(() => '?')
-                              .join(',')})`
+                        .map(() => '?')
+                        .join(',')})`
                 )
                 .all(
                     boatId,
@@ -134,6 +136,11 @@ class MapService {
 
             if (treasureSurroundingStmt.length > 0) {
                 const treasure = treasureSurroundingStmt[0];
+                if (
+                    treasure.x_coord === boatStmt.x_coord &&
+                    treasure.y_coord === boatStmt.y_coord
+                )
+                    return `The documents seem to indicate there is treasure right below us...`;
                 const direction = this.directionFinder(
                     { x: boatStmt.x_coord, y: boatStmt.y_coord },
                     { x: treasure.x_coord, y: treasure.y_coord }
@@ -144,15 +151,21 @@ class MapService {
 
             // Choose a random treasure
             // Randomly choose a direction cardinal to the boat direction
-            const treasures = db()
-                .prepare(`SELECT * FROM loot WHERE key = ?`)
-                .all('TREASURE');
 
-            const treasure =
-                treasures[Math.floor(Math.random() * treasures.length)];
+            const skillXP = await SkillService.getSkillXP(
+                playerId,
+                'CARTOGRAPHY'
+            );
+            const skillLevel = await SkillService.getCurrentLevel(skillXP);
+
+            const treasure = await ItemService.randomItemByLootTag(
+                'TREASURE',
+                skillLevel
+            );
 
             const direction = Math.floor(Math.random() * 4);
             const position = { x: boatStmt.x_coord, y: boatStmt.y_coord };
+
             let directionName;
 
             // TODO: Add validation so the position does not go out of bounds

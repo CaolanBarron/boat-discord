@@ -5,7 +5,7 @@ class TreasureService {
     async shuffleTreasure(boatId) {
         if (this.RANDOM_ITEMS > 80)
             throw new Error(
-                'Random items count is too high this is very likely to cause issues'
+                'Random items count is too high this is very likely to cause issues with map size'
             );
         // Remove all the treasure by boat
         await this.removeAllByBoat(boatId);
