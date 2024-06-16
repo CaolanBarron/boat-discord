@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `effect_key_effect_type_unique` ON `effect` (`key`,`effect_type`);

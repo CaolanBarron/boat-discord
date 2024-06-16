@@ -74,11 +74,12 @@ class EffectService {
         try {
             const effect = db()
                 .prepare(
-                    `SELECT * 
-        FROM boat_effect be 
-        JOIN effect e 
-        ON be.effect_id = e.id 
-        WHERE boat_id = ? AND effect_id = ?`
+                    `
+                  SELECT * 
+                  FROM boat_effect be 
+                  JOIN effect e 
+                  ON be.effect_id = e.id 
+                  WHERE boat_id = ? AND effect_id = ?`
                 )
                 .get(guildId, effectId);
             if (!effect) return `The ${effectId} effect is not in use`;
@@ -101,10 +102,10 @@ class EffectService {
             const stmt = db()
                 .prepare(
                     `
-                SELECT * 
-                FROM boat_effect 
-                JOIN effect ON boat_effect.effect_id = effect.id
-                WHERE boat_effect.boat_id = ? AND effect.effect_type = ?
+                  SELECT * 
+                  FROM boat_effect 
+                  JOIN effect ON boat_effect.effect_id = effect.id
+                  WHERE boat_effect.boat_id = ? AND effect.effect_type = ?
                 `
                 )
                 .all(guildId, 'DEBUFF');
