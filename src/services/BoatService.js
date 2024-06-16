@@ -1,5 +1,4 @@
 import { stripIndent } from 'common-tags';
-import schedule from 'node-schedule';
 import db from '../../database/database.js';
 import GameEventService from './GameEventService.js';
 
@@ -126,61 +125,6 @@ class BoatService {
             .get(boatStmt.x_coord, boatStmt.y_coord);
 
         return biomeStmt;
-    }
-
-    async applyEffect(guildId, effect_id) {
-        try {
-            // Get the effect
-            // TODO: clean this up Or convert prompt_action to use key instead of id
-            // const effect = await EffectService.getByKey(effectKey);
-            // Exit if the effect is already applied
-            const boatAlreadyEffected = db()
-                .prepare(
-                    'SELECT * FROM boat_effect WHERE boat_id = ? AND effect_id = ?'
-                )
-                .get(guildId, effect_id);
-            if (boatAlreadyEffected) return;
-            // Apply the effect to The Boat
-            db()
-                .prepare('INSERT INTO boat_effect VALUES(?, ?)')
-                .run(guildId, effect_id);
-            // TODO: Schedule effect expiration
-            const executeTime = Date.now() + 10_000;
-            schedule.scheduleJob(
-                `effect_${effect_id}_${guildId}`,
-                executeTime,
-                this.removeEffect.bind(this, guildId, effect_id)
-            );
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
-    }
-
-    async removeEffect(guildId, effectId) {
-        try {
-            const effect = db()
-                .prepare(
-                    `SELECT * 
-        FROM boat_effect be 
-        JOIN effect e 
-        ON be.effect_id = e.id 
-        WHERE boat_id = ? AND effect_id = ?`
-                )
-                .get(guildId, effectId);
-            if (!effect) return `The ${effectId} effect is not in use`;
-
-            db()
-                .prepare(
-                    'DELETE FROM boat_effect WHERE boat_id = ? AND effect_id  =?'
-                )
-                .run(guildId, effectId);
-
-            return `The ${effect.name} effect has faded away from the boat...`;
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
     }
 }
 export default new BoatService();
