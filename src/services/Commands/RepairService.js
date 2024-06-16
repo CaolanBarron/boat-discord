@@ -3,6 +3,7 @@ import SkillService from '../SkillService.js';
 import BotService from '../BotService.js';
 import { EmbedBuilder } from '@discordjs/builders';
 import db from '../../../database/database.js';
+import EffectService from '../EffectService.js';
 
 class RepairService {
     async start(guildId, player) {
@@ -47,10 +48,41 @@ class RepairService {
 
             await SkillService.addRandomXP(player.id, 'REPAIR', 4);
 
-            // TODO: Handle boat repairs and buffing here
-            return 'Boat fixed';
+            const activeDebuffs = await EffectService.findBoatDebuffs(guildId);
+
+            if (activeDebuffs.length > 0) {
+                const toRemove =
+                    activeDebuffs[
+                        Math.floor(Math.random() * activeDebuffs.length)
+                    ];
+                db()
+                    .prepare(
+                        'DELETE FROM boat_effect WHERE boat_id = ? AND effect_id = ?'
+                    )
+                    .run(guildId, toRemove.effect_id);
+                return {
+                    content:
+                        'An issue found and an issue fixed, The Boat has been repaired somewhat.',
+                    modifications: `${toRemove.name} debuff removed.`,
+                };
+            }
+
+            const skillXp = await SkillService.getSkillXP(player.id, 'REPAIR');
+            const skillLevel = await SkillService.getCurrentLevel(skillXp);
+
+            const buffToApply = await EffectService.getPositiveWeightedRandom(
+                skillLevel
+            );
+
+            await EffectService.applyEffect(guildId, buffToApply.id);
+
+            return {
+                content: `Why did they place this gear here? What on earth is the function of this pipe?? The Boat's faculties has been improved.`,
+                modifications: `${buffToApply.name} buff applied.`,
+            };
         } catch (error) {
             console.error(error);
+            throw error;
         }
     }
 
@@ -72,8 +104,9 @@ class RepairService {
             .addFields(
                 {
                     name: 'Effects:',
-                    value: `${results}`,
+                    value: `${results.content}`,
                 },
+                { name: 'Modification:', value: results.modifications },
                 { name: 'Experience:', value: '++Repair' }
             );
 

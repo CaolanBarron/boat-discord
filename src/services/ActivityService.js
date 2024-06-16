@@ -32,7 +32,7 @@ class ActivityService {
                 },
                 REPAIR: {
                     execute: RepairService.announceEnd,
-                    time: 600_000,
+                    time: 6000,
                     class: RepairService,
                 },
                 RESEARCH: {

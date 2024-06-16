@@ -95,6 +95,25 @@ class EffectService {
             throw e;
         }
     }
-}
 
+    async findBoatDebuffs(guildId) {
+        try {
+            const stmt = db()
+                .prepare(
+                    `
+                SELECT * 
+                FROM boat_effect 
+                JOIN effect ON boat_effect.effect_id = effect.id
+                WHERE boat_effect.boat_id = ? AND effect.effect_type = ?
+                `
+                )
+                .all(guildId, 'DEBUFF');
+
+            return stmt;
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    }
+}
 export default new EffectService();

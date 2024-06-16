@@ -1,7 +1,7 @@
 import ActivityService from './ActivityService.js';
 import db from '../../database/database.js';
-import BoatService from './BoatService.js';
 import schedule from 'node-schedule';
+import EffectService from './EffectService.js';
 
 class BotService {
     async getChannelByName(guildId, name) {
@@ -66,8 +66,8 @@ class BotService {
             schedule.scheduleJob(
                 `effect_${effect.effect_id}_${effect.boat_id}`,
                 executeTime,
-                BoatService.removeEffect.bind(
-                    BoatService,
+                EffectService.removeEffect.bind(
+                    EffectService,
                     effect.boat_id,
                     effect.effect_id
                 )
