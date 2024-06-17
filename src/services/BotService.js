@@ -48,7 +48,7 @@ class BotService {
         activities = activities.flat();
 
         for (const activity of activities) {
-            ActivityService.scheduleActivity(activity.key, {
+            await ActivityService.scheduleActivity(activity.key, {
                 guildId: activity.boat_id,
                 player: { id: activity.id, name: activity.name },
             });

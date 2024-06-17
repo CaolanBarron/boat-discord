@@ -6,8 +6,9 @@ import { EmbedBuilder } from 'discord.js';
 import { stripIndent } from 'common-tags';
 import ItemService from '../ItemService.js';
 import chooseRandomRarity from '../utils.js';
+import Activity from '../Activity.js';
 
-class ResearchService {
+class ResearchService extends Activity {
     async start(guildId, player, itemId) {
         const isBusy = ActivityService.checkActive(player.id, 'RESEARCH');
         if (isBusy) {
@@ -74,7 +75,7 @@ class ResearchService {
         );
         stmt.run('RESEARCH', player.id);
 
-        ActivityService.scheduleActivity('RESEARCH', { guildId, player });
+        await ActivityService.scheduleActivity('RESEARCH', { guildId, player });
 
         if (itemId) {
             return {
@@ -205,7 +206,7 @@ class ResearchService {
             .get(boat.x_coord, boat.y_coord);
 
         if (currentBiome) return currentBiome.info;
-
+        // TODO: change all of the following wtf
         const openOceanInfos = [
             'The Mariana Trench is the deepest part of the ocean, reaching a depth of over 36,000 feet.',
             "Approximately 70% of the Earth's surface is covered by the ocean, making it the largest habitat on Earth.",
@@ -231,6 +232,34 @@ class ResearchService {
         return openOceanInfos[
             Math.floor(Math.random() * openOceanInfos.length)
         ];
+    }
+    async getTimeToExecute(boatId) {
+        // Check if there are any repair timing effects
+        const stmt = db()
+            .prepare(
+                `
+              SELECT * 
+              FROM boat_effect be 
+              JOIN effect e ON be.effect_id = e.id
+              WHERE be.boat_id = ?
+              AND e.key = ?`
+            )
+            .all(boatId, 'REPAIR_TIME');
+        let finalTime = this.executionTime;
+        const timeModification = 200_000;
+        console.log(stmt);
+        // if there is a negative one increase time
+        if (stmt.find((f) => f.type === 'DEBUFF')) {
+            finalTime += timeModification;
+        }
+
+        // if there is a positive on decrease time
+        if (stmt.find((f) => f.type === 'BUFF')) {
+            finalTime -= timeModification;
+        }
+        if (finalTime < 0) throw new Error('Activity timing is well off');
+        console.log(`Started the repair job with: ${finalTime}`);
+        return finalTime;
     }
 }
 export default new ResearchService();

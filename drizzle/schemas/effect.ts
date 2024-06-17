@@ -10,11 +10,11 @@ export const effect = sqliteTable(
         key: text('key').notNull(),
         name: text('name').notNull(),
         description: text('description').notNull(),
-        effectType: text('effect_type').default('BUFF').notNull(),
+        type: text('type').default('BUFF').notNull(),
         rarity: text('rarity').default('COMMON').notNull(),
     },
     (t) => ({
-        unq: unique().on(t.key, t.effectType),
+        unq: unique().on(t.key, t.type),
     })
 );
 

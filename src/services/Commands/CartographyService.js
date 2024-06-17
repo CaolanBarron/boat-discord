@@ -4,8 +4,9 @@ import db from '../../../database/database.js';
 import BotService from '../BotService.js';
 import { EmbedBuilder } from 'discord.js';
 import MapService from '../MapService.js';
+import Activity from '../Activity.js';
 
-class CartographyService {
+class CartographyService extends Activity {
     async start(guildId, player) {
         const isBusy = ActivityService.checkActive(player.id, 'CARTOGRAPHY');
         if (isBusy) {
@@ -31,7 +32,10 @@ class CartographyService {
         );
         stmt.run('CARTOGRAPHY', player.id);
 
-        ActivityService.scheduleActivity('CARTOGRAPHY', { guildId, player });
+        await ActivityService.scheduleActivity('CARTOGRAPHY', {
+            guildId,
+            player,
+        });
 
         // TODO: CARTOGRAPHY response
         return {
@@ -86,6 +90,34 @@ class CartographyService {
             );
 
         foghorn.send({ embeds: [cartographyEmbed] });
+    }
+
+    async getTimeToExecute(boatId) {
+        // Check if there are any cartography timing effects
+        const stmt = db()
+            .prepare(
+                `
+              SELECT * 
+              FROM boat_effect be 
+              JOIN effect e ON be.effect_id = e.id
+              WHERE be.boat_id = ?
+              AND e.key = ?`
+            )
+            .all(boatId, 'CARTOGRAPHY_TIME');
+        let finalTime = this.executionTime;
+        const timeModification = 200_000;
+        // if there is a negative one increase time
+        if (stmt.find((f) => f.type === 'DEBUFF')) {
+            finalTime += timeModification;
+        }
+
+        // if there is a positive on decrease time
+        if (stmt.find((f) => f.type === 'BUFF')) {
+            finalTime -= timeModification;
+        }
+        if (finalTime < 0) throw new Error('Activity timing is well off');
+        console.log(`Cartography event started for: ${finalTime}`);
+        return finalTime;
     }
 }
 

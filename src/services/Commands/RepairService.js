@@ -4,8 +4,9 @@ import BotService from '../BotService.js';
 import { EmbedBuilder } from '@discordjs/builders';
 import db from '../../../database/database.js';
 import EffectService from '../EffectService.js';
+import Activity from '../Activity.js';
 
-class RepairService {
+class RepairService extends Activity {
     async start(guildId, player) {
         const isBusy = ActivityService.checkActive(player.id, 'REPAIR');
         if (isBusy) {
@@ -31,7 +32,7 @@ class RepairService {
         );
         insertStmt.run('REPAIR', player.id);
 
-        ActivityService.scheduleActivity('REPAIR', { guildId, player });
+        await ActivityService.scheduleActivity('REPAIR', { guildId, player });
 
         return {
             content: `${player.name} unhooks the latches of their toolbox and gets to work.`,
@@ -70,9 +71,8 @@ class RepairService {
             const skillXp = await SkillService.getSkillXP(player.id, 'REPAIR');
             const skillLevel = await SkillService.getCurrentLevel(skillXp);
 
-            const buffToApply = await EffectService.getPositiveWeightedRandom(
-                skillLevel
-            );
+            const buffToApply =
+                await EffectService.getPositiveWeightedRandom(skillLevel);
 
             await EffectService.applyEffect(guildId, buffToApply.id);
 
@@ -111,6 +111,34 @@ class RepairService {
             );
 
         foghorn.send({ embeds: [repairEmbed] });
+    }
+    async getTimeToExecute(boatId) {
+        // Check if there are any repair timing effects
+        const stmt = db()
+            .prepare(
+                `
+              SELECT * 
+              FROM boat_effect be 
+              JOIN effect e ON be.effect_id = e.id
+              WHERE be.boat_id = ?
+              AND e.key = ?`
+            )
+            .all(boatId, 'REPAIR_TIME');
+        let finalTime = this.executionTime;
+        const timeModification = 200_000;
+        console.log(stmt);
+        // if there is a negative one increase time
+        if (stmt.find((f) => f.type === 'DEBUFF')) {
+            finalTime += timeModification;
+        }
+
+        // if there is a positive on decrease time
+        if (stmt.find((f) => f.type === 'BUFF')) {
+            finalTime -= timeModification;
+        }
+        if (finalTime < 0) throw new Error('Activity timing is well off');
+        console.log(`Started the repair job with: ${finalTime}`);
+        return finalTime;
     }
 }
 

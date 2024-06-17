@@ -17,48 +17,64 @@ class ActivityService {
         'WEST_SAILING',
         'EAST_SAILING',
     ];
-    scheduleActivity(key, interaction) {
+    async scheduleActivity(key, interaction) {
         try {
             const activities = {
                 FISH: {
                     execute: FishService.announceEnd,
-                    time: 6000,
+                    time: await FishService.getTimeToExecute(
+                        interaction.player.boat_id
+                    ),
                     class: FishService,
                 },
                 CARTOGRAPHY: {
                     execute: CartographyService.announceEnd,
-                    time: 6000,
+                    time: await CartographyService.getTimeToExecute(
+                        interaction.player.boat_id
+                    ),
                     class: CartographyService,
                 },
                 REPAIR: {
                     execute: RepairService.announceEnd,
-                    time: 6000,
+                    time: await RepairService.getTimeToExecute(
+                        interaction.player.boat_id
+                    ),
                     class: RepairService,
                 },
                 RESEARCH: {
                     execute: ResearchService.announceEnd,
-                    time: 6000,
+                    time: await ResearchService.getTimeToExecute(
+                        interaction.player.boat_id
+                    ),
                     class: ResearchService,
                 },
                 // TODO: Set the correct time for sailing
                 NORTH_SAILING: {
                     execute: SailService.announceEnd,
-                    time: 6000,
+                    time: await SailService.getTimeToExecute(
+                        interaction.player.boat_id
+                    ),
                     class: SailService,
                 },
                 SOUTH_SAILING: {
                     execute: SailService.announceEnd,
-                    time: 6000,
+                    time: await SailService.getTimeToExecute(
+                        interaction.player.boat_id
+                    ),
                     class: SailService,
                 },
                 WEST_SAILING: {
                     execute: SailService.announceEnd,
-                    time: 6000,
+                    time: await SailService.getTimeToExecute(
+                        interaction.player.boat_id
+                    ),
                     class: SailService,
                 },
                 EAST_SAILING: {
                     execute: SailService.announceEnd,
-                    time: 6000,
+                    time: await SailService.getTimeToExecute(
+                        interaction.player.boat_id
+                    ),
                     class: SailService,
                 },
             };

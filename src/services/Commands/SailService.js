@@ -4,9 +4,10 @@ import db from '../../../database/database.js';
 import BotService from '../BotService.js';
 import { EmbedBuilder } from 'discord.js';
 import BoatService from '../BoatService.js';
+import Activity from '../Activity.js';
 
 //TODO: Handle the first sailor stopping the job. Other players will keep the active tag without any scheduled jobs
-class SailService {
+class SailService extends Activity {
     keys = {
         NORTH: 'NORTH_SAILING',
         SOUTH: 'SOUTH_SAILING',
@@ -84,7 +85,7 @@ class SailService {
         //Only create a job if you are the first sailor
         let firstTime = false;
         if (!currentDirection) {
-            ActivityService.scheduleActivity(tag, { guildId, player });
+            await ActivityService.scheduleActivity(tag, { guildId, player });
             firstTime = true;
         }
 
@@ -251,6 +252,33 @@ class SailService {
             .join(',');
 
         return `You would like to sail the boat... However: ${outputs}. \nTry again when the boat is less busy! `;
+    }
+    async getTimeToExecute(boatId) {
+        // Check if there are any sail timing effects
+        const stmt = db()
+            .prepare(
+                `
+              SELECT * 
+              FROM boat_effect be 
+              JOIN effect e ON be.effect_id = e.id
+              WHERE be.boat_id = ?
+              AND e.key = ?`
+            )
+            .all(boatId, 'SAIL_TIME');
+        let finalTime = this.executionTime;
+        const timeModification = 200_000;
+        // if there is a negative one increase time
+        if (stmt.find((f) => f.type === 'DEBUFF')) {
+            finalTime += timeModification;
+        }
+
+        // if there is a positive on decrease time
+        if (stmt.find((f) => f.type === 'BUFF')) {
+            finalTime -= timeModification;
+        }
+        if (finalTime < 0) throw new Error('Activity timing is well off');
+        console.log(`Started the sail job with: ${finalTime}`);
+        return finalTime;
     }
 }
 

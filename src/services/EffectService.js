@@ -31,7 +31,7 @@ class EffectService {
                 );
                 effects = db()
                     .prepare(
-                        `SELECT * FROM effect WHERE effect_type = ? AND rarity = ?`
+                        `SELECT * FROM effect WHERE type = ? AND rarity = ?`
                     )
                     .all('BUFF', rarity);
             }
@@ -105,7 +105,7 @@ class EffectService {
                   SELECT * 
                   FROM boat_effect 
                   JOIN effect ON boat_effect.effect_id = effect.id
-                  WHERE boat_effect.boat_id = ? AND effect.effect_type = ?
+                  WHERE boat_effect.boat_id = ? AND effect.type = ?
                 `
                 )
                 .all(guildId, 'DEBUFF');
