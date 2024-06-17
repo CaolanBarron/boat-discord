@@ -137,7 +137,6 @@ class RepairService extends Activity {
             finalTime -= timeModification;
         }
         if (finalTime < 0) throw new Error('Activity timing is well off');
-        console.log(`Started the repair job with: ${finalTime}`);
         return finalTime;
     }
 }

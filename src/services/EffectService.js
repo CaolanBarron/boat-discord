@@ -116,5 +116,35 @@ class EffectService {
             throw e;
         }
     }
+
+    skillsToXPEffect = {
+        FISH: ['FISH_XP'],
+        SAIL: ['SAIL_XP'],
+        RESEARCH: ['RESEARCH_XP'],
+        CARTOGRAPHY: ['CARTOGRAPHY_XP'],
+        REPAIR: ['REPAIR_XP'],
+    };
+    async getXPModifierByEffect(skillKey, playerId) {
+        // Translate skill keys into effects
+        const effects = this.skillsToXPEffect[skillKey];
+
+        const boat = db()
+            .prepare(`SELECT boat_id FROM player WHERE id = ?`)
+            .get(playerId);
+
+        const activeEffects = db()
+            .prepare(
+                `SELECT * FROM boat_effect be 
+               JOIN effect e ON be.effect_id = e.id
+               WHERE be.boat_id = ? 
+               AND e.key IN (${effects.map(() => '?').join(',')})`
+            )
+            .all(boat.boat_id, effects);
+
+        if (activeEffects.find((f) => f.type === 'BUFF')) modifier += 2;
+        if (activeEffects.find((f) => f.type === 'DEBUFF')) modifier -= 2;
+
+        return modifier;
+    }
 }
 export default new EffectService();

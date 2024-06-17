@@ -16,6 +16,7 @@ class GameEventService {
         for (const guild of guildIds) {
             if (!boatIds.includes(guild)) continue;
             console.log(`Spinning up flavor interval for ${guild}`);
+
             const task = new Task(`${guild}_boat_flavor`, async () => {
                 // Do not send a event half the amount of times
                 if (Math.random() < 0.5) return;
@@ -74,6 +75,7 @@ class GameEventService {
         for (const guild of guildIds) {
             if (!boatIds.includes(guild)) continue;
             console.log(`Spinning up Treasure Shuffle Interval for ${guild}`);
+
             const task = new Task(`${guild}_boat_treasure`, async () => {
                 await TreasureService.shuffleTreasure(guild);
             });

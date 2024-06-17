@@ -1,10 +1,13 @@
 import { Colors, EmbedBuilder } from 'discord.js';
 import db from '../../database/database.js';
 import BotService from './BotService.js';
+import EffectService from './EffectService.js';
+
 class SkillService {
     constructor() {
         this.baseXP = 5;
     }
+
     async getSkillXP(playerId, skillKey) {
         const skillXP = db()
             .prepare(
@@ -18,18 +21,24 @@ class SkillService {
         // Get current skill XP
         const skillXp = await this.getSkillXP(playerId, skillKey);
         const currentLevel = await this.getCurrentLevel(skillXp);
+
+        const modifiedByEffectPoints =
+            points +
+            (await EffectService.getXPModifierByEffect(skillKey, playerId));
+
         // Check if the amount of xp added will get to the next level
         const xpToNextLevel =
             (await this.experienceForNextLevel(currentLevel)) - skillXp;
-        if (points >= xpToNextLevel) {
+        if (modifiedByEffectPoints >= xpToNextLevel) {
             await this.announceLevelUp(playerId, skillKey, currentLevel + 1);
         }
+
         // set the skill XP to be XP++
         const stmt = db().prepare(
             'UPDATE player_skills SET xp = ? WHERE player_id = ? AND skill_key = ?'
         );
 
-        stmt.run(skillXp + points, playerId, skillKey);
+        stmt.run(skillXp + modifiedByEffectPoints, playerId, skillKey);
     }
 
     async addRandomXP(playerId, skillKey, range) {

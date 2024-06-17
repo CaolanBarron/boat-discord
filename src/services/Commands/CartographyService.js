@@ -116,7 +116,6 @@ class CartographyService extends Activity {
             finalTime -= timeModification;
         }
         if (finalTime < 0) throw new Error('Activity timing is well off');
-        console.log(`Cartography event started for: ${finalTime}`);
         return finalTime;
     }
 }

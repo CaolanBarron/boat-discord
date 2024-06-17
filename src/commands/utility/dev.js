@@ -276,7 +276,6 @@ async function createBoat(guildId) {
 async function displayJobs() {
     // TODO: This code is evil. Quell it
     const scheduledJobs = schedule.scheduledJobs;
-    console.log(scheduledJobs);
     if (Object.keys(scheduledJobs).length === 0)
         return 'There are no jobs at the moment!';
     const result = Object.keys(scheduledJobs).reduce((arr, curr) => {

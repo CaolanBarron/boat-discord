@@ -277,7 +277,6 @@ class SailService extends Activity {
             finalTime -= timeModification;
         }
         if (finalTime < 0) throw new Error('Activity timing is well off');
-        console.log(`Started the sail job with: ${finalTime}`);
         return finalTime;
     }
 }
