@@ -1,6 +1,6 @@
 import { EmbedBuilder } from '@discordjs/builders';
 import db from '../../database/database.js';
-import chooseRandomRarity from './utils.js';
+import { chooseRandomRarity } from './utils.js';
 
 class ItemService {
     // This is a table to determine the random chance of getting an item
@@ -11,12 +11,13 @@ class ItemService {
         ODDITY: 5,
     };
 
-    async randomItemByLootTag(lootKey, skillModifier) {
+    async randomItemByLootTag(lootKey, skillModifier, effectModifier) {
         let lootTable;
         while (!lootTable || lootTable.length === 0) {
             const rarity = await chooseRandomRarity(
                 this.rarities,
-                skillModifier
+                skillModifier,
+                effectModifier
             );
 
             lootTable = db()

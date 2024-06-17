@@ -2,7 +2,7 @@ import db from '../../database/database.js';
 import schedule from 'node-schedule';
 import ItemService from './ItemService.js';
 import SkillService from './SkillService.js';
-import chooseRandomRarity from './utils.js';
+import { chooseRandomRarity } from './utils.js';
 
 class EffectService {
     getByKey(effectKey) {

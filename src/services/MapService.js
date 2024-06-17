@@ -1,7 +1,7 @@
 import db from '../../database/database.js';
 import BoatService from './BoatService.js';
 import ItemService from './ItemService.js';
-import chooseRandomRarity from './utils.js';
+import { chooseRandomRarity, getRarityEffectModifer } from './utils.js';
 import SkillService from './SkillService.js';
 
 class MapService {
@@ -42,8 +42,8 @@ class MapService {
           WHERE x_coord = ? AND y_coord IN (${yRange
               .map(() => '?')
               .join(',')}) OR y_coord = ? AND x_coord IN (${xRange
-                    .map(() => '?')
-                    .join(',')})`
+              .map(() => '?')
+              .join(',')})`
             )
             .all(boatStmt.x_coord, yRange, boatStmt.y_coord, xRange);
 
@@ -123,8 +123,8 @@ class MapService {
                               .join(
                                   ','
                               )}) OR y_coord = ? AND x_coord IN (${xRange
-                        .map(() => '?')
-                        .join(',')})`
+                              .map(() => '?')
+                              .join(',')})`
                 )
                 .all(
                     boatId,
@@ -158,9 +158,11 @@ class MapService {
             );
             const skillLevel = await SkillService.getCurrentLevel(skillXP);
 
+            const effectModifier = getRarityEffectModifer(boatId, 'TREASURE');
             const treasure = await ItemService.randomItemByLootTag(
                 'TREASURE',
-                skillLevel
+                skillLevel,
+                effectModifier
             );
 
             const direction = Math.floor(Math.random() * 4);

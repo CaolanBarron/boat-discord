@@ -5,6 +5,7 @@ import SkillService from '../SkillService.js';
 import ItemService from '../ItemService.js';
 import BotService from '../BotService.js';
 import { EmbedBuilder } from 'discord.js';
+import { getRarityEffectModifer } from '../utils.js';
 
 class FishService extends Activity {
     async start(guildId, player) {
@@ -49,9 +50,11 @@ class FishService extends Activity {
             const skillXP = await SkillService.getSkillXP(player.id, 'FISH');
             const skillLevel = await SkillService.getCurrentLevel(skillXP);
 
+            const effectModifier = getRarityEffectModifer(guildId, 'FISH');
             const catches = await ItemService.randomItemByLootTag(
                 'FISH',
-                skillLevel
+                skillLevel,
+                effectModifier
             );
 
             await ItemService.addToInventory(guildId, catches.key, player.id);

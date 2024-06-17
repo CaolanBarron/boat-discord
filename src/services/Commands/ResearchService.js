@@ -5,7 +5,7 @@ import BotService from '../BotService.js';
 import { EmbedBuilder } from 'discord.js';
 import { stripIndent } from 'common-tags';
 import ItemService from '../ItemService.js';
-import chooseRandomRarity from '../utils.js';
+import { chooseRandomRarity, getRarityEffectModifer } from '../utils.js';
 import Activity from '../Activity.js';
 
 class ResearchService extends Activity {
@@ -163,7 +163,15 @@ class ResearchService extends Activity {
             );
             const skillLevel = await SkillService.getCurrentLevel(skillXp);
 
-            const rarity = chooseRandomRarity(ItemService.rarities, skillLevel);
+            const rarityModfier = getRarityEffectModifer(
+                player.boat_id,
+                'TRANSFORMATION'
+            );
+            const rarity = chooseRandomRarity(
+                ItemService.rarities,
+                skillLevel,
+                rarityModfier
+            );
             const transformations = db()
                 .prepare(
                     `SELECT * 
