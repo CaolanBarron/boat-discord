@@ -141,6 +141,8 @@ class EffectService {
             )
             .all(boat.boat_id, effects);
 
+        let modifier = 0;
+
         if (activeEffects.find((f) => f.type === 'BUFF')) modifier += 2;
         if (activeEffects.find((f) => f.type === 'DEBUFF')) modifier -= 2;
 

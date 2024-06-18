@@ -1,3 +1,5 @@
+import db from '../../database/database.js';
+
 export function chooseRandomRarity(rarities, skillModifier, effectModifier) {
     const effectModfierClean = effectModifier || 0;
     let randomValue = Math.floor(Math.random() * 101);
@@ -26,7 +28,7 @@ export function getRarityEffectModifer(boatId, rarityKey) {
             `
         SELECT * 
         FROM boat_effect be 
-        JOIN effect e ON boat_effect.effect_id = e.id
+        JOIN effect e ON be.effect_id = e.id
         WHERE be.boat_id = ?
         AND e.key IN (${effects.map(() => '?').join(',')})
 `

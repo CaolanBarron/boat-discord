@@ -12,6 +12,7 @@ class ItemService {
     };
 
     async randomItemByLootTag(lootKey, skillModifier, effectModifier) {
+        console.log('Effect Modifier: ', effectModifier);
         let lootTable;
         while (!lootTable || lootTable.length === 0) {
             const rarity = await chooseRandomRarity(
