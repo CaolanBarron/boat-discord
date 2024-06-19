@@ -45,6 +45,7 @@ class GameEventService {
 
             const task = new Task(`${guild}_prompt`, async () => {
                 // Do not send a event half the amount of times
+                // TODO: Check if the boat is currently sailing and do not send a prompt if it is
                 if (Math.random() < 0.5) return;
                 const users = db()
                     .prepare(`SELECT * FROM player WHERE boat_id = ?`)
@@ -66,6 +67,12 @@ class GameEventService {
 
             this.scheduler.addSimpleIntervalJob(job);
         }
+    }
+
+    async startSailPrompIntervals(guildId) {
+        const boat = db()
+            .prepare('SELECT * FROM boat WHERE id = ?')
+            .get(guildId);
     }
 
     async startTreasureShufflesIntervals(guildIds) {

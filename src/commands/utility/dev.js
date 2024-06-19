@@ -284,7 +284,7 @@ async function displayJobs() {
         const userId = curr.split('_');
         const userStmt = db()
             .prepare('SELECT * FROM player WHERE id = ?')
-            .get(userId[2]);
+            .get(userId[userId.length - 1]);
 
         return arr.concat(
             stripIndent`

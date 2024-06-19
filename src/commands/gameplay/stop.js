@@ -16,6 +16,7 @@ export default {
                     content: `${interaction.player.name} is not doing anything to stop at the moment`,
                     ephemeral: true,
                 });
+                return;
             }
 
             if (current.key === 'RESEARCH') {
@@ -30,11 +31,57 @@ export default {
             const tagsStmt = db().prepare(
                 'DELETE FROM active_tags WHERE key = ? AND player_id = ?'
             );
-
             tagsStmt.run(current.key, interaction.player.id);
 
-            // Delete the current job
-            schedule.cancelJob(`${interaction.player.id}_${current.key}`);
+            // TODO: Check if you are the last sailor
+            // TODO: If you are then cancel the remaining sailing job
+            if (
+                [
+                    'NORTH_SAILING',
+                    'SOUTH_SAILING',
+                    'EAST_SAILING',
+                    'WEST_SAILING',
+                ].includes(current.key)
+            ) {
+                const sailingActivities = db()
+                    .prepare(
+                        `
+                  SELECT * 
+                  FROM active_tags 
+                  JOIN player ON active_tags.player_id = player.id 
+                  WHERE player.id = ? 
+                  AND active_tags.key 
+                    IN (
+                      'NORTH_SAILING', 
+                      'SOUTH_SAILING', 
+                      'EAST_SAILING', 
+                      'WEST_SAILING'
+                    )`
+                    )
+                    .all(interaction.player.id);
+
+                if (sailingActivities.length === 0) {
+                    // Need to get playrIds because they are decoupled from scheduled jobs
+                    const playerIds = db()
+                        .prepare('SELECT id FROM player WHERE boat_id = ?')
+                        .all(interaction.player.id);
+
+                    const activityNames = playerIds.map(
+                        (id) => `activity_${current.key}_${id}`
+                    );
+
+                    activityNames.forEach((jobName) =>
+                        schedule.cancelJob(jobName)
+                    );
+
+                    // TODO: need to account for The main person stopping while others are still sailing
+                }
+            } else {
+                // Delete the current job
+                schedule.cancelJob(
+                    `activity_${current.key}_${interaction.player.id}`
+                );
+            }
 
             const result = ActivityService.stopPhrase(
                 current.key,

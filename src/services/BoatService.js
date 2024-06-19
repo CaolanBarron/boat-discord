@@ -37,6 +37,8 @@ class BoatService {
                 defaultItemStmt.run(value);
             }
 
+            // Start up the sailing interval for all boats who are sailing
+
             GameEventService.startFlavorIntervals([guildID]);
             GameEventService.startPromptIntervals([guildID]);
             GameEventService.startTreasureShufflesIntervals([guildID]);

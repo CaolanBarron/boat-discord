@@ -138,8 +138,10 @@ class ActivityService {
                             : 'You will have to put away your tools if you want to do something else...';
                     break;
                 case 'RESEARCH':
-                    result = 'Poring over notes and samples...';
-                    ``;
+                    result =
+                        requestedActivity === 'RESEARCH'
+                            ? 'You are already using the research table!'
+                            : 'You will have to wrap up any experiments you are doing at the moment...';
                     break;
                 case 'NORTH_SAILING':
                 case 'SOUTH_SAILING':
@@ -153,7 +155,6 @@ class ActivityService {
                     ].includes(requestedActivity)
                         ? 'You are already sailing The Boat!'
                         : 'You will have to stop sailing you want to do anything else...';
-                    result = 'Barreling through the waves...';
                     break;
             }
         }

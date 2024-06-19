@@ -4,6 +4,7 @@ import { ButtonBuilder, ButtonStyle, Colors, EmbedBuilder } from 'discord.js';
 import BoatService from './BoatService.js';
 import SkillService from './SkillService.js';
 
+// TODO: Implement sailing prompts
 class PromptService {
     async getRandomPrompt() {
         try {

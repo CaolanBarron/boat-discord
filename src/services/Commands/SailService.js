@@ -8,6 +8,10 @@ import Activity from '../Activity.js';
 
 //TODO: Handle the first sailor stopping the job. Other players will keep the active tag without any scheduled jobs
 class SailService extends Activity {
+    constructor() {
+        super();
+        this.executionTime = 900_000;
+    }
     keys = {
         NORTH: 'NORTH_SAILING',
         SOUTH: 'SOUTH_SAILING',
@@ -40,7 +44,7 @@ class SailService extends Activity {
             };
         }
 
-        // Check if any other players in the boat are doing incompatible activities
+        // Check if any other players in the boat aYou will have to wrap up any experiments you are doing at the moment...re doing incompatible activities
         const otherPlayersBusy = await this.checkOtherPlayers(guildId);
 
         if (otherPlayersBusy) {
@@ -87,6 +91,8 @@ class SailService extends Activity {
         if (!currentDirection) {
             await ActivityService.scheduleActivity(tag, { guildId, player });
             firstTime = true;
+        }
+        {
         }
 
         const stmt = db().prepare(
@@ -135,14 +141,15 @@ class SailService extends Activity {
                 );
 
             const stmt = db().prepare(
-                `DELETE FROM active_tags 
-        WHERE EXISTS(
-          SELECT 1 
-          FROM player
-          WHERE player.boat_id = ? AND player.id = active_tags.player_id) 
-          AND key IN (${Object.keys(this.keys)
-              .map(() => '?')
-              .join(',')})`
+                `
+              DELETE FROM active_tags 
+              WHERE EXISTS(
+              SELECT 1 
+              FROM player
+              WHERE player.boat_id = ? AND player.id = active_tags.player_id) 
+              AND key IN (${Object.keys(this.keys)
+                  .map(() => '?')
+                  .join(',')})`
             );
             stmt.run(
                 guildId,

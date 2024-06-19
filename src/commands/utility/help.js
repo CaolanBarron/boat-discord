@@ -153,7 +153,7 @@ export default {
                     The activity takes some time to complete, and when it does, The Boat will be in a new location.
 
                     This activity is different from others because multiple players can take part in it; they just need to use the \'/sailing\' command without a direction argument. 
-                    Sailing will take less time for each player who is currently sailing.
+                    You are more likely to succeed special sailing events the more players are sailing at one time
 
                     Successful completion of the sailing activity will grant each player who took part in the activity experience points towards their sailing skill.
                 `;

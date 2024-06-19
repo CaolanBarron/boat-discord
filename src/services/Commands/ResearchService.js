@@ -255,7 +255,7 @@ class ResearchService extends Activity {
             .all(boatId, 'REPAIR_TIME');
         let finalTime = this.executionTime;
         const timeModification = 200_000;
-        console.log(stmt);
+
         // if there is a negative one increase time
         if (stmt.find((f) => f.type === 'DEBUFF')) {
             finalTime += timeModification;
