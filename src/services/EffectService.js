@@ -2,7 +2,7 @@ import db from '../../database/database.js';
 import schedule from 'node-schedule';
 import ItemService from './ItemService.js';
 import SkillService from './SkillService.js';
-import { chooseRandomRarity } from './utils.js';
+import { chooseRandomRarity, sqlPlaceholder } from './utils.js';
 
 class EffectService {
     getByKey(effectKey) {
@@ -137,7 +137,7 @@ class EffectService {
                 `SELECT * FROM boat_effect be 
                JOIN effect e ON be.effect_id = e.id
                WHERE be.boat_id = ? 
-               AND e.key IN (${effects.map(() => '?').join(',')})`
+               AND e.key IN ${sqlPlaceholder(effects.length)}`
             )
             .all(boat.boat_id, effects);
 

@@ -2,6 +2,7 @@ import ActivityService from './ActivityService.js';
 import db from '../../database/database.js';
 import schedule from 'node-schedule';
 import EffectService from './EffectService.js';
+import { sqlPlaceholder } from './utils.js';
 
 class BotService {
     async getChannelByName(guildId, name) {
@@ -21,9 +22,9 @@ class BotService {
             'WEST_SAILING',
             'EAST_EAST',
         ];
-        const sql = `SELECT * FROM active_tags at JOIN player p ON at.player_id = p.id WHERE at.key IN (${activityKeys
-            .map(() => '?')
-            .join(',')})`;
+        const sql = `SELECT * FROM active_tags at JOIN player p ON at.player_id = p.id WHERE at.key IN ${sqlPlaceholder(
+            activityKeys.length
+        )}`;
         let activities = db().prepare(sql).all(activityKeys);
 
         let perBoatSailing = [];

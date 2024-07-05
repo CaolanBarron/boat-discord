@@ -5,6 +5,7 @@ import RepairService from './Commands/RepairService.js';
 import CartographyService from './Commands/CartographyService.js';
 import ResearchService from './Commands/ResearchService.js';
 import SailService from './Commands/SailService.js';
+import { sqlPlaceholder } from './utils.js';
 
 class ActivityService {
     activityKeys = [
@@ -98,9 +99,9 @@ class ActivityService {
     getCurrent(playerId) {
         try {
             const sql = db().prepare(
-                `SELECT * FROM active_tags  WHERE player_id = ? AND key IN (${this.activityKeys
-                    .map(() => '?')
-                    .join(',')})`
+                `SELECT * FROM active_tags  WHERE player_id = ? AND key IN ${sqlPlaceholder(
+                    this.activityKeys.length
+                )}`
             );
 
             const activity = sql.get(playerId, this.activityKeys);

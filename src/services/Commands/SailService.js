@@ -5,6 +5,7 @@ import BotService from '../BotService.js';
 import { EmbedBuilder } from 'discord.js';
 import BoatService from '../BoatService.js';
 import Activity from '../Activity.js';
+import { sqlPlaceholder } from '../utils.js';
 
 //TODO: Handle the first sailor stopping the job. Other players will keep the active tag without any scheduled jobs
 class SailService extends Activity {
@@ -61,9 +62,9 @@ class SailService extends Activity {
         active_tags 
         JOIN player 
         ON player.id = active_tags.player_id 
-        WHERE player.boat_id = ? AND key IN (${Object.keys(this.keys)
-            .map(() => '?')
-            .join(',')})`
+        WHERE player.boat_id = ? AND key IN ${sqlPlaceholder(
+            Object.keys(this.keys).length
+        )}`
             )
             .get(
                 guildId,
@@ -128,9 +129,9 @@ class SailService extends Activity {
         active_tags 
         JOIN player 
         ON player.id = active_tags.player_id 
-        WHERE player.boat_id = ? AND key IN (${Object.keys(this.keys)
-            .map(() => '?')
-            .join(',')})`
+        WHERE player.boat_id = ? AND key IN ${sqlPlaceholder(
+            Object.keys(this.keys).length
+        )}`
                 )
                 .all(
                     guildId,
@@ -147,9 +148,7 @@ class SailService extends Activity {
               SELECT 1 
               FROM player
               WHERE player.boat_id = ? AND player.id = active_tags.player_id) 
-              AND key IN (${Object.keys(this.keys)
-                  .map(() => '?')
-                  .join(',')})`
+              AND key IN ${sqlPlaceholder(Object.keys(this.keys).length)}`
             );
             stmt.run(
                 guildId,
@@ -211,9 +210,7 @@ class SailService extends Activity {
         JOIN player 
         ON active_tags.player_id = player.id 
         WHERE player.boat_id = ? AND 
-        active_tags.key IN (${Object.keys(this.keys)
-            .map(() => '?')
-            .join(',')})`
+        active_tags.key IN ${sqlPlaceholder(Object.keys(this.keys).length)}`
             )
             .all(
                 guildId,

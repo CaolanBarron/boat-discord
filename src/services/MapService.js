@@ -1,7 +1,11 @@
 import db from '../../database/database.js';
 import BoatService from './BoatService.js';
 import ItemService from './ItemService.js';
-import { chooseRandomRarity, getRarityEffectModifer } from './utils.js';
+import {
+    chooseRandomRarity,
+    getRarityEffectModifer,
+    sqlPlaceholder,
+} from './utils.js';
 import SkillService from './SkillService.js';
 
 class MapService {
@@ -39,11 +43,10 @@ class MapService {
         const biomeSurroundingStmt = db()
             .prepare(
                 `SELECT * FROM biome_coords 
-          WHERE x_coord = ? AND y_coord IN (${yRange
-              .map(() => '?')
-              .join(',')}) OR y_coord = ? AND x_coord IN (${xRange
-              .map(() => '?')
-              .join(',')})`
+                WHERE x_coord = ? AND y_coord IN ${
+                    sqlPlaceholder(yRange).length
+                } 
+                OR y_coord = ? AND x_coord IN ${sqlPlaceholder(xRange).length}`
             )
             .all(boatStmt.x_coord, yRange, boatStmt.y_coord, xRange);
 
@@ -118,13 +121,10 @@ class MapService {
             const treasureSurroundingStmt = db()
                 .prepare(
                     `SELECT * FROM treasure 
-                          WHERE boat_id = ? AND x_coord = ? AND y_coord IN (${yRange
-                              .map(() => '?')
-                              .join(
-                                  ','
-                              )}) OR y_coord = ? AND x_coord IN (${xRange
-                              .map(() => '?')
-                              .join(',')})`
+                          WHERE boat_id = ? AND x_coord = ? 
+                          AND y_coord IN ${sqlPlaceholder(yRange.length)} 
+                          OR y_coord = ? 
+                          AND x_coord IN ${sqlPlaceholder(xRange.length)}`
                 )
                 .all(
                     boatId,

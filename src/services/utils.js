@@ -16,6 +16,7 @@ export function chooseRandomRarity(rarities, skillModifier, effectModifier) {
     }
 }
 
+//TODO: Move this
 const rarityToEffectTranslation = {
     FISH: ['FISH_QUALITY'],
     TREASURE: ['TREASURE_QUALITY'],
@@ -30,8 +31,7 @@ export function getRarityEffectModifer(boatId, rarityKey) {
         FROM boat_effect be 
         JOIN effect e ON be.effect_id = e.id
         WHERE be.boat_id = ?
-        AND e.key IN (${effects.map(() => '?').join(',')})
-`
+        AND e.key IN ${sqlPlaceholder(effects.length)}`
         )
         .all(boatId, effects);
 
@@ -41,4 +41,8 @@ export function getRarityEffectModifer(boatId, rarityKey) {
     if (stmt.find((f) => f.type === 'DEBUFF')) modifier += 2;
 
     return modifier;
+}
+
+export function sqlPlaceholder(length) {
+    return `(${Array[length].map(() => '?').join(',')})`;
 }
