@@ -44,5 +44,5 @@ export function getRarityEffectModifer(boatId, rarityKey) {
 }
 
 export function sqlPlaceholder(length) {
-    return `(${Array[length].map(() => '?').join(',')})`;
+    return `(${Array(length).fill('?').join(',')})`;
 }

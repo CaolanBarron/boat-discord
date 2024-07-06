@@ -43,10 +43,10 @@ class MapService {
         const biomeSurroundingStmt = db()
             .prepare(
                 `SELECT * FROM biome_coords 
-                WHERE x_coord = ? AND y_coord IN ${
-                    sqlPlaceholder(yRange).length
-                } 
-                OR y_coord = ? AND x_coord IN ${sqlPlaceholder(xRange).length}`
+                WHERE x_coord = ? AND y_coord IN ${sqlPlaceholder(
+                    yRange.length
+                )} 
+                OR y_coord = ? AND x_coord IN ${sqlPlaceholder(xRange.length)}`
             )
             .all(boatStmt.x_coord, yRange, boatStmt.y_coord, xRange);
 
