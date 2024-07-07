@@ -132,7 +132,6 @@ class EffectService {
             .prepare(`SELECT boat_id FROM player WHERE id = ?`)
             .get(playerId);
 
-        console.log(sqlPlaceholder(effects.length));
         const activeEffects = db()
             .prepare(
                 `SELECT * FROM boat_effect be 
