@@ -77,6 +77,36 @@ class ItemService {
             console.error(error);
         }
     }
+
+    /*
+     * Params:
+     * boatId String
+     * itemId String
+     *
+     * Returns:
+     * result String
+     */
+    async inspectItem(boatId, itemId) {
+        try {
+            const item = db()
+                .prepare(
+                    `SELECT * 
+                  FROM boat_inventory bi 
+                  JOIN item i ON bi.item_key = i.key 
+                  WHERE id = ? AND boat_id = ?`
+                )
+                .get(itemId, boatId);
+
+            if (!item)
+                return {
+                    content: 'This item is not in The Boats Inventory',
+                    ephemeral: true,
+                };
+            return { content: item.description, ephemeral: false };
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default new ItemService();
