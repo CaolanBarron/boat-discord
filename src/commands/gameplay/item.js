@@ -36,7 +36,10 @@ export default {
                     result = 'use';
                     break;
                 case 'item_dispose':
-                    result = 'dispose';
+                    result = await ItemService.disposeItem(
+                        interaction.player.boat_id,
+                        itemId
+                    );
                     break;
                 case 'item_inspect':
                     result = await ItemService.inspectItem(

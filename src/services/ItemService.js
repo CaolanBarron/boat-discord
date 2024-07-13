@@ -107,6 +107,33 @@ class ItemService {
             throw error;
         }
     }
+
+    async disposeItem(boatId, itemId) {
+        try {
+            const item = db()
+                .prepare(
+                    `SELECT * 
+                  FROM boat_inventory bi 
+                  JOIN item i ON bi.item_key = i.key 
+                  WHERE id = ? AND boat_id = ?`
+                )
+                .get(itemId, boatId);
+            // TODO: Add a check for special items that cant be disposed
+            if (!item)
+                return {
+                    content: 'This item is not in The Boats Inventory',
+                    ephemeral: true,
+                };
+            db().prepare('DELETE FROM boat_inventory WHERE id = ?').run(itemId);
+
+            return {
+                content: `The ${item.name} has been disposed of.`,
+                ephemeral: false,
+            };
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default new ItemService();
