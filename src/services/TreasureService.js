@@ -31,7 +31,11 @@ class TreasureService {
         };
 
         for (const item of randomItems) {
+            let loopChecker = 0;
             while (true) {
+                loopChecker++;
+                if (loopChecker > 50)
+                    throw new Error('Potential infinite loop');
                 const coords = { x: randomCoord(), y: randomCoord() };
                 if (checkExistingCoords(treasures, coords.x, coords.y))
                     continue;

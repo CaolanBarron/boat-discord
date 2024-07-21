@@ -24,7 +24,11 @@ class EffectService {
     async getPositiveWeightedRandom(skillModifier) {
         try {
             let effects;
+            let loopChecker = 0;
             while (!effects || effects.length === 0) {
+                loopChecker++;
+                if (loopChecker > 10)
+                    throw new Error('Potential infinite loop');
                 const rarity = await chooseRandomRarity(
                     ItemService.rarities,
                     skillModifier

@@ -14,7 +14,10 @@ class ItemService {
 
     async randomItemByLootTag(lootKey, skillModifier, effectModifier) {
         let lootTable;
+        let loopChecker = 0;
         while (!lootTable || lootTable.length === 0) {
+            loopChecker++;
+            if (loopChecker > 10) throw new Error('Potential Infinite loop');
             const rarity = chooseRandomRarity(
                 this.rarities,
                 skillModifier,
@@ -26,6 +29,7 @@ class ItemService {
                     'SELECT * FROM loot_item JOIN item ON item.key = loot_item.item_key WHERE loot_item.loot_key = ? AND loot_item.rarity = ?'
                 )
                 .all(lootKey, rarity);
+            console.log(lootKey, rarity);
         }
 
         return lootTable[Math.floor(Math.random() * lootTable.length)];
