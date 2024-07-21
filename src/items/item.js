@@ -1,3 +1,4 @@
+import ItemService from '../services/ItemService.js';
 import {
     IncreaseXpBoatRandomUse,
     IncreaseXpPlayerAllUse,
@@ -9,18 +10,24 @@ import {
 } from './uses.js';
 
 export default class Item {
+    id;
     key;
     name;
     description;
     info;
+    consumable;
+    useDescription;
 
     uses = [];
 
     constructor(itemInfo, itemUses) {
+        this.id = itemInfo.id;
         this.key = itemInfo.key;
         this.name = itemInfo.name;
         this.description = itemInfo.description;
         this.info = itemInfo.info;
+        this.consumable = itemInfo.consumable;
+        this.useDescription = itemInfo.item_description;
 
         for (const itemUse of itemUses) {
             switch (itemUse.use_key) {
@@ -57,6 +64,9 @@ export default class Item {
     async use(player) {
         for (const itemUse of this.uses) {
             await itemUse.use(player);
+        }
+        if (this.consumable) {
+            await ItemService.disposeItem(player.boat_id, this.id);
         }
     }
 }

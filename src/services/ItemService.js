@@ -89,7 +89,6 @@ class ItemService {
             )
             .get(itemId, player.boat_id);
 
-        console.log(player);
         if (!itemData)
             return {
                 content: 'This item is not in The Boats Inventory',
@@ -99,11 +98,8 @@ class ItemService {
         const itemUses = db()
             .prepare(`SELECT * FROM item_uses WHERE item_key = ?`)
             .all(itemData.key);
-        console.log(itemUses);
 
         const item = new Item(itemData, itemUses);
-
-        console.log(item);
 
         if (item.uses.length === 0) return 'This item has no usability';
 

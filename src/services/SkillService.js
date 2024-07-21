@@ -43,7 +43,6 @@ class SkillService {
 
     async addRandomXP(playerId, skillKey, range) {
         const randomAmount = Math.floor(Math.random() * range);
-        console.log(randomAmount);
         await this.addXP(playerId, skillKey, randomAmount);
     }
 

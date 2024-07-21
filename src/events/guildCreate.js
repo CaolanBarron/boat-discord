@@ -33,7 +33,6 @@ export default {
             BoatService.create(created.id);
         }
 
-        console.log(deckChannel);
         await deckChannel.send(BoatService.introductionNarrativeMessage());
         await foghornChannel.send(BoatService.introductionGameplayMessage());
     },
