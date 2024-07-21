@@ -45,7 +45,7 @@ class SailService extends Activity {
             };
         }
 
-        // Check if any other players in the boat aYou will have to wrap up any experiments you are doing at the moment...re doing incompatible activities
+        // Check if any other players in the boat are doing incompatible activities
         const otherPlayersBusy = await this.checkOtherPlayers(guildId);
 
         if (otherPlayersBusy) {
@@ -88,6 +88,9 @@ class SailService extends Activity {
 
         // TODO: this sucks but il find a better way to do it later. Probably using all the check im already doing
         //Only create a job if you are the first sailor
+
+        // TODO: reduce sail time here maybe
+
         let firstTime = false;
         if (!currentDirection) {
             await ActivityService.scheduleActivity(tag, { guildId, player });
