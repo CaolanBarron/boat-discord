@@ -90,6 +90,15 @@ class SkillService {
             .setDescription(message);
         foghorn.send({ embeds: [embed] });
     }
+    async getRandomSkill() {
+        const skills = db().prepare('SELECT * FROM skill').all();
+        return skills[Math.floor(Math.random() * skills.length)].key;
+    }
+
+    async getAllSkills() {
+        const skills = db().prepare('SELECT * FROM skill').all();
+        return skills.map((skill) => skill.key);
+    }
 }
 
 export default new SkillService();

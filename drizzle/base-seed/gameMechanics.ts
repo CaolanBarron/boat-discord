@@ -202,6 +202,42 @@ export const item = [
         description: 'Allows operation of the salvage arm',
         info: 'The water of the ocean is not caustic, yet when the salvage arm rises each time the rope is destroyed...',
     },
+    {
+        key: 'MAGIC_WRENCH',
+        name: 'Magic Wrench',
+        description: 'Fixes da whole boat',
+        info: 'Fixes da whole boat',
+        use: 'I fixed da whole boat',
+    },
+];
+
+export const use = [
+    {
+        key: 'INC_XP_PLAYER_RANDOM',
+        name: 'Increases a players XP in a random skill',
+    },
+    { key: 'INC_XP_PLAYER_ALL', name: 'Increases a players XP in all skills' },
+    {
+        key: 'INC_XP_BOAT_RANDOM',
+        name: 'Increases the boats XP in a random skill',
+    },
+    { key: 'INC_XP_BOAT_ALL', name: 'Increases the boats XP in all skills' },
+    { key: 'REPAIR_ONE', name: 'Repairs one random defect on the boat' },
+    { key: 'REPAIR_ALL', name: 'Repairs all defects on the boat' },
+    { key: 'INC_SPEED', name: 'Applies the Sail Time buff' },
+];
+
+export const itemUse = [
+    {
+        itemKey: 'MAGIC_WRENCH',
+        useKey: 'REPAIR_ALL',
+        variable: 1,
+    },
+    {
+        itemKey: 'MAGIC_WRENCH',
+        useKey: 'INC_XP_BOAT_ALL',
+        variable: 1,
+    },
 ];
 
 export const itemTransformation = [

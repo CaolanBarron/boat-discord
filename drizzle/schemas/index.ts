@@ -1,3 +1,5 @@
+import { itemUses } from './itemUses';
+
 export * from './activeTags';
 export * from './activities';
 export * from './biome';
@@ -19,3 +21,5 @@ export * from './promptOutcome';
 export * from './skill';
 export * from './tag';
 export * from './treasure';
+export * from './use';
+export * from './itemUses';

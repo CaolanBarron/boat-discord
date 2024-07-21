@@ -1,6 +1,7 @@
 import { EmbedBuilder } from '@discordjs/builders';
 import db from '../../database/database.js';
 import { chooseRandomRarity } from './utils.js';
+import Item from '../items/item.js';
 
 class ItemService {
     // This is a table to determine the random chance of getting an item
@@ -76,6 +77,39 @@ class ItemService {
         } catch (error) {
             console.error(error);
         }
+    }
+
+    async useItem(player, itemId) {
+        const itemData = db()
+            .prepare(
+                `SELECT * 
+                  FROM boat_inventory bi 
+                  JOIN item i ON bi.item_key = i.key 
+                  WHERE id = ? AND boat_id = ?`
+            )
+            .get(itemId, player.boat_id);
+
+        if (!itemData)
+            return {
+                content: 'This item is not in The Boats Inventory',
+                ephemeral: true,
+            };
+
+        const itemUses = db()
+            .prepare(`SELECT * FROM item_uses WHERE item_key = ?`)
+            .all(itemData.key);
+
+        const item = new Item(itemData, itemUses);
+
+        if (item.uses.length === 0) {
+            if (item.useDescription) return useDescription;
+            else return 'This item has no usability';
+        }
+
+        await item.use(player);
+        if (!item.useDescription)
+            throw new Error('This item should have a use description');
+        return item.useDescription;
     }
 
     /*
