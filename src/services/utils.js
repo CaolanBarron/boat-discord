@@ -16,7 +16,7 @@ export function chooseRandomRarity(rarities, skillModifier, effectModifier) {
     }
 }
 
-//TODO: Move this
+// TODO: Move this
 const rarityToEffectTranslation = {
     FISH: ['FISH_QUALITY'],
     TREASURE: ['TREASURE_QUALITY'],

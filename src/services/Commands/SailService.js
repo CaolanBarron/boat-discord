@@ -7,7 +7,7 @@ import BoatService from '../BoatService.js';
 import Activity from '../Activity.js';
 import { sqlPlaceholder } from '../utils.js';
 
-//TODO: Handle the first sailor stopping the job. Other players will keep the active tag without any scheduled jobs
+// TODO: Handle the first sailor stopping the job. Other players will keep the active tag without any scheduled jobs
 class SailService extends Activity {
     constructor() {
         super();

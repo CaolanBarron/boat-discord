@@ -11,6 +11,8 @@ export default {
                 interaction.guildId
             );
 
+            // FIXME: This will fail if a boat has more than 300 items in the inventroy
+            // Maybe limit this to 150 and use pagination
             await interaction.reply({
                 embeds: [inventoryResult],
                 ephemeral: true,
