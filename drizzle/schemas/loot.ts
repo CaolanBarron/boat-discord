@@ -1,16 +1,13 @@
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { item } from './item';
+import { biome } from './biome';
 import { relations } from 'drizzle-orm';
+import { lootItem } from './lootItem';
 
 export const loot = sqliteTable('loot', {
     key: text('key'),
-    itemKey: text('item_key').references(() => item.key),
-    rarity: text('rarity'),
+    biome: text('biome_key').references(() => biome.key),
 });
 
-export const lootRelations = relations(loot, ({ one }) => ({
-    item: one(item, {
-        fields: [loot.itemKey],
-        references: [item.key],
-    }),
+export const lootRelations = relations(loot, ({ many }) => ({
+    lootItem: many(lootItem),
 }));

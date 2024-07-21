@@ -249,17 +249,12 @@ export const itemTransformation = [
 ];
 
 export const loot = [
-    { key: 'FISH', itemKey: 'GAS_FISH', rarity: 'COMMON' },
-    { key: 'FISH', itemKey: 'TROUT', rarity: 'COMMON' },
-    { key: 'FISH', itemKey: 'BOOT', rarity: 'COMMON' },
-    { key: 'FISH', itemKey: 'SALMON', rarity: 'COMMON' },
-    { key: 'FISH', itemKey: 'STURGEON', rarity: 'RARE' },
-    { key: 'FISH', itemKey: 'LAVA_FISH', rarity: 'ODDITY' },
-    { key: 'TREASURE', itemKey: 'WINCH', rarity: 'ODDITY' },
-    { key: 'TREASURE', itemKey: 'HARMONICA', rarity: 'ODDITY' },
-    { key: 'TREASURE', itemKey: 'HOURGLASS', rarity: 'ODDITY' },
-    { key: 'TREASURE', itemKey: 'LANTERN', rarity: 'ODDITY' },
-    { key: 'TREASURE', itemKey: 'MUSIC_BOX', rarity: 'ODDITY' },
+    { key: 'FISH', biome: 'VOID' },
+    { key: 'TREASURE', biome: 'VOID' },
+];
+
+export const lootItem = [
+    { lootKey: 'FISH', itemKey: 'HARMONICA', rarity: 'common' },
 ];
 
 export const activities = [

@@ -11,7 +11,7 @@ class TreasureService {
         await this.removeAllByBoat(boatId);
         // Get all the possible items for treasure
         const items = db()
-            .prepare(`SELECT * FROM loot WHERE key = ?`)
+            .prepare(`SELECT * FROM loot_item WHERE loot_key = ?`)
             .all('TREASURE');
 
         // Grab X random items
@@ -29,6 +29,7 @@ class TreasureService {
             }
             return false;
         };
+
         for (const item of randomItems) {
             while (true) {
                 const coords = { x: randomCoord(), y: randomCoord() };

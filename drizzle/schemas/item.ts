@@ -5,6 +5,7 @@ import { loot } from './loot';
 import { itemTransformation } from './itemTransformation';
 import { treasure } from './treasure';
 import { itemUses } from './itemUses';
+import { lootItem } from './lootItem';
 
 export const item = sqliteTable('item', {
     key: text('key').primaryKey(),
@@ -26,4 +27,5 @@ export const itemRelations = relations(item, ({ many }) => ({
     }),
     treasures: many(treasure),
     itemUses: many(itemUses),
+    lootItem: many(lootItem),
 }));

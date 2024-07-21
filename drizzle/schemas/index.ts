@@ -13,6 +13,7 @@ export * from './flavor';
 export * from './item';
 export * from './itemTransformation';
 export * from './loot';
+export * from './lootItem';
 export * from './player';
 export * from './playerSkills';
 export * from './promptAction';

@@ -15,7 +15,7 @@ class ItemService {
     async randomItemByLootTag(lootKey, skillModifier, effectModifier) {
         let lootTable;
         while (!lootTable || lootTable.length === 0) {
-            const rarity = await chooseRandomRarity(
+            const rarity = chooseRandomRarity(
                 this.rarities,
                 skillModifier,
                 effectModifier
@@ -23,7 +23,7 @@ class ItemService {
 
             lootTable = db()
                 .prepare(
-                    'SELECT * FROM loot JOIN item ON item.key = loot.item_key WHERE loot.key = ? AND loot.rarity = ?'
+                    'SELECT * FROM loot_item JOIN item ON item.key = loot_item.item_key WHERE loot_item.loot_key = ? AND loot_item.rarity = ?'
                 )
                 .all(lootKey, rarity);
         }

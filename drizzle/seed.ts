@@ -59,6 +59,11 @@ export const seedDB = async () => {
             .values(gameMechanics.loot)
             .returning();
 
+        const lootItems = await tx
+            .insert(schemas.lootItem)
+            .values(gameMechanics.lootItem)
+            .returning();
+
         const activities = await tx
             .insert(schemas.activities)
             .values(gameMechanics.activities)
@@ -80,6 +85,7 @@ export const seedDB = async () => {
             uses,
             itemUses,
             loot,
+            lootItems,
             activities,
             effects,
         };
