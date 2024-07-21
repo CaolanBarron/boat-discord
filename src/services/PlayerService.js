@@ -1,4 +1,4 @@
-import db from '../database';
+import db from '../../database/database.js';
 
 class PlayerService {
     async getById(playerId, guildId) {
@@ -18,6 +18,11 @@ class PlayerService {
         } catch (error) {
             console.error(error);
         }
+    }
+    async getAllPlayersByBoat(boatId) {
+        return db()
+            .prepare('SELECT * FROM player WHERE boat_id = ?')
+            .all(boatId);
     }
 }
 

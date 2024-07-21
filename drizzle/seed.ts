@@ -44,6 +44,16 @@ export const seedDB = async () => {
             .values(gameMechanics.itemTransformation)
             .returning();
 
+        const uses = await tx
+            .insert(schemas.use)
+            .values(gameMechanics.use)
+            .returning();
+
+        const itemUses = await tx
+            .insert(schemas.itemUses)
+            .values(gameMechanics.itemUse)
+            .returning();
+
         const loot = await tx
             .insert(schemas.loot)
             .values(gameMechanics.loot)
@@ -67,6 +77,8 @@ export const seedDB = async () => {
             biomeCoords,
             items,
             itemTransformation,
+            uses,
+            itemUses,
             loot,
             activities,
             effects,

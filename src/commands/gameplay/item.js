@@ -33,7 +33,10 @@ export default {
             let result;
             switch (interaction.options.getString('action')) {
                 case 'item_use':
-                    result = 'use';
+                    result = await ItemService.useItem(
+                        interaction.player,
+                        itemId
+                    );
                     break;
                 case 'item_dispose':
                     result = await ItemService.disposeItem(
@@ -49,7 +52,7 @@ export default {
                     break;
             }
 
-            if (!result) throw new Error('Invalid item commadn');
+            if (!result) throw new Error('Invalid item command');
 
             await interaction.reply(result);
         } catch (error) {
