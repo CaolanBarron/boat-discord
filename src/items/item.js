@@ -27,7 +27,7 @@ export default class Item {
         this.description = itemInfo.description;
         this.info = itemInfo.info;
         this.consumable = itemInfo.consumable;
-        this.useDescription = itemInfo.item_description;
+        this.useDescription = itemInfo.use_description;
 
         for (const itemUse of itemUses) {
             switch (itemUse.use_key) {
