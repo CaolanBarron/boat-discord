@@ -6,7 +6,10 @@ import { prompts } from './base-seed/content';
 export const seedDB = async () => {
     // Do a simple check if the database has data
     const dataExists = await db.query.tag.findFirst();
-    if (dataExists) throw new Error('This database has data in it already.');
+    if (dataExists) {
+        console.error('This database has data in it already.');
+        return;
+    }
 
     const mechanicsData = await db.transaction(async (tx) => {
         const tags = await tx
