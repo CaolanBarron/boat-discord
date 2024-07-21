@@ -101,9 +101,15 @@ class ItemService {
 
         const item = new Item(itemData, itemUses);
 
-        if (item.uses.length === 0) return 'This item has no usability';
+        if (item.uses.length === 0) {
+            if (item.useDescription) return useDescription;
+            else return 'This item has no usability';
+        }
 
         await item.use(player);
+        if (!item.useDescription)
+            throw new Error('This item should have a use description');
+        return item.useDescription;
     }
 
     /*
