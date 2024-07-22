@@ -4,11 +4,12 @@ import { ButtonBuilder, ButtonStyle, Colors, EmbedBuilder } from 'discord.js';
 import SkillService from './SkillService.js';
 import EffectService from './EffectService.js';
 
-// TODO: Implement sailing prompts
 class PromptService {
-    async getRandomPrompt() {
+    async getRandomPrompt(tag = null) {
         try {
-            const messages = db().prepare('SELECT * FROM prompt_message').all();
+            const messages = db()
+                .prepare('SELECT * FROM prompt_message WHERE tag_key IS ?')
+                .all(tag);
 
             const randomMessage =
                 messages[Math.floor(Math.random() * messages.length)];

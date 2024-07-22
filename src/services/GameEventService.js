@@ -66,10 +66,14 @@ class GameEventService {
                         'EAST_SAILING',
                     );
 
-                if (isSailing) return;
+                let promptTag = null;
+                if (isSailing) {
+                    promptTag = 'SAILING';
+                }
                 if (users.length === 0) return;
 
-                const promptMessage = await PromptService.getRandomPrompt();
+                const promptMessage =
+                    await PromptService.getRandomPrompt(promptTag);
 
                 const channel = await BotService.getChannelByName(
                     guild,

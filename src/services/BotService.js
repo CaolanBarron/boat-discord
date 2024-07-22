@@ -62,7 +62,6 @@ class BotService {
         const activeEffects = db().prepare('SELECT * FROM boat_effect').all();
         if (activeEffects.length === 0) return;
         // for every one schedule the removeEffect
-        // TODO: A seperate schedule function should probably be created for these
         const executeTime = Date.now() + 10_000;
         for (const effect of activeEffects) {
             schedule.scheduleJob(
