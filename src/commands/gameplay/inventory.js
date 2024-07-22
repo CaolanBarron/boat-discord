@@ -8,7 +8,7 @@ export default {
     async execute(interaction) {
         try {
             const inventoryResult = await ItemService.displayInventory(
-                interaction.guildId
+                interaction.guildId,
             );
 
             // FIXME: This will fail if a boat has more than 300 items in the inventroy

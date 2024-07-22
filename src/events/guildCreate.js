@@ -10,21 +10,21 @@ export default {
         // Validate that all required channels exist
         const deckChannel = await BotService.getChannelByName(
             created.id,
-            process.env.GAMEPLAYCHANNEL
+            process.env.GAMEPLAYCHANNEL,
         );
         const foghornChannel = await BotService.getChannelByName(
             created.id,
-            process.env.NOTICHANNEL
+            process.env.NOTICHANNEL,
         );
         if (!deckChannel || !foghornChannel) {
             console.error(
-                `This server: ${created.name} is missing the required channels`
+                `This server: ${created.name} is missing the required channels`,
             );
             return;
         }
         // check if the boat already exists, only create one if it does not
         const boatExists = db()
-            .prepare(`SELECT * FROM boat WHERE id = ?`)
+            .prepare('SELECT * FROM boat WHERE id = ?')
             .get(created.id);
         if (boatExists) {
             GameEventService.startFlavorIntervals([created.id]);

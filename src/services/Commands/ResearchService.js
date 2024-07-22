@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import ActivityService from '../ActivityService.js';
 import SkillService from '../SkillService.js';
 import db from '../../../database/database.js';
@@ -5,7 +6,8 @@ import BotService from '../BotService.js';
 import { EmbedBuilder } from 'discord.js';
 import { stripIndent } from 'common-tags';
 import ItemService from '../ItemService.js';
-import { chooseRandomRarity, getRarityEffectModifer } from '../utils.js';
+import { chooseRandomRarity } from '../utils.js';
+import EffectService from '../EffectService.js';
 import Activity from '../Activity.js';
 
 class ResearchService extends Activity {
@@ -20,7 +22,7 @@ class ResearchService extends Activity {
 
         const isOccupied = await ActivityService.checkOccupied(
             'RESEARCH',
-            guildId
+            guildId,
         );
         if (isOccupied) {
             return {
@@ -46,7 +48,7 @@ class ResearchService extends Activity {
           FROM boat_inventory 
           LEFT JOIN player on boat_inventory.locked_by = player.id
           JOIN item ON boat_inventory.item_key = item.key 
-          WHERE boat_inventory.id = ?`
+          WHERE boat_inventory.id = ?`,
                 )
                 .get(itemId);
 
@@ -71,7 +73,7 @@ class ResearchService extends Activity {
         }
 
         const stmt = db().prepare(
-            'INSERT INTO active_tags(key, player_id) VALUES(?, ?)'
+            'INSERT INTO active_tags(key, player_id) VALUES(?, ?)',
         );
         stmt.run('RESEARCH', player.id);
 
@@ -93,14 +95,14 @@ class ResearchService extends Activity {
     async endJob(guildId, player) {
         try {
             const stmt = db().prepare(
-                'DELETE FROM active_tags WHERE player_id = ? AND key = ?'
+                'DELETE FROM active_tags WHERE player_id = ? AND key = ?',
             );
             stmt.run(player.id, 'RESEARCH');
 
             // Check if the player is locking an item.
             const item = db()
                 .prepare(
-                    `SELECT * FROM boat_inventory JOIN item ON item_key = key WHERE locked_by = ?`
+                    'SELECT * FROM boat_inventory JOIN item ON item_key = key WHERE locked_by = ?',
                 )
                 .get(player.id);
             // If they are then do an item action and unlock the item
@@ -113,7 +115,8 @@ class ResearchService extends Activity {
             } else {
                 // If not then check the players current biome and do a biome action
                 response = {
-                    description: `Examination of the surrounding area has concluded...`,
+                    description:
+                        'Examination of the surrounding area has concluded...',
                     content: await this.researchBiome(guildId),
                 };
             }
@@ -128,12 +131,12 @@ class ResearchService extends Activity {
     async announceEnd(interaction) {
         const results = await this.endJob(
             interaction.guildId,
-            interaction.player
+            interaction.player,
         );
 
         const foghorn = await BotService.getChannelByName(
             interaction.guildId,
-            process.env.NOTICHANNEL
+            process.env.NOTICHANNEL,
         );
 
         const cartographyEmbed = new EmbedBuilder()
@@ -142,7 +145,7 @@ class ResearchService extends Activity {
             .setDescription(results.description)
             .addFields(
                 { name: 'Findings:', value: results.content },
-                { name: 'Experience:', value: '++Research' }
+                { name: 'Experience:', value: '++Research' },
             );
 
         foghorn.send({ embeds: [cartographyEmbed] });
@@ -151,7 +154,7 @@ class ResearchService extends Activity {
     async researchItem(item, player) {
         db()
             .prepare(
-                `UPDATE boat_inventory SET locked_by = ? WHERE locked_by = ?`
+                'UPDATE boat_inventory SET locked_by = ? WHERE locked_by = ?',
             )
             .run(null, player.id);
 
@@ -159,32 +162,33 @@ class ResearchService extends Activity {
         if (Math.random() < 0.7) {
             const skillXp = await SkillService.getSkillXP(
                 player.id,
-                'RESEARCH'
+                'RESEARCH',
             );
             const skillLevel = await SkillService.getCurrentLevel(skillXp);
 
-            const rarityModfier = getRarityEffectModifer(
+            const rarityModfier = await EffectService.getRarityEffectModifier(
                 player.boat_id,
-                'TRANSFORMATION'
+                'TRANSFORMATION',
             );
             const rarity = chooseRandomRarity(
                 ItemService.rarities,
                 skillLevel,
-                rarityModfier
+                rarityModfier,
             );
             const transformations = db()
                 .prepare(
                     `SELECT * 
                     FROM item_transformation 
                     JOIN item ON item.key = transformation 
-                    WHERE original = ? AND item_transformation.rarity = ?`
+                    WHERE original = ? AND item_transformation.rarity = ?`,
                 )
                 .all(item.key, rarity);
 
-            if (transformations.length === 0)
+            if (transformations.length === 0) {
                 return stripIndent`Some information has been revealed about this item...\n ${await ItemService.itemInfo(
-                    item.key
+                    item.key,
                 )}`;
+            }
 
             const chosenItem =
                 transformations[
@@ -192,24 +196,24 @@ class ResearchService extends Activity {
                 ];
 
             db()
-                .prepare(`UPDATE boat_inventory SET item_key = ? WHERE id = ?`)
+                .prepare('UPDATE boat_inventory SET item_key = ? WHERE id = ?')
                 .run(chosenItem.key, item.id);
 
             return `Hmmm science can be very strange...\nThe ${item.name} has been transformed into a ${chosenItem.name}`;
         } else {
             return stripIndent`Some information has been revealed about this item...\n ${await ItemService.itemInfo(
-                item.key
+                item.key,
             )}`;
         }
     }
 
     async researchBiome(guildId) {
         const boat = db()
-            .prepare(`SELECT * FROM BOAT WHERE id = ?`)
+            .prepare('SELECT * FROM BOAT WHERE id = ?')
             .get(guildId);
         const currentBiome = db()
             .prepare(
-                `SELECT * FROM biome_coords JOIN biomes ON biome_coords.biome_key = biomes.key WHERE x_coord = ? and y_coord = ?`
+                'SELECT * FROM biome_coords JOIN biomes ON biome_coords.biome_key = biomes.key WHERE x_coord = ? and y_coord = ?',
             )
             .get(boat.x_coord, boat.y_coord);
 
@@ -250,7 +254,7 @@ class ResearchService extends Activity {
               FROM boat_effect be 
               JOIN effect e ON be.effect_id = e.id
               WHERE be.boat_id = ?
-              AND e.key = ?`
+              AND e.key = ?`,
             )
             .all(boatId, 'REPAIR_TIME');
         let finalTime = this.executionTime;

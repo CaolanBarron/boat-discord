@@ -6,13 +6,13 @@ class SalvageService {
         try {
             // Check if treasure exists on the current
             const boat = db()
-                .prepare(`SELECT * FROM boat WHERE id = ?`)
+                .prepare('SELECT * FROM boat WHERE id = ?')
                 .get(guildId);
             const treasureExists = db()
                 .prepare(
                     `SELECT * 
           FROM treasure 
-          WHERE boat_id = ? AND x_coord = ? AND y_coord = ?`
+          WHERE boat_id = ? AND x_coord = ? AND y_coord = ?`,
                 )
                 .get(boat.id, boat.x_coord, boat.y_coord);
 
@@ -30,7 +30,7 @@ class SalvageService {
                 .prepare(
                     `SELECT * 
           FROM boat_inventory 
-          WHERE boat_id = ? AND item_key = ?`
+          WHERE boat_id = ? AND item_key = ?`,
                 )
                 .all(boat.id, 'WINCH');
 
@@ -44,16 +44,16 @@ class SalvageService {
 
             // remove the winch from the inventory
             db()
-                .prepare(`DELETE FROM boat_inventory WHERE id = ?`)
+                .prepare('DELETE FROM boat_inventory WHERE id = ?')
                 .run(hasWinch[0].id);
             // Remove the treasure from the world
             db()
-                .prepare(`DELETE FROM treasure where id = ?`)
+                .prepare('DELETE FROM treasure where id = ?')
                 .run(treasureExists.id);
             // Add the item to the inventory
             db()
                 .prepare(
-                    `INSERT INTO boat_inventory(boat_id,item_key,collected_by) VALUES(?,?,?)`
+                    'INSERT INTO boat_inventory(boat_id,item_key,collected_by) VALUES(?,?,?)',
                 )
                 .run(boat.id, treasureExists.item_key, player.id);
 

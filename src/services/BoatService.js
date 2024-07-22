@@ -7,7 +7,7 @@ class BoatService {
         try {
             if (!guildID) throw Error('No Guild ID????');
             const createStmt = db().prepare(
-                'INSERT INTO boat(id, condition, speed, x_coord, y_coord) VALUES(?, ?, ?, ?, ?)'
+                'INSERT INTO boat(id, condition, speed, x_coord, y_coord) VALUES(?, ?, ?, ?, ?)',
             );
 
             createStmt.run(guildID, condition, speed, x_coord, y_coord);
@@ -25,7 +25,7 @@ class BoatService {
             ];
 
             const defaultItemStmt = db().prepare(
-                `INSERT INTO boat_inventory(boat_id, item_key) VALUES (@boat_id, @item_key)`
+                'INSERT INTO boat_inventory(boat_id, item_key) VALUES (@boat_id, @item_key)',
             );
 
             const insertValues = defaultItems.map((item) => ({
@@ -101,7 +101,7 @@ class BoatService {
         }
 
         db()
-            .prepare(`UPDATE boat SET x_coord = ?, y_coord = ? WHERE id = ?`)
+            .prepare('UPDATE boat SET x_coord = ?, y_coord = ? WHERE id = ?')
             .run(new_x, new_y, guildId);
 
         const currentBiome = this.currentBiome(guildId);
@@ -110,19 +110,19 @@ class BoatService {
 
         db()
             .prepare(
-                `INSERT INTO boat_travel_history(boat_id, x_coord, y_coord, biome) VALUES(?, ?, ?, ?)`
+                'INSERT INTO boat_travel_history(boat_id, x_coord, y_coord, biome) VALUES(?, ?, ?, ?)',
             )
             .run(guildId, new_x, new_y, biome_key);
     }
 
     currentBiome(guildId) {
         const boatStmt = db()
-            .prepare(`SELECT * FROM boat WHERE id = ?`)
+            .prepare('SELECT * FROM boat WHERE id = ?')
             .get(guildId);
 
         const biomeStmt = db()
             .prepare(
-                `SELECT * FROM biome_coords WHERE x_coord = ? AND y_coord = ?`
+                'SELECT * FROM biome_coords WHERE x_coord = ? AND y_coord = ?',
             )
             .get(boatStmt.x_coord, boatStmt.y_coord);
 

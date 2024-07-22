@@ -5,7 +5,7 @@ import SkillService from '../SkillService.js';
 import ItemService from '../ItemService.js';
 import BotService from '../BotService.js';
 import { EmbedBuilder } from 'discord.js';
-import { getRarityEffectModifer } from '../utils.js';
+import EffectService from '../EffectService.js';
 
 class FishService extends Activity {
     async start(guildId, player) {
@@ -26,7 +26,7 @@ class FishService extends Activity {
         }
 
         const stmt = db().prepare(
-            'INSERT INTO active_tags(key, player_id) VALUES(?, ?)'
+            'INSERT INTO active_tags(key, player_id) VALUES(?, ?)',
         );
         stmt.run('FISH', player.id);
 
@@ -41,7 +41,7 @@ class FishService extends Activity {
     async endJob(guildId, player) {
         try {
             const stmt = db().prepare(
-                'DELETE FROM active_tags WHERE player_id = ? AND key = ?'
+                'DELETE FROM active_tags WHERE player_id = ? AND key = ?',
             );
             stmt.run(player.id, 'FISH');
 
@@ -50,11 +50,14 @@ class FishService extends Activity {
             const skillXP = await SkillService.getSkillXP(player.id, 'FISH');
             const skillLevel = await SkillService.getCurrentLevel(skillXP);
 
-            const effectModifier = getRarityEffectModifer(guildId, 'FISH');
+            const effectModifier = await EffectService.getRarityEffectModifier(
+                guildId,
+                'FISH',
+            );
             const catches = await ItemService.randomItemByLootTag(
                 'FISH',
                 skillLevel,
-                effectModifier
+                effectModifier,
             );
 
             await ItemService.addToInventory(guildId, catches.key, player.id);
@@ -68,12 +71,12 @@ class FishService extends Activity {
     async announceEnd(interaction) {
         const catches = await this.endJob(
             interaction.guildId,
-            interaction.player
+            interaction.player,
         );
 
         const foghorn = await BotService.getChannelByName(
             interaction.guildId,
-            process.env.NOTICHANNEL
+            process.env.NOTICHANNEL,
         );
 
         const fishEmbed = new EmbedBuilder()
@@ -85,7 +88,7 @@ class FishService extends Activity {
                     name: 'Caught:',
                     value: `${catches.name}\n${catches.description}`,
                 },
-                { name: 'Experience:', value: '++Fishing' }
+                { name: 'Experience:', value: '++Fishing' },
             );
 
         foghorn.send({ embeds: [fishEmbed] });
@@ -100,7 +103,7 @@ class FishService extends Activity {
               FROM boat_effect be 
               JOIN effect e ON be.effect_id = e.id
               WHERE be.boat_id = ?
-              AND e.key = ?`
+              AND e.key = ?`,
             )
             .all(boatId, 'FISH_TIME');
         let finalTime = this.executionTime;

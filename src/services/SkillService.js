@@ -11,7 +11,7 @@ class SkillService {
     async getSkillXP(playerId, skillKey) {
         const skillXP = db()
             .prepare(
-                'SELECT * FROM player_skills WHERE player_id = ? AND skill_key = ?'
+                'SELECT * FROM player_skills WHERE player_id = ? AND skill_key = ?',
             )
             .get(playerId, skillKey);
         return skillXP.xp;
@@ -35,7 +35,7 @@ class SkillService {
 
         // set the skill XP to be XP++
         const stmt = db().prepare(
-            'UPDATE player_skills SET xp = ? WHERE player_id = ? AND skill_key = ?'
+            'UPDATE player_skills SET xp = ? WHERE player_id = ? AND skill_key = ?',
         );
 
         stmt.run(skillXp + modifiedByEffectPoints, playerId, skillKey);
@@ -57,12 +57,12 @@ class SkillService {
 
     async announceLevelUp(playerId, skillKey, nextLevel) {
         const player = db()
-            .prepare(`SELECT * FROM player WHERE id = ?`)
+            .prepare('SELECT * FROM player WHERE id = ?')
             .get(playerId);
 
         const foghorn = await BotService.getChannelByName(
             player.boat_id,
-            process.env.NOTICHANNEL
+            process.env.NOTICHANNEL,
         );
         let message;
         switch (skillKey) {

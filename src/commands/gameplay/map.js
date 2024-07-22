@@ -9,7 +9,7 @@ export default {
         try {
             const cartographyResult = await CartographyService.start(
                 interaction.guildId,
-                interaction.player
+                interaction.player,
             );
             await interaction.reply(cartographyResult);
         } catch (error) {

@@ -30,8 +30,8 @@ export class IncreaseXpBoatRandomUse extends Use {
         const players = await PlayerService.getAllPlayersByBoat(player.boat_id);
         const skillKey = await SkillService.getRandomSkill();
 
-        for (const player of players) {
-            await SkillService.addRandomXP(player.id, skillKey, this.variable);
+        for (const p of players) {
+            await SkillService.addRandomXP(p.id, skillKey, this.variable);
         }
     }
 }
@@ -41,13 +41,9 @@ export class IncreaseXpBoatAllUse extends Use {
         const players = await PlayerService.getAllPlayersByBoat(player.boat_id);
         const skillKeys = await SkillService.getAllSkills();
 
-        for (const player of players) {
+        for (const p of players) {
             for (const skillKey of skillKeys) {
-                await SkillService.addRandomXP(
-                    player.id,
-                    skillKey,
-                    this.variable
-                );
+                await SkillService.addRandomXP(p.id, skillKey, this.variable);
             }
         }
     }

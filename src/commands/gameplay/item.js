@@ -13,16 +13,16 @@ export default {
                 .addChoices(
                     { name: 'use', value: 'item_use' },
                     { name: 'inspect', value: 'item_inspect' },
-                    { name: 'dispose', value: 'item_dispose' }
-                )
+                    { name: 'dispose', value: 'item_dispose' },
+                ),
         )
         .addStringOption((option) =>
             option
                 .setName('item-id')
                 .setDescription(
-                    'The ID of the item you would like to interct with'
+                    'The ID of the item you would like to interct with',
                 )
-                .setRequired(true)
+                .setRequired(true),
         ),
 
     async execute(interaction) {
@@ -35,19 +35,19 @@ export default {
                 case 'item_use':
                     result = await ItemService.useItem(
                         interaction.player,
-                        itemId
+                        itemId,
                     );
                     break;
                 case 'item_dispose':
                     result = await ItemService.disposeItem(
                         interaction.player.boat_id,
-                        itemId
+                        itemId,
                     );
                     break;
                 case 'item_inspect':
                     result = await ItemService.inspectItem(
                         interaction.player.boat_id,
-                        itemId
+                        itemId,
                     );
                     break;
             }

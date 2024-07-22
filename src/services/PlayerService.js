@@ -6,13 +6,14 @@ class PlayerService {
             const character = db().prepare(
                 'SELECT * FROM character WHERE user_id = ? AND boat_id = ?'.get(
                     playerId,
-                    guildId
-                )
+                    guildId,
+                ),
             );
-            if (!character)
+            if (!character) {
                 throw new Error(
-                    `This player could not be found: ${playerId}, ${guildId}`
+                    `This player could not be found: ${playerId}, ${guildId}`,
                 );
+            }
 
             return character;
         } catch (error) {

@@ -1,17 +1,21 @@
 import db from '../../database/database.js';
 
 class TreasureService {
-    RANDOM_ITEMS = 5;
+    constructor() {
+        this.RANDOM_ITEMS = 5;
+    }
+
     async shuffleTreasure(boatId) {
-        if (this.RANDOM_ITEMS > 80)
+        if (this.RANDOM_ITEMS > 80) {
             throw new Error(
-                'Random items count is too high this is very likely to cause issues with map size'
+                'Random items count is too high this is very likely to cause issues with map size',
             );
+        }
         // Remove all the treasure by boat
         await this.removeAllByBoat(boatId);
         // Get all the possible items for treasure
         const items = db()
-            .prepare(`SELECT * FROM loot_item WHERE loot_key = ?`)
+            .prepare('SELECT * FROM loot_item WHERE loot_key = ?')
             .all('TREASURE');
 
         // Grab X random items
@@ -34,11 +38,13 @@ class TreasureService {
             let loopChecker = 0;
             while (true) {
                 loopChecker++;
-                if (loopChecker > 50)
+                if (loopChecker > 50) {
                     throw new Error('Potential infinite loop');
+                }
                 const coords = { x: randomCoord(), y: randomCoord() };
-                if (checkExistingCoords(treasures, coords.x, coords.y))
+                if (checkExistingCoords(treasures, coords.x, coords.y)) {
                     continue;
+                }
                 treasures.push({
                     boat_id: boatId,
                     item_key: item.item_key,
@@ -51,7 +57,7 @@ class TreasureService {
         // Add these to the treasure table
 
         const defaultTreasureStmt = db().prepare(
-            `INSERT INTO treasure(boat_id, item_key, x_coord, y_coord) VALUES(@boat_id, @item_key, @x_coord, @y_coord)`
+            'INSERT INTO treasure(boat_id, item_key, x_coord, y_coord) VALUES(@boat_id, @item_key, @x_coord, @y_coord)',
         );
 
         for (const treasure of treasures) {
@@ -61,20 +67,20 @@ class TreasureService {
 
     async add(boatId, itemKey, coords) {
         db()
-            .prepare(`INSERT INTO treasure VALUES(?, ?, ?, ?)`)
+            .prepare('INSERT INTO treasure VALUES(?, ?, ?, ?)')
             .run(boatId, itemKey, coords.x, coords.y);
     }
 
     async removeByLocation(boatId, coords) {
         db()
             .prepare(
-                `DELETE FROM treasure WHERE boat_id = ? AND x_coord = ? AND y_coord = ?`
+                'DELETE FROM treasure WHERE boat_id = ? AND x_coord = ? AND y_coord = ?',
             )
             .run(boatId, coords.x, coords.y);
     }
 
     async removeAllByBoat(boatId) {
-        db().prepare(`DELETE FROM treasure WHERE boat_id = ?`).run(boatId);
+        db().prepare('DELETE FROM treasure WHERE boat_id = ?').run(boatId);
     }
 }
 

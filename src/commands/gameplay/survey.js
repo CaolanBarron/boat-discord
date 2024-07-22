@@ -14,15 +14,16 @@ export default {
         LEFT JOIN biome_coords 
         ON boat.x_coord = biome_coords.x_coord AND boat.y_coord = biome_coords.y_coord 
         LEFT JOIN biome ON biome_coords.biome_key = biome.key 
-        WHERE boat.id = ?`
+        WHERE boat.id = ?`,
                 )
                 .get(interaction.guildId);
 
             let response =
                 'The Boat is currently in a nondescript part of the ocean';
 
-            if (boat.biome_key)
+            if (boat.biome_key) {
                 response = `The Boat is currently in the ${boat.name} biome.`;
+            }
             await interaction.reply({ content: response, ephemeral: true });
         } catch (error) {
             console.error(error);

@@ -22,19 +22,17 @@ export default {
             if (current.key === 'RESEARCH') {
                 db()
                     .prepare(
-                        'UPDATE boat_inventory SET locked_by = ? WHERE locked_by = ?'
+                        'UPDATE boat_inventory SET locked_by = ? WHERE locked_by = ?',
                     )
                     .run(null, interaction.player.id);
             }
 
             // Delete the active_tag from the database
             const tagsStmt = db().prepare(
-                'DELETE FROM active_tags WHERE key = ? AND player_id = ?'
+                'DELETE FROM active_tags WHERE key = ? AND player_id = ?',
             );
             tagsStmt.run(current.key, interaction.player.id);
 
-            // TODO: Check if you are the last sailor
-            // TODO: If you are then cancel the remaining sailing job
             if (
                 [
                     'NORTH_SAILING',
@@ -56,7 +54,7 @@ export default {
                       'SOUTH_SAILING', 
                       'EAST_SAILING', 
                       'WEST_SAILING'
-                    )`
+                    )`,
                     )
                     .all(interaction.player.id);
 
@@ -67,11 +65,11 @@ export default {
                         .all(interaction.player.id);
 
                     const activityNames = playerIds.map(
-                        (id) => `activity_${current.key}_${id}`
+                        (id) => `activity_${current.key}_${id}`,
                     );
 
                     activityNames.forEach((jobName) =>
-                        schedule.cancelJob(jobName)
+                        schedule.cancelJob(jobName),
                     );
 
                     // TODO: need to account for The main person stopping while others are still sailing
@@ -79,13 +77,13 @@ export default {
             } else {
                 // Delete the current job
                 schedule.cancelJob(
-                    `activity_${current.key}_${interaction.player.id}`
+                    `activity_${current.key}_${interaction.player.id}`,
                 );
             }
 
             const result = ActivityService.stopPhrase(
                 current.key,
-                interaction.player.name
+                interaction.player.name,
             );
 
             await interaction.reply(result);

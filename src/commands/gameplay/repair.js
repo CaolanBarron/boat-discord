@@ -9,7 +9,7 @@ export default {
         try {
             const repairResult = await RepairService.start(
                 interaction.guildId,
-                interaction.player
+                interaction.player,
             );
 
             await interaction.reply(repairResult);

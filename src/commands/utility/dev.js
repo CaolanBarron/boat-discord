@@ -21,15 +21,15 @@ export default {
                 .addChoices(
                     { name: 'map', value: 'tool_map' },
                     { name: 'boat', value: 'tool_boat' },
-                    { name: 'activities', value: 'tool_activities' }
-                )
+                    { name: 'activities', value: 'tool_activities' },
+                ),
         ),
 
     async execute(interaction) {
         // Validate that the user of this command is LeftTale
         if (interaction.user.id !== process.env.DEVID) return;
         const row = new ActionRowBuilder();
-        let content = 'Which tool would you like to use?';
+        const content = 'Which tool would you like to use?';
         switch (interaction.options.getString('tools')) {
             case 'tool_map': {
                 const displayMapButton = new ButtonBuilder()
@@ -50,24 +50,24 @@ export default {
                 row.addComponents(
                     displayMapButton,
                     inspectMapButton,
-                    displayMapLegendButton
+                    displayMapLegendButton,
                 );
                 break;
             }
             case 'tool_boat': {
-                const createBoat = new ButtonBuilder()
+                const createBoatButton = new ButtonBuilder()
                     .setCustomId('dev_create_boat')
                     .setLabel('Create Boat')
                     .setStyle(ButtonStyle.Primary);
-                row.addComponents(createBoat);
+                row.addComponents(createBoatButton);
                 break;
             }
             case 'tool_activities': {
-                const showJobs = new ButtonBuilder()
+                const showJobsButton = new ButtonBuilder()
                     .setCustomId('dev_display_jobs')
                     .setLabel('Display Jobs')
                     .setStyle(ButtonStyle.Primary);
-                row.addComponents(showJobs);
+                row.addComponents(showJobsButton);
                 break;
             }
         }
@@ -93,11 +93,11 @@ export default {
                     });
                     break;
                 case 'dev_inspect_map': {
-                    const collectorFilter = (m) =>
+                    const collectorAuthorFilter = (m) =>
                         m.author.id === interaction.user.id;
                     const collector =
                         interaction.channel.createMessageCollector({
-                            filter: collectorFilter,
+                            filter: collectorAuthorFilter,
                             time: 15_000,
                         });
 
@@ -237,20 +237,20 @@ async function inspectMap(x, y) {
         for (const boat of boatStmt) {
             result = result.concat(
                 `Boat:   
-        - ${boat.id}\n`
+        - ${boat.id}\n`,
             );
         }
 
         const biomeStmt = db()
             .prepare(
-                'SELECT * FROM biome_coords WHERE x_coord = ? AND y_coord = ?'
+                'SELECT * FROM biome_coords WHERE x_coord = ? AND y_coord = ?',
             )
             .get(x, y);
 
         if (biomeStmt) {
             result = result.concat(`Biome: ${biomeStmt.biome_key}\n`);
         } else {
-            result = result.concat(`Biome: Open sea\n`);
+            result = result.concat('Biome: Open sea\n');
         }
 
         return result;
@@ -276,8 +276,9 @@ async function createBoat(guildId) {
 async function displayJobs() {
     // TODO: This code is evil. Quell it
     const scheduledJobs = schedule.scheduledJobs;
-    if (Object.keys(scheduledJobs).length === 0)
+    if (Object.keys(scheduledJobs).length === 0) {
         return 'There are no jobs at the moment!';
+    }
     const result = Object.keys(scheduledJobs).reduce((arr, curr) => {
         const date = scheduledJobs[curr].pendingInvocations[0].fireDate._date;
 
@@ -293,7 +294,7 @@ async function displayJobs() {
       User: ${userStmt.name}
       FireDate: ${date.toString()}
       ---
-      `
+      `,
         );
     }, '');
 

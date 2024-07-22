@@ -1,20 +1,19 @@
 import db from '../../database/database.js';
 import BoatService from './BoatService.js';
 import ItemService from './ItemService.js';
-import {
-    chooseRandomRarity,
-    getRarityEffectModifer,
-    sqlPlaceholder,
-} from './utils.js';
+import { chooseRandomRarity, sqlPlaceholder } from './utils.js';
 import SkillService from './SkillService.js';
+import EffectService from './EffectService.js';
 
 class MapService {
-    rarities = {
-        BIOME: 55,
-        // LAND: 25,
-        TREASURE: 40,
-        NOTHING: 5,
-    };
+    constructor() {
+        this.rarities = {
+            BIOME: 55,
+            // LAND: 25,
+            TREASURE: 40,
+            NOTHING: 5,
+        };
+    }
 
     async randomDiscovery(guildId, playerId) {
         const choice = await chooseRandomRarity(this.rarities);
@@ -22,11 +21,11 @@ class MapService {
             case 'BIOME':
                 return await this.nearbyBiome(guildId);
             case 'LAND':
-                return `TODO land creation`;
+                return 'TODO land creation';
             case 'TREASURE':
                 return await this.nearbyTreasure(guildId, playerId);
             case 'NOTHING':
-                return `Unfortunately this time they could not divine anything from the blasted documents.`;
+                return 'Unfortunately this time they could not divine anything from the blasted documents.';
             default:
                 throw new Error(`This key ${choice} does not exist`);
         }
@@ -44,14 +43,14 @@ class MapService {
             .prepare(
                 `SELECT * FROM biome_coords 
                 WHERE x_coord = ? AND y_coord IN ${sqlPlaceholder(
-                    yRange.length
+                    yRange.length,
                 )} 
-                OR y_coord = ? AND x_coord IN ${sqlPlaceholder(xRange.length)}`
+                OR y_coord = ? AND x_coord IN ${sqlPlaceholder(xRange.length)}`,
             )
             .all(boatStmt.x_coord, yRange, boatStmt.y_coord, xRange);
 
         if (biomeSurroundingStmt.length === 0) {
-            return `Unfortunately this time they could not divine anything from the blasted documents.`;
+            return 'Unfortunately this time they could not divine anything from the blasted documents.';
         }
         const randomBiome =
             biomeSurroundingStmt[
@@ -60,11 +59,11 @@ class MapService {
 
         const currentBiome = BoatService.currentBiome(guildId);
         if (currentBiome && currentBiome.biome_key === randomBiome.biome_key) {
-            return `Unfortunately this time they could not divine anything from the blasted documents.`;
+            return 'Unfortunately this time they could not divine anything from the blasted documents.';
         }
 
         let directions = ['North', 'South', 'West', 'East'];
-        let biomeDirection = [];
+        const biomeDirection = [];
         // Find out what direction the biome is in.
         if (boatStmt.x_coord === randomBiome.x_coord) {
             if (boatStmt.y_coord < randomBiome.y) {
@@ -74,18 +73,16 @@ class MapService {
                 directions = directions.filter((i) => i !== 'North');
                 biomeDirection.push('North');
             }
+        } else if (boatStmt.x_coord > randomBiome.x_coord) {
+            directions = directions.filter((i) => i !== 'West');
+            biomeDirection.push('West');
         } else {
-            if (boatStmt.x_coord > randomBiome.x_coord) {
-                directions = directions.filter((i) => i !== 'West');
-                biomeDirection.push('West');
-            } else {
-                directions = directions.filter((i) => i !== 'East');
-                biomeDirection.push('East');
-            }
+            directions = directions.filter((i) => i !== 'East');
+            biomeDirection.push('East');
         }
         // Choose a random direction other than the chosen one
         biomeDirection.push(
-            directions[Math.floor(Math.random() * directions.length)]
+            directions[Math.floor(Math.random() * directions.length)],
         );
         const randomTimes = Math.floor(Math.random() * 2);
         for (let i = 0; i < randomTimes; i++) {
@@ -101,16 +98,13 @@ class MapService {
                 return `Some of the documents reference an area permeated by darkness and dread that could be nearby, Could that be **${biomeDirection[0]}**? or maybe **${biomeDirection[1]}**?`;
             default:
                 throw new Error(
-                    `This key ${randomBiome.biome_key} does not exist`
+                    `This key ${randomBiome.biome_key} does not exist`,
                 );
         }
     }
 
     async nearbyTreasure(boatId, playerId) {
         try {
-            // TODO: Should this simply find existing treasure or make new treasure?
-            // Maybe both. Look for treasure that exists and if none is found then make some
-
             const boatStmt = db()
                 .prepare('SELECT x_coord, y_coord FROM boat WHERE id = ?')
                 .get(boatId);
@@ -124,14 +118,14 @@ class MapService {
                           WHERE boat_id = ? AND x_coord = ? 
                           AND y_coord IN ${sqlPlaceholder(yRange.length)} 
                           OR y_coord = ? 
-                          AND x_coord IN ${sqlPlaceholder(xRange.length)}`
+                          AND x_coord IN ${sqlPlaceholder(xRange.length)}`,
                 )
                 .all(
                     boatId,
                     boatStmt.x_coord,
                     yRange,
                     boatStmt.y_coord,
-                    xRange
+                    xRange,
                 );
 
             if (treasureSurroundingStmt.length > 0) {
@@ -139,11 +133,12 @@ class MapService {
                 if (
                     treasure.x_coord === boatStmt.x_coord &&
                     treasure.y_coord === boatStmt.y_coord
-                )
-                    return `The documents seem to indicate there is treasure right below us...`;
+                ) {
+                    return 'The documents seem to indicate there is treasure right below us...';
+                }
                 const direction = this.directionFinder(
                     { x: boatStmt.x_coord, y: boatStmt.y_coord },
-                    { x: treasure.x_coord, y: treasure.y_coord }
+                    { x: treasure.x_coord, y: treasure.y_coord },
                 );
 
                 return `Some of these documents make reference to treasure in a ${direction}ward direction`;
@@ -154,15 +149,18 @@ class MapService {
 
             const skillXP = await SkillService.getSkillXP(
                 playerId,
-                'CARTOGRAPHY'
+                'CARTOGRAPHY',
             );
             const skillLevel = await SkillService.getCurrentLevel(skillXP);
 
-            const effectModifier = getRarityEffectModifer(boatId, 'TREASURE');
+            const effectModifier = await EffectService.getRarityEffectModifier(
+                boatId,
+                'TREASURE',
+            );
             const treasure = await ItemService.randomItemByLootTag(
                 'TREASURE',
                 skillLevel,
-                effectModifier
+                effectModifier,
             );
 
             const direction = Math.floor(Math.random() * 4);
@@ -170,7 +168,6 @@ class MapService {
 
             let directionName;
 
-            // TODO: Add validation so the position does not go out of bounds
             switch (direction) {
                 case 0:
                     // North
@@ -178,17 +175,17 @@ class MapService {
                     directionName = 'North';
                     break;
                 case 1:
-                    //East
+                    // East
                     position.x += 1;
                     directionName = 'East';
                     break;
                 case 2:
-                    //South
+                    // South
                     position.y -= 1;
                     directionName = 'South';
                     break;
                 case 3:
-                    //West
+                    // West
                     position.x -= 1;
                     directionName = 'West';
                     break;
@@ -198,7 +195,7 @@ class MapService {
 
             db()
                 .prepare(
-                    'INSERT INTO treasure(boat_id, item_key, x_coord, y_coord) VALUES(?, ?, ?, ?)'
+                    'INSERT INTO treasure(boat_id, item_key, x_coord, y_coord) VALUES(?, ?, ?, ?)',
                 )
                 .run(boatId, treasure.item_key, position.x, position.y);
 
@@ -216,9 +213,10 @@ class MapService {
         if (originalPos.x === comparePos.x) {
             if (originalPos.y < comparePos.y) return 'South';
             else return 'North';
+        } else if (originalPos.x > comparePos.x) {
+            return 'West';
         } else {
-            if (originalPos.x > comparePos.x) return 'West';
-            else return 'East';
+            return 'East';
         }
     }
 }

@@ -1,18 +1,32 @@
 import db from '../../database/database.js';
 import schedule from 'node-schedule';
 import ItemService from './ItemService.js';
-import SkillService from './SkillService.js';
 import { chooseRandomRarity, sqlPlaceholder } from './utils.js';
 
 class EffectService {
+    constructor() {
+        this.rarityToEffectTranslation = {
+            FISH: ['FISH_QUALITY'],
+            TREASURE: ['TREASURE_QUALITY'],
+            TRANSFORMATION: ['TRANSFORMATION_QUALITY'],
+        };
+        this.skillsToXPEffect = {
+            FISH: ['FISH_XP'],
+            SAIL: ['SAIL_XP'],
+            RESEARCH: ['RESEARCH_XP'],
+            CARTOGRAPHY: ['CARTOGRAPHY_XP'],
+            REPAIR: ['REPAIR_XP'],
+        };
+    }
     getByKey(effectKey) {
         try {
             const effect = db()
                 .prepare('SELECT * FROM effect WHERE key = ?')
                 .get(effectKey);
 
-            if (!effect)
+            if (!effect) {
                 throw new Error(`This key does not exist ${effectKey}`);
+            }
 
             return effect;
         } catch (e) {
@@ -27,15 +41,16 @@ class EffectService {
             let loopChecker = 0;
             while (!effects || effects.length === 0) {
                 loopChecker++;
-                if (loopChecker > 10)
+                if (loopChecker > 10) {
                     throw new Error('Potential infinite loop');
+                }
                 const rarity = await chooseRandomRarity(
                     ItemService.rarities,
-                    skillModifier
+                    skillModifier,
                 );
                 effects = db()
                     .prepare(
-                        `SELECT * FROM effect WHERE type = ? AND rarity = ?`
+                        'SELECT * FROM effect WHERE type = ? AND rarity = ?',
                     )
                     .all('BUFF', rarity);
             }
@@ -53,7 +68,7 @@ class EffectService {
             // Exit if the effect is already applied
             const boatAlreadyEffected = db()
                 .prepare(
-                    'SELECT * FROM boat_effect WHERE boat_id = ? AND effect_id = ?'
+                    'SELECT * FROM boat_effect WHERE boat_id = ? AND effect_id = ?',
                 )
                 .get(guildId, effect_id);
             if (boatAlreadyEffected) return;
@@ -61,12 +76,13 @@ class EffectService {
             db()
                 .prepare('INSERT INTO boat_effect VALUES(?, ?)')
                 .run(guildId, effect_id);
-            // TODO: Schedule effect expiration
-            const executeTime = Date.now() + 10_000;
+
+            const executeTime = Date.now() + 1_000_000;
+
             schedule.scheduleJob(
                 `effect_${effect_id}_${guildId}`,
                 executeTime,
-                this.removeEffect.bind(this, guildId, effect_id)
+                this.removeEffect.bind(this, guildId, effect_id),
             );
         } catch (e) {
             console.error(e);
@@ -83,14 +99,14 @@ class EffectService {
                   FROM boat_effect be 
                   JOIN effect e 
                   ON be.effect_id = e.id 
-                  WHERE boat_id = ? AND effect_id = ?`
+                  WHERE boat_id = ? AND effect_id = ?`,
                 )
                 .get(guildId, effectId);
             if (!effect) return `The ${effectId} effect is not in use`;
 
             db()
                 .prepare(
-                    'DELETE FROM boat_effect WHERE boat_id = ? AND effect_id  =?'
+                    'DELETE FROM boat_effect WHERE boat_id = ? AND effect_id  =?',
                 )
                 .run(guildId, effectId);
 
@@ -99,6 +115,27 @@ class EffectService {
             console.error(e);
             throw e;
         }
+    }
+
+    async getRarityEffectModifier(boatId, rarityKey) {
+        const effects = this.rarityToEffectTranslation[rarityKey];
+        const stmt = db()
+            .prepare(
+                `
+        SELECT * 
+        FROM boat_effect be 
+        JOIN effect e ON be.effect_id = e.id
+        WHERE be.boat_id = ?
+        AND e.key IN ${sqlPlaceholder(effects.length)}`,
+            )
+            .all(boatId, effects);
+
+        let modifier = 0;
+
+        if (stmt.find((f) => f.type === 'BUFF')) modifier += -2;
+        if (stmt.find((f) => f.type === 'DEBUFF')) modifier += 2;
+
+        return modifier;
     }
 
     async findBoatDebuffs(guildId) {
@@ -110,7 +147,7 @@ class EffectService {
                   FROM boat_effect 
                   JOIN effect ON boat_effect.effect_id = effect.id
                   WHERE boat_effect.boat_id = ? AND effect.type = ?
-                `
+                `,
                 )
                 .all(guildId, 'DEBUFF');
 
@@ -121,19 +158,12 @@ class EffectService {
         }
     }
 
-    skillsToXPEffect = {
-        FISH: ['FISH_XP'],
-        SAIL: ['SAIL_XP'],
-        RESEARCH: ['RESEARCH_XP'],
-        CARTOGRAPHY: ['CARTOGRAPHY_XP'],
-        REPAIR: ['REPAIR_XP'],
-    };
     async getXPModifierByEffect(skillKey, playerId) {
         // Translate skill keys into effects
         const effects = this.skillsToXPEffect[skillKey];
 
         const boat = db()
-            .prepare(`SELECT boat_id FROM player WHERE id = ?`)
+            .prepare('SELECT boat_id FROM player WHERE id = ?')
             .get(playerId);
 
         const activeEffects = db()
@@ -141,7 +171,7 @@ class EffectService {
                 `SELECT * FROM boat_effect be 
                JOIN effect e ON be.effect_id = e.id
                WHERE be.boat_id = ? 
-               AND e.key IN ${sqlPlaceholder(effects.length)}`
+               AND e.key IN ${sqlPlaceholder(effects.length)}`,
             )
             .all(boat.boat_id, effects);
 

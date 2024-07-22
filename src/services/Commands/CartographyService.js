@@ -18,7 +18,7 @@ class CartographyService extends Activity {
 
         const isOccupied = await ActivityService.checkOccupied(
             'CARTOGRAPHY',
-            guildId
+            guildId,
         );
         if (isOccupied) {
             return {
@@ -28,7 +28,7 @@ class CartographyService extends Activity {
         }
 
         const stmt = db().prepare(
-            'INSERT INTO active_tags(key, player_id) VALUES(?, ?)'
+            'INSERT INTO active_tags(key, player_id) VALUES(?, ?)',
         );
         stmt.run('CARTOGRAPHY', player.id);
 
@@ -37,7 +37,6 @@ class CartographyService extends Activity {
             player,
         });
 
-        // TODO: CARTOGRAPHY response
         return {
             content: `${player.name} gathers all the geographical documents they can find. Equipped with a compass and a planimeter they begin to study...`,
             ephemeral: false,
@@ -47,7 +46,7 @@ class CartographyService extends Activity {
     async endJob(guildId, player) {
         try {
             const stmt = db().prepare(
-                'DELETE FROM active_tags WHERE player_id = ? AND key = ?'
+                'DELETE FROM active_tags WHERE player_id = ? AND key = ?',
             );
             stmt.run(player.id, 'CARTOGRAPHY');
 
@@ -60,7 +59,7 @@ class CartographyService extends Activity {
             // - nothing
             const discovery = await MapService.randomDiscovery(
                 guildId,
-                player.id
+                player.id,
             );
 
             return discovery;
@@ -72,12 +71,12 @@ class CartographyService extends Activity {
     async announceEnd(interaction) {
         const results = await this.endJob(
             interaction.guildId,
-            interaction.player
+            interaction.player,
         );
 
         const foghorn = await BotService.getChannelByName(
             interaction.guildId,
-            process.env.NOTICHANNEL
+            process.env.NOTICHANNEL,
         );
 
         const cartographyEmbed = new EmbedBuilder()
@@ -86,7 +85,7 @@ class CartographyService extends Activity {
             .setDescription('I wonder what they discovered...')
             .addFields(
                 { name: 'Discoveries:', value: results },
-                { name: 'Experience:', value: '++Cartography' }
+                { name: 'Experience:', value: '++Cartography' },
             );
 
         foghorn.send({ embeds: [cartographyEmbed] });
@@ -101,7 +100,7 @@ class CartographyService extends Activity {
               FROM boat_effect be 
               JOIN effect e ON be.effect_id = e.id
               WHERE be.boat_id = ?
-              AND e.key = ?`
+              AND e.key = ?`,
             )
             .all(boatId, 'CARTOGRAPHY_TIME');
         let finalTime = this.executionTime;

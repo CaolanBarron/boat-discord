@@ -4,6 +4,7 @@ import FlavorService from './FlavorService.js';
 import BotService from './BotService.js';
 import PromptService from './PromptService.js';
 import TreasureService from './TreasureService.js';
+import { sqlPlaceholder } from './utils.js';
 
 class GameEventService {
     constructor() {
@@ -24,7 +25,7 @@ class GameEventService {
 
                 const channel = await BotService.getChannelByName(
                     guild,
-                    process.env.GAMEPLAYCHANNEL
+                    process.env.GAMEPLAYCHANNEL,
                 );
 
                 await channel.send(flavor);
@@ -44,20 +45,35 @@ class GameEventService {
             console.log(`Spinning up prompt interval for ${guild}`);
 
             const task = new Task(`${guild}_prompt`, async () => {
-                // Do not send a event half the amount of times
-                // TODO: Check if the boat is currently sailing and do not send a prompt if it is
                 if (Math.random() < 0.5) return;
                 const users = db()
-                    .prepare(`SELECT * FROM player WHERE boat_id = ?`)
+                    .prepare('SELECT * FROM player WHERE boat_id = ?')
                     .all(guild);
 
+                const isSailing = db()
+                    .prepare(
+                        `SELECT key FROM
+                active_tags 
+                JOIN player 
+                ON player.id = active_tags.player_id 
+                WHERE player.boat_id = ? AND key IN ${sqlPlaceholder(4)}`,
+                    )
+                    .get(
+                        guild,
+                        'NORTH_SAILING',
+                        'SOUTH_SAILING',
+                        'WEST_SAILING',
+                        'EAST_SAILING',
+                    );
+
+                if (isSailing) return;
                 if (users.length === 0) return;
 
                 const promptMessage = await PromptService.getRandomPrompt();
 
                 const channel = await BotService.getChannelByName(
                     guild,
-                    process.env.GAMEPLAYCHANNEL
+                    process.env.GAMEPLAYCHANNEL,
                 );
 
                 await channel.send(promptMessage);
@@ -67,12 +83,6 @@ class GameEventService {
 
             this.scheduler.addSimpleIntervalJob(job);
         }
-    }
-
-    async startSailPrompIntervals(guildId) {
-        const boat = db()
-            .prepare('SELECT * FROM boat WHERE id = ?')
-            .get(guildId);
     }
 
     async startTreasureShufflesIntervals(guildIds) {

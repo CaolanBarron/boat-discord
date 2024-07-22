@@ -7,16 +7,12 @@
     "scripts": {
         "start": "node src/index.js",
         "dev": "nodemon src/index.js",
-        "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
         "migrate": "npx tsx drizzle/migrate.ts",
         "generate": "npx drizzle-kit generate",
         "seed": "npx tsx drizzle/seed.ts"
     },
     "author": "",
     "license": "ISC",
-    "jest": {
-        "transform": {}
-    },
     "dependencies": {
         "better-sqlite3": "^9.5.0",
         "common-tags": "^1.8.2",
@@ -24,16 +20,19 @@
         "discord.js": "^14.14.1",
         "dotenv": "^16.4.5",
         "drizzle-orm": "^0.31.1",
-        "jest": "^29.7.0",
         "node-schedule": "^2.1.1",
         "sqlite3": "^5.1.7",
         "toad-scheduler": "^3.0.1"
     },
     "devDependencies": {
-        "@eslint/js": "^9.4.0",
+        "@eslint/eslintrc": "^3.1.0",
+        "@eslint/js": "^9.7.0",
         "drizzle-kit": "^0.22.2",
-        "eslint": "^9.4.0",
-        "globals": "^15.4.0",
+        "eslint": "^9.7.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^5.2.1",
+        "globals": "^15.8.0",
         "nodemon": "^3.1.0",
         "tsx": "^4.14.0"
     }

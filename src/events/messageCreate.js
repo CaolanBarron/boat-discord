@@ -10,12 +10,13 @@ export default {
             if (
                 interaction.channel.name !== process.env.GAMEPLAYCHANNEL ||
                 interaction.author.username === process.env.BOTNAME
-            )
+            ) {
                 return;
+            }
 
             const user = db()
                 .prepare(
-                    'SELECT * FROM player WHERE user_id = ? AND boat_id = ?'
+                    'SELECT * FROM player WHERE user_id = ? AND boat_id = ?',
                 )
                 .get(interaction.author.id, interaction.guildId);
 
@@ -35,7 +36,7 @@ export default {
 
             const message = FlavorService.getPlayerFlavor(
                 interaction.content,
-                user
+                user,
             );
 
             interaction.channel.send(message);

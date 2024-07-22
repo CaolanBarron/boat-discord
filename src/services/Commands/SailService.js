@@ -12,13 +12,14 @@ class SailService extends Activity {
     constructor() {
         super();
         this.executionTime = 900_000;
+        this.keys = {
+            NORTH: 'NORTH_SAILING',
+            SOUTH: 'SOUTH_SAILING',
+            WEST: 'WEST_SAILING',
+            EAST: 'EAST_SAILING',
+        };
     }
-    keys = {
-        NORTH: 'NORTH_SAILING',
-        SOUTH: 'SOUTH_SAILING',
-        WEST: 'WEST_SAILING',
-        EAST: 'EAST_SAILING',
-    };
+
     async start(guildId, player, direction) {
         // Check if the boat is already sailing if no direction is given
         if (!direction) {
@@ -36,7 +37,7 @@ class SailService extends Activity {
         // Check if the player is already busy doing something
         const isBusy = ActivityService.checkActive(
             player.id,
-            this.keys[direction]
+            this.keys[direction],
         );
         if (isBusy) {
             return {
@@ -63,31 +64,29 @@ class SailService extends Activity {
         JOIN player 
         ON player.id = active_tags.player_id 
         WHERE player.boat_id = ? AND key IN ${sqlPlaceholder(
-            Object.keys(this.keys).length
-        )}`
+            Object.keys(this.keys).length,
+        )}`,
             )
             .get(
                 guildId,
                 'NORTH_SAILING',
                 'SOUTH_SAILING',
                 'WEST_SAILING',
-                'EAST_SAILING'
+                'EAST_SAILING',
             );
         // No direction = Join the sailing with other players
         if (!direction) {
             tag = currentDirection.key;
+        } else if (currentDirection) {
+            tag = currentDirection.key;
         } else {
-            if (currentDirection) {
-                tag = currentDirection.key;
-            } else {
-                tag = this.keys[direction];
-            }
+            tag = this.keys[direction];
         }
 
         // direction = Start sailing with the given direction
 
         // TODO: this sucks but il find a better way to do it later. Probably using all the check im already doing
-        //Only create a job if you are the first sailor
+        // Only create a job if you are the first sailor
 
         // TODO: reduce sail time here maybe
 
@@ -96,11 +95,9 @@ class SailService extends Activity {
             await ActivityService.scheduleActivity(tag, { guildId, player });
             firstTime = true;
         }
-        {
-        }
 
         const stmt = db().prepare(
-            'INSERT INTO active_tags(key, player_id, boat) VALUES(?, ?, true)'
+            'INSERT INTO active_tags(key, player_id, boat) VALUES(?, ?, true)',
         );
         stmt.run(tag, player.id);
 
@@ -133,15 +130,15 @@ class SailService extends Activity {
         JOIN player 
         ON player.id = active_tags.player_id 
         WHERE player.boat_id = ? AND key IN ${sqlPlaceholder(
-            Object.keys(this.keys).length
-        )}`
+            Object.keys(this.keys).length,
+        )}`,
                 )
                 .all(
                     guildId,
                     'NORTH_SAILING',
                     'SOUTH_SAILING',
                     'WEST_SAILING',
-                    'EAST_SAILING'
+                    'EAST_SAILING',
                 );
 
             const stmt = db().prepare(
@@ -151,14 +148,14 @@ class SailService extends Activity {
               SELECT 1 
               FROM player
               WHERE player.boat_id = ? AND player.id = active_tags.player_id) 
-              AND key IN ${sqlPlaceholder(Object.keys(this.keys).length)}`
+              AND key IN ${sqlPlaceholder(Object.keys(this.keys).length)}`,
             );
             stmt.run(
                 guildId,
                 'NORTH_SAILING',
                 'SOUTH_SAILING',
                 'EAST_SAILING',
-                'WEST_SAILING'
+                'WEST_SAILING',
             );
 
             BoatService.sail(guildId, direction[0].key);
@@ -186,17 +183,17 @@ class SailService extends Activity {
     async announceEnd(interaction) {
         const results = await this.endJob(
             interaction.guildId,
-            interaction.player
+            interaction.player,
         );
 
         const foghorn = await BotService.getChannelByName(
             interaction.guildId,
-            process.env.NOTICHANNEL
+            process.env.NOTICHANNEL,
         );
 
         const sailingEmbed = new EmbedBuilder()
             .setColor(0x0077be)
-            .setTitle(`Finished sailing!`)
+            .setTitle('Finished sailing!')
             .setDescription(results.content)
             .addFields({
                 name: 'Experience:',
@@ -213,18 +210,18 @@ class SailService extends Activity {
         JOIN player 
         ON active_tags.player_id = player.id 
         WHERE player.boat_id = ? AND 
-        active_tags.key IN ${sqlPlaceholder(Object.keys(this.keys).length)}`
+        active_tags.key IN ${sqlPlaceholder(Object.keys(this.keys).length)}`,
             )
             .all(
                 guildId,
                 'NORTH_SAILING',
                 'SOUTH_SAILING',
                 'WEST_SAILING',
-                'EAST_SAILING'
+                'EAST_SAILING',
             );
 
         if (stmt.length === 0) {
-            return `The Boat is not sailing at the moment, try again with a direction.`;
+            return 'The Boat is not sailing at the moment, try again with a direction.';
         }
     }
 
@@ -235,7 +232,7 @@ class SailService extends Activity {
       FROM active_tags at 
       JOIN player p ON at.player_id = p.id 
       WHERE p.boat_id = ? 
-      AND at.key in (SELECT key FROM activities WHERE allow_during_sail = false)`
+      AND at.key in (SELECT key FROM activities WHERE allow_during_sail = false)`,
             )
             .all(guildId);
 
@@ -269,7 +266,7 @@ class SailService extends Activity {
               FROM boat_effect be 
               JOIN effect e ON be.effect_id = e.id
               WHERE be.boat_id = ?
-              AND e.key = ?`
+              AND e.key = ?`,
             )
             .all(boatId, 'SAIL_TIME');
         let finalTime = this.executionTime;

@@ -6,15 +6,15 @@ export default {
         .setName('feedback')
         .setDescription('Send feedback to the developer!')
         .addStringOption((option) =>
-            option.setName('message').setDescription('Message with feedback')
+            option.setName('message').setDescription('Message with feedback'),
         ),
     async execute(interaction) {
         const feedbackStmt = db().prepare(
-            'INSERT INTO feedback(player_name, message) VALUES (?, ?)'
+            'INSERT INTO feedback(player_name, message) VALUES (?, ?)',
         );
         feedbackStmt.run(
             interaction.user.username,
-            interaction.options.getString('message')
+            interaction.options.getString('message'),
         );
 
         interaction.reply({

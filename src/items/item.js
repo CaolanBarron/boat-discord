@@ -10,16 +10,6 @@ import {
 } from './uses.js';
 
 export default class Item {
-    id;
-    key;
-    name;
-    description;
-    info;
-    consumable;
-    useDescription;
-
-    uses = [];
-
     constructor(itemInfo, itemUses) {
         this.id = itemInfo.id;
         this.key = itemInfo.key;
@@ -29,21 +19,23 @@ export default class Item {
         this.consumable = itemInfo.consumable;
         this.useDescription = itemInfo.use_description;
 
+        this.uses = [];
+
         for (const itemUse of itemUses) {
             switch (itemUse.use_key) {
                 case 'INC_XP_PLAYER_RANDOM':
                     this.uses.push(
-                        new IncreaseXpPlayerRandomUse(itemUse.variable)
+                        new IncreaseXpPlayerRandomUse(itemUse.variable),
                     );
                     break;
                 case 'INC_XP_PLAYER_ALL':
                     this.uses.push(
-                        new IncreaseXpPlayerAllUse(itemUse.variable)
+                        new IncreaseXpPlayerAllUse(itemUse.variable),
                     );
                     break;
                 case 'INC_XP_BOAT_RANDOM':
                     this.uses.push(
-                        new IncreaseXpBoatRandomUse(itemUse.variable)
+                        new IncreaseXpBoatRandomUse(itemUse.variable),
                     );
                     break;
                 case 'INC_XP_BOAT_ALL':

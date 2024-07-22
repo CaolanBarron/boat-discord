@@ -1,7 +1,6 @@
 import { ActionRowBuilder } from '@discordjs/builders';
 import db from '../../database/database.js';
 import { ButtonBuilder, ButtonStyle, Colors, EmbedBuilder } from 'discord.js';
-import BoatService from './BoatService.js';
 import SkillService from './SkillService.js';
 import EffectService from './EffectService.js';
 
@@ -15,7 +14,7 @@ class PromptService {
                 messages[Math.floor(Math.random() * messages.length)];
 
             const messageActions = db()
-                .prepare(`SELECT * FROM prompt_action WHERE message_id = ?`)
+                .prepare('SELECT * FROM prompt_action WHERE message_id = ?')
                 .all(randomMessage.id);
 
             const row = new ActionRowBuilder();
@@ -46,7 +45,7 @@ class PromptService {
     FROM prompt_action pa 
     JOIN prompt_outcome po
     ON po.action_id = pa.id
-    WHERE pa.id = ?`
+    WHERE pa.id = ?`,
             )
             .all(actionId);
 
@@ -56,17 +55,17 @@ class PromptService {
         if (outcomes[0].challenge_skill) {
             const skillXP = await SkillService.getSkillXP(
                 player.id,
-                outcomes[0].challenge_skill
+                outcomes[0].challenge_skill,
             );
             const skillLevel = await SkillService.getCurrentLevel(skillXP);
 
             if (skillLevel > outcomes[0].challenge_value) {
                 [response] = outcomes.filter(
-                    (i) => i.outcome_type === 'SUCCESS'
+                    (i) => i.outcome_type === 'SUCCESS',
                 );
             } else {
                 [response] = outcomes.filter(
-                    (i) => i.outcome_type === 'FAILURE'
+                    (i) => i.outcome_type === 'FAILURE',
                 );
             }
         }

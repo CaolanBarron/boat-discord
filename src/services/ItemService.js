@@ -4,13 +4,15 @@ import { chooseRandomRarity } from './utils.js';
 import Item from '../items/item.js';
 
 class ItemService {
-    // This is a table to determine the random chance of getting an item
-    rarities = {
-        COMMON: 60,
-        RARE: 20,
-        UNUSUAL: 15,
-        ODDITY: 5,
-    };
+    constructor() {
+        // This is a table to determine the random chance of getting an item
+        this.rarities = {
+            COMMON: 60,
+            RARE: 20,
+            UNUSUAL: 15,
+            ODDITY: 5,
+        };
+    }
 
     async randomItemByLootTag(lootKey, skillModifier, effectModifier) {
         let lootTable;
@@ -21,12 +23,12 @@ class ItemService {
             const rarity = chooseRandomRarity(
                 this.rarities,
                 skillModifier,
-                effectModifier
+                effectModifier,
             );
 
             lootTable = db()
                 .prepare(
-                    'SELECT * FROM loot_item JOIN item ON item.key = loot_item.item_key WHERE loot_item.loot_key = ? AND loot_item.rarity = ?'
+                    'SELECT * FROM loot_item JOIN item ON item.key = loot_item.item_key WHERE loot_item.loot_key = ? AND loot_item.rarity = ?',
                 )
                 .all(lootKey, rarity);
             console.log(lootKey, rarity);
@@ -37,7 +39,7 @@ class ItemService {
 
     async addToInventory(guidId, itemKey, playerId) {
         const inventoryStmt = db().prepare(
-            'INSERT INTO boat_inventory(boat_id, item_key, collected_by) VALUES(?, ?, ?)'
+            'INSERT INTO boat_inventory(boat_id, item_key, collected_by) VALUES(?, ?, ?)',
         );
         inventoryStmt.run(guidId, itemKey, Math.floor(playerId));
     }
@@ -46,7 +48,7 @@ class ItemService {
         try {
             const inventoryStmt = db()
                 .prepare(
-                    'SELECT * FROM boat_inventory JOIN item ON boat_inventory.item_key = item.key WHERE boat_id = ?'
+                    'SELECT * FROM boat_inventory JOIN item ON boat_inventory.item_key = item.key WHERE boat_id = ?',
                 )
                 .all(guildId);
             let displayable;
@@ -89,30 +91,32 @@ class ItemService {
                 `SELECT * 
                   FROM boat_inventory bi 
                   JOIN item i ON bi.item_key = i.key 
-                  WHERE id = ? AND boat_id = ?`
+                  WHERE id = ? AND boat_id = ?`,
             )
             .get(itemId, player.boat_id);
 
-        if (!itemData)
+        if (!itemData) {
             return {
                 content: 'This item is not in The Boats Inventory',
                 ephemeral: true,
             };
+        }
 
         const itemUses = db()
-            .prepare(`SELECT * FROM item_uses WHERE item_key = ?`)
+            .prepare('SELECT * FROM item_uses WHERE item_key = ?')
             .all(itemData.key);
 
         const item = new Item(itemData, itemUses);
 
         if (item.uses.length === 0) {
-            if (item.useDescription) return useDescription;
+            if (item.useDescription) return item.useDescription;
             else return 'This item has no usability';
         }
 
         await item.use(player);
-        if (!item.useDescription)
+        if (!item.useDescription) {
             throw new Error('This item should have a use description');
+        }
         return item.useDescription;
     }
 
@@ -125,52 +129,46 @@ class ItemService {
      * result String
      */
     async inspectItem(boatId, itemId) {
-        try {
-            const item = db()
-                .prepare(
-                    `SELECT * 
+        const item = db()
+            .prepare(
+                `SELECT * 
                   FROM boat_inventory bi 
                   JOIN item i ON bi.item_key = i.key 
-                  WHERE id = ? AND boat_id = ?`
-                )
-                .get(itemId, boatId);
+                  WHERE id = ? AND boat_id = ?`,
+            )
+            .get(itemId, boatId);
 
-            if (!item)
-                return {
-                    content: 'This item is not in The Boats Inventory',
-                    ephemeral: true,
-                };
-            return { content: item.description, ephemeral: false };
-        } catch (error) {
-            throw error;
+        if (!item) {
+            return {
+                content: 'This item is not in The Boats Inventory',
+                ephemeral: true,
+            };
         }
+        return { content: item.description, ephemeral: false };
     }
 
     async disposeItem(boatId, itemId) {
-        try {
-            const item = db()
-                .prepare(
-                    `SELECT * 
+        const item = db()
+            .prepare(
+                `SELECT * 
                   FROM boat_inventory bi 
                   JOIN item i ON bi.item_key = i.key 
-                  WHERE id = ? AND boat_id = ?`
-                )
-                .get(itemId, boatId);
-            // TODO: Add a check for special items that cant be disposed
-            if (!item)
-                return {
-                    content: 'This item is not in The Boats Inventory',
-                    ephemeral: true,
-                };
-            db().prepare('DELETE FROM boat_inventory WHERE id = ?').run(itemId);
-
+                  WHERE id = ? AND boat_id = ?`,
+            )
+            .get(itemId, boatId);
+        // TODO: Add a check for special items that cant be disposed
+        if (!item) {
             return {
-                content: `The ${item.name} has been disposed of.`,
-                ephemeral: false,
+                content: 'This item is not in The Boats Inventory',
+                ephemeral: true,
             };
-        } catch (error) {
-            throw error;
         }
+        db().prepare('DELETE FROM boat_inventory WHERE id = ?').run(itemId);
+
+        return {
+            content: `The ${item.name} has been disposed of.`,
+            ephemeral: false,
+        };
     }
 }
 

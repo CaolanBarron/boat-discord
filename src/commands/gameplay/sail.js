@@ -13,15 +13,15 @@ export default {
                     { name: 'North', value: 'NORTH' },
                     { name: 'East', value: 'EAST' },
                     { name: 'South', value: 'SOUTH' },
-                    { name: 'West', value: 'WEST' }
-                )
+                    { name: 'West', value: 'WEST' },
+                ),
         ),
     async execute(interaction) {
         try {
             const sailResult = await SailService.start(
                 interaction.guildId,
                 interaction.player,
-                interaction.options.getString('direction')
+                interaction.options.getString('direction'),
             );
 
             await interaction.reply(sailResult);

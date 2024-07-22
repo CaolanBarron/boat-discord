@@ -8,73 +8,74 @@ import SailService from './Commands/SailService.js';
 import { sqlPlaceholder } from './utils.js';
 
 class ActivityService {
-    activityKeys = [
-        'FISH',
-        'CARTOGRAPHY',
-        'REPAIR',
-        'RESEARCH',
-        'NORTH_SAILING',
-        'SOUTH_SAILING',
-        'WEST_SAILING',
-        'EAST_SAILING',
-    ];
+    constructor() {
+        this.activityKeys = [
+            'FISH',
+            'CARTOGRAPHY',
+            'REPAIR',
+            'RESEARCH',
+            'NORTH_SAILING',
+            'SOUTH_SAILING',
+            'WEST_SAILING',
+            'EAST_SAILING',
+        ];
+    }
     async scheduleActivity(key, interaction) {
         try {
             const activities = {
                 FISH: {
                     execute: FishService.announceEnd,
                     time: await FishService.getTimeToExecute(
-                        interaction.player.boat_id
+                        interaction.player.boat_id,
                     ),
                     class: FishService,
                 },
                 CARTOGRAPHY: {
                     execute: CartographyService.announceEnd,
                     time: await CartographyService.getTimeToExecute(
-                        interaction.player.boat_id
+                        interaction.player.boat_id,
                     ),
                     class: CartographyService,
                 },
                 REPAIR: {
                     execute: RepairService.announceEnd,
                     time: await RepairService.getTimeToExecute(
-                        interaction.player.boat_id
+                        interaction.player.boat_id,
                     ),
                     class: RepairService,
                 },
                 RESEARCH: {
                     execute: ResearchService.announceEnd,
                     time: await ResearchService.getTimeToExecute(
-                        interaction.player.boat_id
+                        interaction.player.boat_id,
                     ),
                     class: ResearchService,
                 },
-                // TODO: Set the correct time for sailing
                 NORTH_SAILING: {
                     execute: SailService.announceEnd,
                     time: await SailService.getTimeToExecute(
-                        interaction.player.boat_id
+                        interaction.player.boat_id,
                     ),
                     class: SailService,
                 },
                 SOUTH_SAILING: {
                     execute: SailService.announceEnd,
                     time: await SailService.getTimeToExecute(
-                        interaction.player.boat_id
+                        interaction.player.boat_id,
                     ),
                     class: SailService,
                 },
                 WEST_SAILING: {
                     execute: SailService.announceEnd,
                     time: await SailService.getTimeToExecute(
-                        interaction.player.boat_id
+                        interaction.player.boat_id,
                     ),
                     class: SailService,
                 },
                 EAST_SAILING: {
                     execute: SailService.announceEnd,
                     time: await SailService.getTimeToExecute(
-                        interaction.player.boat_id
+                        interaction.player.boat_id,
                     ),
                     class: SailService,
                 },
@@ -89,7 +90,7 @@ class ActivityService {
             schedule.scheduleJob(
                 `activity_${key}_${interaction.player.id}`,
                 startTime,
-                activity.execute.bind(activity.class, interaction)
+                activity.execute.bind(activity.class, interaction),
             );
         } catch (error) {
             console.error(error);
@@ -100,8 +101,8 @@ class ActivityService {
         try {
             const sql = db().prepare(
                 `SELECT * FROM active_tags  WHERE player_id = ? AND key IN ${sqlPlaceholder(
-                    this.activityKeys.length
-                )}`
+                    this.activityKeys.length,
+                )}`,
             );
 
             const activity = sql.get(playerId, this.activityKeys);
@@ -111,20 +112,21 @@ class ActivityService {
             console.error(error);
         }
     }
-    //Checks if the player is doing an activity that would clash with player request
+    // Checks if the player is doing an activity that would clash with player request
     checkActive(playerId, requestedActivity) {
         // Pass in the requested activity to check if player current matches
         const activeUser = this.getCurrent(playerId);
 
         let result;
         if (activeUser) {
+            // eslint-disable-next-line quotes
             result = "You're busy!";
             switch (activeUser.key) {
                 case 'FISH':
                     result =
                         requestedActivity === 'FISH'
                             ? 'You are already fishing!'
-                            : `You will have to put down your fishing rod if you want to do something else...`;
+                            : 'You will have to put down your fishing rod if you want to do something else...';
                     break;
                 case 'CARTOGRAPHY':
                     result =
@@ -184,16 +186,20 @@ class ActivityService {
                             'Vials rattle with the waves... you are currently researching!';
                         break;
                     case 'NORTH_SAILING':
-                        result = `The bow splits the sea... you are currently sailing Northward!`;
+                        result =
+                            'The bow splits the sea... you are currently sailing Northward!';
                         break;
                     case 'EAST_SAILING':
-                        result = `The bow splits the sea... you are currently sailing Eastward!`;
+                        result =
+                            'The bow splits the sea... you are currently sailing Eastward!';
                         break;
                     case 'WEST_SAILING':
-                        result = `The bow splits the sea... you are currently sailing Westward!`;
+                        result =
+                            'The bow splits the sea... you are currently sailing Westward!';
                         break;
                     case 'SOUTH_SAILING':
-                        result = `The bow splits the sea... you are currently sailing Southward!`;
+                        result =
+                            'The bow splits the sea... you are currently sailing Southward!';
                         break;
                 }
             }
@@ -206,7 +212,6 @@ class ActivityService {
         // Checks the current active tags under the activity
         // if one exists return the correct response
 
-        // TODO: by key
         const activityStmt = db()
             .prepare(
                 `SELECT *
@@ -215,7 +220,7 @@ class ActivityService {
         ON at.player_id = p.id
         JOIN boat b
         ON p.boat_id = b.id
-        WHERE b.id = ? AND at.key = ?;`
+        WHERE b.id = ? AND at.key = ?;`,
             )
             .get(guildId, activity);
 
@@ -230,6 +235,7 @@ class ActivityService {
                 case 'CARTOGRAPHY':
                     return `You plan to sit down and pore over the maps to ease your boredom... Unfortunately ${activityStmt.name} would get in the way of that.`;
                 default:
+                    // eslint-disable-next-line quotes
                     throw new Error("This key doesn't exist: " + activity);
             }
         }

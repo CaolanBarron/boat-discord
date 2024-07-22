@@ -18,7 +18,7 @@ class RepairService extends Activity {
 
         const isOccupied = await ActivityService.checkOccupied(
             'REPAIR',
-            guildId
+            guildId,
         );
         if (isOccupied) {
             return {
@@ -28,7 +28,7 @@ class RepairService extends Activity {
         }
 
         const insertStmt = db().prepare(
-            'INSERT INTO active_tags(key, player_id) VALUES(?,?)'
+            'INSERT INTO active_tags(key, player_id) VALUES(?,?)',
         );
         insertStmt.run('REPAIR', player.id);
 
@@ -43,7 +43,7 @@ class RepairService extends Activity {
     async endJob(guildId, player) {
         try {
             const stmt = db().prepare(
-                'DELETE FROM active_tags WHERE player_id = ? AND key = ?'
+                'DELETE FROM active_tags WHERE player_id = ? AND key = ?',
             );
             stmt.run(player.id, 'REPAIR');
 
@@ -58,7 +58,7 @@ class RepairService extends Activity {
                     ];
                 db()
                     .prepare(
-                        'DELETE FROM boat_effect WHERE boat_id = ? AND effect_id = ?'
+                        'DELETE FROM boat_effect WHERE boat_id = ? AND effect_id = ?',
                     )
                     .run(guildId, toRemove.effect_id);
                 return {
@@ -77,7 +77,9 @@ class RepairService extends Activity {
             await EffectService.applyEffect(guildId, buffToApply.id);
 
             return {
-                content: `Why did they place this gear here? What on earth is the function of this pipe?? The Boat's faculties has been improved.`,
+                content:
+                    // eslint-disable-next-line quotes
+                    "Why did they place this gear here? What on earth is the function of this pipe?? The Boat's faculties has been improved.",
                 modifications: `${buffToApply.name} buff applied.`,
             };
         } catch (error) {
@@ -89,12 +91,12 @@ class RepairService extends Activity {
     async announceEnd(interaction) {
         const results = await this.endJob(
             interaction.guildId,
-            interaction.player
+            interaction.player,
         );
 
         const foghorn = await BotService.getChannelByName(
             interaction.guildId,
-            process.env.NOTICHANNEL
+            process.env.NOTICHANNEL,
         );
 
         const repairEmbed = new EmbedBuilder()
@@ -107,7 +109,7 @@ class RepairService extends Activity {
                     value: `${results.content}`,
                 },
                 { name: 'Modification:', value: results.modifications },
-                { name: 'Experience:', value: '++Repair' }
+                { name: 'Experience:', value: '++Repair' },
             );
 
         foghorn.send({ embeds: [repairEmbed] });
@@ -121,7 +123,7 @@ class RepairService extends Activity {
               FROM boat_effect be 
               JOIN effect e ON be.effect_id = e.id
               WHERE be.boat_id = ?
-              AND e.key = ?`
+              AND e.key = ?`,
             )
             .all(boatId, 'REPAIR_TIME');
         let finalTime = this.executionTime;

@@ -7,7 +7,7 @@ class FlavourService {
             // allows the format function of strings to insert values into the flavor
             // strings stored in the database
             String.prototype.format = function () {
-                var args = arguments;
+                const args = arguments;
                 return this.replace(/{([0-9]+)}/g, function (match, index) {
                     return typeof args[index] == 'undefined'
                         ? match
@@ -23,7 +23,7 @@ class FlavourService {
                     OR tag IN (
                       SELECT key 
                       FROM active_tags 
-                      WHERE player_id = ?)`
+                      WHERE player_id = ?)`,
                 )
                 .all('PLAYER', player.id);
 
@@ -53,7 +53,7 @@ class FlavourService {
 
             const stmt = db()
                 .prepare(
-                    'SELECT * FROM flavor WHERE subject = ? AND tag IS null OR tag = ?'
+                    'SELECT * FROM flavor WHERE subject = ? AND tag IS null OR tag = ?',
                 )
                 .all('BOAT', biome_key);
 

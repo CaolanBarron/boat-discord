@@ -16,7 +16,7 @@ export default {
         try {
             const user = db()
                 .prepare(
-                    'SELECT * FROM player WHERE user_id = ? AND boat_id = ?'
+                    'SELECT * FROM player WHERE user_id = ? AND boat_id = ?',
                 )
                 .get(interaction.user.id, interaction.guildId);
             interaction.player = user;
@@ -61,7 +61,7 @@ export default {
                     const actionResponse = await PromptService.chooseAction(
                         customId[1],
                         user,
-                        interaction.guildId
+                        interaction.guildId,
                     );
 
                     const outcome =
@@ -111,11 +111,11 @@ export default {
                 return;
             }
             const command = interaction.client.commands.get(
-                interaction.commandName
+                interaction.commandName,
             );
             if (!command) {
                 console.error(
-                    `No command matching ${interaction.commandName} was found.`
+                    `No command matching ${interaction.commandName} was found.`,
                 );
                 return;
             }

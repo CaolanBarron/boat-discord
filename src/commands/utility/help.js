@@ -9,7 +9,7 @@ export default {
             option
                 .setName('topic')
                 .setDescription(
-                    'Information about a particular part of the game '
+                    'Information about a particular part of the game ',
                 )
                 .addChoices({ name: 'Activities', value: 'topic_activities' })
                 .addChoices({ name: 'Events', value: 'topic_events' })
@@ -21,7 +21,7 @@ export default {
                 .addChoices({ name: 'Repair', value: 'topic_repair' })
                 .addChoices({ name: 'Research', value: 'topic_research' })
                 .addChoices({ name: 'Sailing', value: 'topic_sailing' })
-                .addChoices({ name: 'Salvage', value: 'topic_salvage' })
+                .addChoices({ name: 'Salvage', value: 'topic_salvage' }),
         ),
     async execute(interaction) {
         let message = 'This help message has not yet been written';
