@@ -14,6 +14,7 @@ export const item = sqliteTable('item', {
     info: text('info'),
     consumable: integer('consumable', { mode: 'boolean' }).default(false),
     useDescription: text('use_description'),
+    special: integer('special', { mode: 'boolean' }).default(false),
 });
 
 export const itemRelations = relations(item, ({ many }) => ({

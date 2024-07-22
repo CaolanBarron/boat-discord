@@ -156,7 +156,14 @@ class ItemService {
                   WHERE id = ? AND boat_id = ?`,
             )
             .get(itemId, boatId);
-        // TODO: Add a check for special items that cant be disposed
+
+        if (item.special) {
+            return {
+                content: 'This item is special and cannot be disposed',
+                ephemeral: true,
+            };
+        }
+
         if (!item) {
             return {
                 content: 'This item is not in The Boats Inventory',
