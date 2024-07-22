@@ -3,6 +3,7 @@ import db from '../../database/database.js';
 import { ButtonBuilder, ButtonStyle, Colors, EmbedBuilder } from 'discord.js';
 import BoatService from './BoatService.js';
 import SkillService from './SkillService.js';
+import EffectService from './EffectService.js';
 
 // TODO: Implement sailing prompts
 class PromptService {
@@ -76,7 +77,7 @@ class PromptService {
         }
 
         if (response.effect_id) {
-            BoatService.applyEffect(boatId, response.effect_id);
+            await EffectService.applyEffect(boatId, response.effect_id);
         }
         // return the final response content/other info
 
