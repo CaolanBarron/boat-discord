@@ -18,7 +18,6 @@ export class IncreaseXpPlayerRandomUse extends Use {
 export class IncreaseXpPlayerAllUse extends Use {
     async use(player) {
         const allSkills = await SkillService.getAllSkills();
-        // TODO: If many skills are upgraded at once discord may complain because of too many anouncements
         for (const skillKey of allSkills) {
             await SkillService.addRandomXP(player.id, skillKey, this.variable);
         }

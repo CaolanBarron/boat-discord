@@ -27,7 +27,13 @@ export default {
 
     async execute(interaction) {
         // Validate that the user of this command is LeftTale
-        if (interaction.user.id !== process.env.DEVID) return;
+        if (interaction.user.id !== process.env.DEVID) {
+            await interaction.reply({
+                content: 'You do not have access to this command',
+                ephemeral: true,
+            });
+            return;
+        }
         const row = new ActionRowBuilder();
         const content = 'Which tool would you like to use?';
         switch (interaction.options.getString('tools')) {
@@ -75,6 +81,7 @@ export default {
         const response = await interaction.reply({
             content,
             components: [row],
+            ephemeral: true,
         });
 
         const collectorFilter = (i) => i.user.id === interaction.user.id;
@@ -274,7 +281,6 @@ async function createBoat(guildId) {
 }
 
 async function displayJobs() {
-    // TODO: This code is evil. Quell it
     const scheduledJobs = schedule.scheduledJobs;
     if (Object.keys(scheduledJobs).length === 0) {
         return 'There are no jobs at the moment!';

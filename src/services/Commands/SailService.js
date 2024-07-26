@@ -7,7 +7,6 @@ import BoatService from '../BoatService.js';
 import Activity from '../Activity.js';
 import { sqlPlaceholder } from '../utils.js';
 
-// TODO: Handle the first sailor stopping the job. Other players will keep the active tag without any scheduled jobs
 class SailService extends Activity {
     constructor() {
         super();
@@ -31,8 +30,6 @@ class SailService extends Activity {
                 };
             }
         }
-
-        // TODO: Ensure the order of these checks do not cause problems
 
         // Check if the player is already busy doing something
         const isBusy = ActivityService.checkActive(
@@ -59,13 +56,13 @@ class SailService extends Activity {
         let tag;
         const currentDirection = db()
             .prepare(
-                `SELECT key FROM
-        active_tags 
-        JOIN player 
-        ON player.id = active_tags.player_id 
-        WHERE player.boat_id = ? AND key IN ${sqlPlaceholder(
-            Object.keys(this.keys).length,
-        )}`,
+                `SELECT key 
+                FROM active_tags 
+                JOIN player 
+                ON player.id = active_tags.player_id 
+                WHERE player.boat_id = ? AND key IN ${sqlPlaceholder(
+                    Object.keys(this.keys).length,
+                )}`,
             )
             .get(
                 guildId,
@@ -83,12 +80,7 @@ class SailService extends Activity {
             tag = this.keys[direction];
         }
 
-        // direction = Start sailing with the given direction
-
-        // TODO: this sucks but il find a better way to do it later. Probably using all the check im already doing
         // Only create a job if you are the first sailor
-
-        // TODO: reduce sail time here maybe
 
         let firstTime = false;
         if (!currentDirection) {

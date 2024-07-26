@@ -27,8 +27,6 @@ export default {
 
     async execute(interaction) {
         try {
-            // TODO: Beware of SQL injection on the itemID validate it
-
             const itemId = interaction.options.getString('item-id');
             let result;
             switch (interaction.options.getString('action')) {

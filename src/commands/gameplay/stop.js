@@ -71,8 +71,6 @@ export default {
                     activityNames.forEach((jobName) =>
                         schedule.cancelJob(jobName),
                     );
-
-                    // TODO: need to account for The main person stopping while others are still sailing
                 }
             } else {
                 // Delete the current job
