@@ -5,7 +5,7 @@ import RepairService from './Commands/RepairService.js';
 import CartographyService from './Commands/CartographyService.js';
 import ResearchService from './Commands/ResearchService.js';
 import SailService from './Commands/SailService.js';
-import { sqlPlaceholder } from './utils.js';
+import { sqlPlaceholder } from './Utils.js';
 
 class ActivityService {
     constructor() {
@@ -20,6 +20,7 @@ class ActivityService {
             'EAST_SAILING',
         ];
     }
+
     async scheduleActivity(key, interaction) {
         try {
             const activities = {
@@ -112,6 +113,7 @@ class ActivityService {
             console.error(error);
         }
     }
+
     // Checks if the player is doing an activity that would clash with player request
     checkActive(playerId, requestedActivity) {
         // Pass in the requested activity to check if player current matches
@@ -208,6 +210,7 @@ class ActivityService {
             console.error(error);
         }
     }
+
     async checkOccupied(activity, guildId) {
         // Checks the current active tags under the activity
         // if one exists return the correct response

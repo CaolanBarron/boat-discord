@@ -6,7 +6,7 @@ import BotService from '../BotService.js';
 import { EmbedBuilder } from 'discord.js';
 import { stripIndent } from 'common-tags';
 import ItemService from '../ItemService.js';
-import { chooseRandomRarity } from '../utils.js';
+import { chooseRandomRarity } from '../Utils.js';
 import EffectService from '../EffectService.js';
 import Activity from '../Activity.js';
 

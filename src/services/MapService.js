@@ -1,7 +1,7 @@
 import db from '../../database/database.js';
 import BoatService from './BoatService.js';
 import ItemService from './ItemService.js';
-import { chooseRandomRarity, sqlPlaceholder } from './utils.js';
+import { chooseRandomRarity, sqlPlaceholder } from './Utils.js';
 import SkillService from './SkillService.js';
 import EffectService from './EffectService.js';
 

@@ -5,7 +5,7 @@ import BotService from '../BotService.js';
 import { EmbedBuilder } from 'discord.js';
 import BoatService from '../BoatService.js';
 import Activity from '../Activity.js';
-import { sqlPlaceholder } from '../utils.js';
+import { sqlPlaceholder } from '../Utils.js';
 
 class SailService extends Activity {
     constructor() {

@@ -254,7 +254,7 @@ export const loot = [
 ];
 
 export const lootItem = [
-    { lootKey: 'FISH', itemKey: 'HARMONICA', rarity: 'common' },
+    { lootKey: 'FISH', itemKey: 'HARMONICA', rarity: 'COMMON' },
 ];
 
 export const activities = [

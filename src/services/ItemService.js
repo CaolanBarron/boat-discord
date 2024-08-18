@@ -1,6 +1,6 @@
 import { EmbedBuilder } from '@discordjs/builders';
 import db from '../../database/database.js';
-import { chooseRandomRarity } from './utils.js';
+import { chooseRandomRarity } from './Utils.js';
 import Item from '../items/item.js';
 
 class ItemService {
@@ -31,7 +31,6 @@ class ItemService {
                     'SELECT * FROM loot_item JOIN item ON item.key = loot_item.item_key WHERE loot_item.loot_key = ? AND loot_item.rarity = ?',
                 )
                 .all(lootKey, rarity);
-            console.log(lootKey, rarity);
         }
 
         return lootTable[Math.floor(Math.random() * lootTable.length)];

@@ -4,21 +4,24 @@ import FlavorService from './FlavorService.js';
 import BotService from './BotService.js';
 import PromptService from './PromptService.js';
 import TreasureService from './TreasureService.js';
-import { sqlPlaceholder } from './utils.js';
+import { sqlPlaceholder } from './Utils.js';
 
 class GameEventService {
     constructor() {
         this.scheduler = new ToadScheduler();
     }
+
     async startFlavorIntervals(guildIds) {
         const boats = db().prepare('SELECT * FROM boat').all();
         const boatIds = boats.map((boat) => boat.id);
 
         for (const guild of guildIds) {
             if (!boatIds.includes(guild)) continue;
-            console.log(`Spinning up flavor interval for ${guild}`);
-
-            const task = new Task(`${guild}_boat_flavor`, async () => {
+            if (process.env.NODE_ENV !== 'test') {
+                console.log(`Spinning up flavor interval for ${guild}`);
+            }
+            const jobId = `${guild}_boat_flavor`;
+            const task = new Task(jobId, async () => {
                 // Do not send a event half the amount of times
                 if (Math.random() < 0.5) return;
                 const flavor = FlavorService.getBoatFlavor(guild);
@@ -30,7 +33,9 @@ class GameEventService {
 
                 await channel.send(flavor);
             });
-            const job = new SimpleIntervalJob({ seconds: 3000 }, task);
+            const job = new SimpleIntervalJob({ seconds: 3000 }, task, {
+                id: jobId,
+            });
 
             this.scheduler.addSimpleIntervalJob(job);
         }
@@ -42,9 +47,12 @@ class GameEventService {
 
         for (const guild of guildIds) {
             if (!boatIds.includes(guild)) continue;
-            console.log(`Spinning up prompt interval for ${guild}`);
+            if (process.env.NODE_ENV !== 'test') {
+                console.log(`Spinning up prompt interval for ${guild}`);
+            }
 
-            const task = new Task(`${guild}_prompt`, async () => {
+            const jobId = `${guild}_prompt`;
+            const task = new Task(jobId, async () => {
                 if (Math.random() < 0.5) return;
                 const users = db()
                     .prepare('SELECT * FROM player WHERE boat_id = ?')
@@ -83,7 +91,9 @@ class GameEventService {
                 await channel.send(promptMessage);
             });
 
-            const job = new SimpleIntervalJob({ seconds: 1800 }, task);
+            const job = new SimpleIntervalJob({ seconds: 1800 }, task, {
+                id: jobId,
+            });
 
             this.scheduler.addSimpleIntervalJob(job);
         }
@@ -95,12 +105,19 @@ class GameEventService {
 
         for (const guild of guildIds) {
             if (!boatIds.includes(guild)) continue;
-            console.log(`Spinning up Treasure Shuffle Interval for ${guild}`);
+            if (process.env.NODE_ENV !== 'test') {
+                console.log(
+                    `Spinning up Treasure Shuffle Interval for ${guild}`,
+                );
+            }
 
-            const task = new Task(`${guild}_boat_treasure`, async () => {
+            const jobId = `${guild}_boat_treasure`;
+            const task = new Task(jobId, async () => {
                 await TreasureService.shuffleTreasure(guild);
             });
-            const job = new SimpleIntervalJob({ seconds: 180 }, task);
+            const job = new SimpleIntervalJob({ seconds: 180 }, task, {
+                id: jobId,
+            });
 
             this.scheduler.addSimpleIntervalJob(job);
         }

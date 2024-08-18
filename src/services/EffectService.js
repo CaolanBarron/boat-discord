@@ -1,7 +1,7 @@
 import db from '../../database/database.js';
 import schedule from 'node-schedule';
 import ItemService from './ItemService.js';
-import { chooseRandomRarity, sqlPlaceholder } from './utils.js';
+import { chooseRandomRarity, sqlPlaceholder } from './Utils.js';
 
 class EffectService {
     constructor() {
@@ -18,6 +18,7 @@ class EffectService {
             REPAIR: ['REPAIR_XP'],
         };
     }
+
     getByKey(effectKey) {
         try {
             const effect = db()

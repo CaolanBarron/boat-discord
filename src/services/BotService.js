@@ -2,7 +2,7 @@ import ActivityService from './ActivityService.js';
 import db from '../../database/database.js';
 import schedule from 'node-schedule';
 import EffectService from './EffectService.js';
-import { sqlPlaceholder } from './utils.js';
+import { sqlPlaceholder } from './Utils.js';
 
 class BotService {
     async getChannelByName(guildId, name) {
