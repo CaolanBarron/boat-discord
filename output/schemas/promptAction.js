@@ -12,17 +12,14 @@ export const promptAction = sqliteTable('prompt_action', {
     challengeSkill: text('challenge_skill').references(() => skill.key),
     challengeValue: integer('challenge_value'),
 });
-export const promptActionRelations = relations(
-    promptAction,
-    ({ one, many }) => ({
-        skill: one(skill, {
-            fields: [promptAction.challengeSkill],
-            references: [skill.key],
-        }),
-        promptMessage: one(promptMessage, {
-            fields: [promptAction.messageId],
-            references: [promptMessage.id],
-        }),
-        promptOutcomes: many(promptOutcome),
+export const promptActionRelations = relations(promptAction, ({ one, many }) => ({
+    skill: one(skill, {
+        fields: [promptAction.challengeSkill],
+        references: [skill.key],
     }),
-);
+    promptMessage: one(promptMessage, {
+        fields: [promptAction.messageId],
+        references: [promptMessage.id],
+    }),
+    promptOutcomes: many(promptOutcome),
+}));

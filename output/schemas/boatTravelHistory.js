@@ -9,14 +9,11 @@ export const boatTravelHistory = sqliteTable('boat_travel_history', {
     xCoord: integer('x_coord').notNull(),
     yCoord: integer('y_coord').notNull(),
     biome: text('biome'),
-    timestamp: numeric('timestamp').default(sql`(CURRENT_TIMESTAMP)`),
+    timestamp: numeric('timestamp').default(sql `(CURRENT_TIMESTAMP)`),
 });
-export const boatTravelHistoryRelations = relations(
-    boatTravelHistory,
-    ({ one }) => ({
-        boat: one(boat, {
-            fields: [boatTravelHistory.boatId],
-            references: [boat.id],
-        }),
+export const boatTravelHistoryRelations = relations(boatTravelHistory, ({ one }) => ({
+    boat: one(boat, {
+        fields: [boatTravelHistory.boatId],
+        references: [boat.id],
     }),
-);
+}));

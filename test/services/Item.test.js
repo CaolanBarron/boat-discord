@@ -1,13 +1,25 @@
 /* eslint-disable */
-import { describe, it, beforeAll, afterEach, expect } from '@jest/globals';
+import {
+    describe,
+    it,
+    jest,
+    beforeAll,
+    afterEach,
+    expect,
+} from '@jest/globals';
 import ItemService from '../../src/services/ItemService';
 import db from '../../database/database';
 import { faker } from '@faker-js/faker';
 
 describe('Item Service Integration', () => {
+    afterEach(() => {
+        jest.spyOn(global.Math, 'random').mockRestore();
+    });
+
     it('Random item by loot tag', async () => {
+        jest.spyOn(global.Math, 'random').mockReturnValue(0.6);
         const result = await ItemService.randomItemByLootTag('FISH');
-        expect(result.key).toEqual('HARMONICA');
+        expect(result.item_key).toEqual('LONG_SNOUTED_SEAHORSE');
     });
 
     it('Add to inventory', async () => {
@@ -54,9 +66,7 @@ describe('Item Service Integration', () => {
 
     it('Get Item Info ', async () => {
         const result = await ItemService.itemInfo('BOOT');
-        expect(result).toEqual(
-            'This is hidden information about the Boot item.',
-        );
+        expect(result).toEqual('Size 10 UK');
     });
 
     it('Get Item Description', async () => {
@@ -74,7 +84,7 @@ describe('Item Service Integration', () => {
             )
             .get(boatId, 'BOOT');
         const result = await ItemService.inspectItem(boatId, inventoryId.id);
-        expect(result.content).toEqual(`I wouldn't wear that...`);
+        expect(result.content).toEqual(`This is a boot`);
         expect(result.ephemeral).toBeFalsy();
     });
 

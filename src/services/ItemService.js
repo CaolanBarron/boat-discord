@@ -28,7 +28,7 @@ class ItemService {
 
             lootTable = db()
                 .prepare(
-                    'SELECT * FROM loot_item JOIN item ON item.key = loot_item.item_key WHERE loot_item.loot_key = ? AND loot_item.rarity = ?',
+                    'SELECT * FROM loot_item JOIN item ON item.key = loot_item.item_key JOIN loot ON loot_item.loot_id = loot.id WHERE loot.key = ? AND loot_item.rarity = ?',
                 )
                 .all(lootKey, rarity);
         }

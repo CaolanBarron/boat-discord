@@ -7,13 +7,10 @@ export const promptMessage = sqliteTable('prompt_message', {
     content: text('content'),
     tagKey: text('tag_key').references(() => tag.key),
 });
-export const promptMessageRelations = relations(
-    promptMessage,
-    ({ one, many }) => ({
-        promptActions: many(promptAction),
-        tag: one(tag, {
-            fields: [promptMessage.tagKey],
-            references: [tag.key],
-        }),
+export const promptMessageRelations = relations(promptMessage, ({ one, many }) => ({
+    promptActions: many(promptAction),
+    tag: one(tag, {
+        fields: [promptMessage.tagKey],
+        references: [tag.key],
     }),
-);
+}));
