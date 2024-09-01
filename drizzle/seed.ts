@@ -2,9 +2,27 @@ import { db } from './db';
 import * as schemas from './schemas';
 import * as gameMechanics from './base-seed/gameMechanics';
 import { prompts } from './base-seed/content';
+import { eq, sql } from '../node_modules/drizzle-orm/index';
+import { tag } from './schemas/tag';
 
 export const seedDB = async () => {
     // Do a simple check if the database has data
+
+    await db.run(sql.raw('PRAGMA foreign_keys=OFF;'));
+
+    const result = sql.raw(
+        `SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE '__drizzle_migrations' ;`,
+    );
+    const tableNames = await db.all(result).map((r: any) => r.name);
+    for (const tableName of tableNames) {
+        const query = sql.raw(`DELETE FROM ${tableName}`);
+        await db.run(query);
+    }
+    await db.run(sql.raw('DELETE FROM boat_travel_history;'));
+    await db.run(sql.raw('PRAGMA foreign_keys=ON;'));
+
+    console.log('Database cleared.');
+
     const dataExists = await db.query.tag.findFirst();
     if (dataExists) {
         console.error('This database has data in it already.');

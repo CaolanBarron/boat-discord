@@ -64,6 +64,13 @@
       "when": 1721688528513,
       "tag": "0008_narrow_shatterstar",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1725191442413,
+      "tag": "0009_noisy_namorita",
+      "breakpoints": true
     }
   ]
 }

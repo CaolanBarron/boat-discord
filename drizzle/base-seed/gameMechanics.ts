@@ -94,7 +94,7 @@ export const flavor = [
         tag: null,
         subject: 'BOAT',
     },
-    { content: 'The brackish water bubbles', tag: 'SWAMP', subject: 'BOAT' },
+    { content: 'The brackish water bubbles', tag: 'SLUDGE', subject: 'BOAT' },
     {
         content: 'Something in the dark shifts...',
         tag: 'VOID',
@@ -153,7 +153,7 @@ export const biome = [
     },
 ];
 
-export const biomeCoords = [{ biomeKey: '', xCoord: 0, yCoord: 0 }];
+export const biomeCoords = [{ biomeKey: 'VOID', xCoord: 0, yCoord: 0 }];
 
 export const item = [
     {
@@ -514,15 +514,91 @@ export const itemUse = [
     },
 ];
 
-export const itemTransformation = [{ original: '', transformation: '' }];
+export const itemTransformation = [
+    { original: 'PYGMY_SEAHORSE', transformation: 'SEADRAGON' },
+    { original: 'SEADRAGON', transformation: 'PYGMY_SEAHORSE' },
+    { original: 'TRUMPET', transformation: 'IPOD' },
+    { original: 'SITCOM_VCR', transformation: 'SKIN_INTERFACE' },
+    { original: 'FLASHLIGHT_FISH', transformation: 'GLOWING_SCARAB' },
+    { original: 'GOLD_COINS', transformation: 'DIAMOND_ENCRUSTED_DIAMOND' },
+    { original: 'BOTTLE_NOTE', transformation: 'MIRRORED_PUZZLE_BOX' },
+];
 
 export const loot = [
-    { key: 'FISH', biome: 'VOID' },
-    { key: 'TREASURE', biome: 'VOID' },
+    { id: 1, key: 'FISH', biome: null },
+    { id: 2, key: 'FISH', biome: 'STORM' },
+    { id: 3, key: 'FISH', biome: 'VOID' },
+    { id: 4, key: 'FISH', biome: 'SLUDGE' },
+    { id: 5, key: 'FISH', biome: 'TROPICAL' },
+    { id: 6, key: 'FISH', biome: 'ELECTRONIC' },
+    { id: 7, key: 'FISH', biome: 'FLESH' },
+    { id: 8, key: 'FISH', biome: 'MIRROR' },
+    { id: 9, key: 'TREASURE', biome: null },
+    { id: 10, key: 'TREASURE', biome: 'VOID' },
+    { id: 11, key: 'TREASURE', biome: 'STORM' },
+    { id: 12, key: 'TREASURE', biome: 'SLUDGE' },
+    { id: 13, key: 'TREASURE', biome: 'TROPICAL' },
+    { id: 14, key: 'TREASURE', biome: 'ELECTRONIC' },
+    { id: 15, key: 'TREASURE', biome: 'FLESH' },
+    { id: 16, key: 'TREASURE', biome: 'MIRROR' },
 ];
 
 export const lootItem = [
-    { lootKey: 'FISH', itemKey: 'HARMONICA', rarity: 'COMMON' },
+    { lootId: 1, itemKey: 'GAS_TROUT', rarity: 'COMMON' },
+    { lootId: 1, itemKey: 'TROUT', rarity: 'COMMON' },
+    { lootId: 1, itemKey: 'TRUMPETFISH', rarity: 'COMMON' },
+    { lootId: 1, itemKey: 'BLUEBANDED_GOBY', rarity: 'COMMON' },
+    { lootId: 1, itemKey: 'SALMON', rarity: 'COMMON' },
+    { lootId: 1, itemKey: 'BOOT', rarity: 'COMMON' },
+    { lootId: 1, itemKey: 'STICK', rarity: 'COMMON' },
+    { lootId: 1, itemKey: 'BOTTLE_NOTE', rarity: 'COMMON' },
+    { lootId: 9, itemKey: 'TRUMPET', rarity: 'COMMON' },
+    { lootId: 9, itemKey: 'GOLD_COINS', rarity: 'COMMON' },
+    { lootId: 9, itemKey: 'SPYGLASS', rarity: 'COMMON' },
+    { lootId: 9, itemKey: 'PLAYING_CARDS', rarity: 'COMMON' },
+    { lootId: 9, itemKey: 'BOOT', rarity: 'COMMON' },
+    { lootId: 9, itemKey: 'STICK', rarity: 'COMMON' },
+    { lootId: 9, itemKey: 'BOTTLE_NOTE', rarity: 'COMMON' },
+    { lootId: 2, itemKey: 'ELECTRIC_EEL', rarity: 'COMMON' },
+    { lootId: 2, itemKey: 'BLUEHEADED_WRASSE', rarity: 'COMMON' },
+    { lootId: 2, itemKey: 'SEADRAGON', rarity: 'COMMON' },
+    { lootId: 11, itemKey: 'LIGHTNING_BOTTLE', rarity: 'COMMON' },
+    { lootId: 11, itemKey: 'CERULEAN_JADE', rarity: 'COMMON' },
+    { lootId: 3, itemKey: 'SNIPE_EEL', rarity: 'COMMON' },
+    { lootId: 3, itemKey: 'FLASHLIGHT_FISH', rarity: 'COMMON' },
+    { lootId: 3, itemKey: 'SNIPE_EEL', rarity: 'COMMON' },
+    { lootId: 10, itemKey: 'DARKNESS_JAR', rarity: 'COMMON' },
+    { lootId: 10, itemKey: 'OBSIDIAN_SHARD', rarity: 'COMMON' },
+    { lootId: 10, itemKey: 'SITCOM_VCR', rarity: 'COMMON' },
+    { lootId: 4, itemKey: 'JOHN_DORY', rarity: 'COMMON' },
+    { lootId: 4, itemKey: 'GRUNION', rarity: 'COMMON' },
+    { lootId: 4, itemKey: 'TRUMPETFISH', rarity: 'COMMON' },
+    { lootId: 12, itemKey: 'GLOWING_SCARAB', rarity: 'COMMON' },
+    { lootId: 12, itemKey: 'SLUDGE_BLOOM', rarity: 'COMMON' },
+    { lootId: 12, itemKey: 'AMBERGRIS', rarity: 'COMMON' },
+    { lootId: 5, itemKey: 'LONG_SNOUTED_SEAHORSE', rarity: 'COMMON' },
+    { lootId: 5, itemKey: 'RED_SNAPPER', rarity: 'COMMON' },
+    { lootId: 5, itemKey: 'DOLPHINFISH', rarity: 'COMMON' },
+    { lootId: 13, itemKey: 'CERULEAN_JADE', rarity: 'COMMON' },
+    { lootId: 13, itemKey: 'DIAMOND_ENCRUSTED_DIAMOND', rarity: 'COMMON' },
+    { lootId: 13, itemKey: 'STORY_SCALE', rarity: 'COMMON' },
+    { lootId: 6, itemKey: 'SAWFISH', rarity: 'COMMON' },
+    { lootId: 6, itemKey: 'QUEEN_ANGELFISH', rarity: 'COMMON' },
+    { lootId: 6, itemKey: 'DREAMFISH', rarity: 'COMMON' },
+    { lootId: 14, itemKey: 'IPOD', rarity: 'COMMON' },
+    { lootId: 14, itemKey: 'SPEAKERS', rarity: 'COMMON' },
+    { lootId: 14, itemKey: 'VIRTUAL_REALITY_TUBE', rarity: 'COMMON' },
+    { lootId: 7, itemKey: 'SARDINE', rarity: 'COMMON' },
+    { lootId: 7, itemKey: 'OARFISH', rarity: 'COMMON' },
+    { lootId: 7, itemKey: 'PYGMY_SEAHORSE', rarity: 'COMMON' },
+    { lootId: 15, itemKey: 'SKIN_INTERFACE', rarity: 'COMMON' },
+    { lootId: 15, itemKey: 'SMOOTH_STONE', rarity: 'COMMON' },
+    { lootId: 15, itemKey: 'BONE_DAGGER', rarity: 'COMMON' },
+    { lootId: 8, itemKey: 'MEXICAN_LOOKDOWN', rarity: 'COMMON' },
+    { lootId: 8, itemKey: 'GUINEAFOWL_PUFFER', rarity: 'COMMON' },
+    { lootId: 8, itemKey: 'BONITO', rarity: 'COMMON' },
+    { lootId: 16, itemKey: 'MEMORY_SHARD', rarity: 'COMMON' },
+    { lootId: 16, itemKey: 'INWARD_SPECTACLES', rarity: 'COMMON' },
 ];
 
 export const activities = [
