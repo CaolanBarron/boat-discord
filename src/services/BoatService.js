@@ -12,16 +12,15 @@ class BoatService {
 
             createStmt.run(guildID, condition, speed, x_coord, y_coord);
 
-            // TODO: Replace these with proper item keys before release
             const defaultItems = [
-                'GAS_FISH',
-                'GAS_FISH',
-                'GAS_FISH',
-                'COMPASS',
-                'LANTERN',
-                'WINCH',
-                'WINCH',
-                'WINCH',
+                'GAS_TROUT',
+                'GAS_TROUT',
+                'GAS_TROUT',
+                'SPYGLASS',
+                'BOTTLE_NOTE',
+                'WRENCH',
+                'WRENCH',
+                'WRENCH',
             ];
 
             const defaultItemStmt = db().prepare(

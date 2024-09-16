@@ -18,7 +18,6 @@ export const seedDB = async () => {
         const query = sql.raw(`DELETE FROM ${tableName}`);
         await db.run(query);
     }
-    await db.run(sql.raw('DELETE FROM boat_travel_history;'));
     await db.run(sql.raw('PRAGMA foreign_keys=ON;'));
 
     console.log('Database cleared.');
@@ -37,7 +36,7 @@ export const seedDB = async () => {
 
         const flavors = await tx
             .insert(schemas.flavor)
-            .values(gameMechanics.flavor)
+            .values(gameMechanics.flavor())
             .returning();
 
         const skills = await tx
@@ -50,9 +49,65 @@ export const seedDB = async () => {
             .values(gameMechanics.biome)
             .returning();
 
+        // const biomeCoordResults: {
+        //     biomeKey: string;
+        //     xCoord: number;
+        //     yCoord: number;
+        // }[] = gameMechanics.biomeCoords.reduce(
+        //     (
+        //         arr: { biomeKey: string; xCoord: number; yCoord: number }[],
+        //         curr,
+        //     ) => {
+        //         for (
+        //             let x = 0;
+        //             x < curr.bottomRight[0] - curr.topLeft[0];
+        //             x++
+        //         ) {
+        //             for (
+        //                 let y = 0;
+        //                 y < curr.bottomRight[1] - curr.topLeft[1];
+        //                 y++
+        //             ) {
+        //                 arr.push({
+        //                     biomeKey: curr.biomeKey,
+        //                     xCoord: x,
+        //                     yCoord: y,
+        //                 });
+        //             }
+        //         }
+        //         return arr;
+        //     },
+        //     [],
+        // );
+        const biomeCoordResults = gameMechanics.biomeCoords.reduce(
+            (
+                arr: { biomeKey: string; xCoord: number; yCoord: number }[],
+                curr: { topLeft: any[]; bottomRight: number[]; biomeKey: any },
+            ) => {
+                // Loop over x coordinates from topLeft[0] to bottomRight[0]
+                for (let x = curr.topLeft[0]; x <= curr.bottomRight[0]; x++) {
+                    // Loop over y coordinates from topLeft[1] to bottomRight[1]
+                    for (
+                        let y = curr.topLeft[1];
+                        y <= curr.bottomRight[1];
+                        y++
+                    ) {
+                        // Push each coordinate as an object into the array
+                        arr.push({
+                            biomeKey: curr.biomeKey,
+                            xCoord: x,
+                            yCoord: y,
+                        });
+                    }
+                }
+                return arr;
+            },
+            [], // Initialize the accumulator with the correct type
+        );
+
         const biomeCoords = await tx
             .insert(schemas.biomeCoords)
-            .values(gameMechanics.biomeCoords)
+            .values(biomeCoordResults)
             .returning();
 
         const items = await tx

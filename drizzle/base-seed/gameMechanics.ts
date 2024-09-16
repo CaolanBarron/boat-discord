@@ -13,94 +13,237 @@ export const tag = [
     { key: 'MIRROR' },
 ];
 
-export const flavor = [
-    {
-        content: '**"{0}"** {1} says while scrubbing the deck relentlessly.',
-        tag: null,
-    },
-    {
-        content: '**"{0}"** {1} mentions, as they stare into the horizon.',
-        tag: null,
-    },
-    {
-        content: '**"{0}"** {1} says as they almost slip on the deck.',
-        tag: null,
-    },
-    {
-        content:
-            '**"{0}"** {1} comments, whilst peeling a suspiciously fresh orange.',
-        tag: null,
-    },
-    {
-        content:
-            '**"{0}"** {1} emits, fumbling for their lucky coin as it rolls along the deck.',
-        tag: null,
-    },
-    {
-        content:
-            '**"{0}"** {1} calls out from atop the boat, where they were attempting to adjust the receiver.',
-        tag: null,
-    },
-    { content: '**"{0}"** {1} grunts.', tag: null },
-    { content: '**"{0}"** {1} states dismissively.', tag: null },
-    {
-        content: '**"{0}"** {1} slurs in between swigs of ale.',
-        tag: null,
-    },
-    { content: '**"{0}"** {1} says.', tag: null },
-    {
-        content: '**"{0}"** {1} shouts from somewhere deep in the boat.',
-        tag: null,
-    },
-    {
-        content: '**"{0}"** {1} whispers, afraid of whats listening.',
-        tag: null,
-    },
-    { content: '**"{0}"** {1} answers cryptically.', tag: null },
-    {
-        content: '**"{0}"** {1} exclaims, jumping to their feet!',
-        tag: null,
-    },
-    {
-        content: '**"{0}"** {1} comments, thinking about the land.',
-        tag: null,
-    },
-    {
-        content: '**"{0}"** {1} announces, to the surprise of no one.',
-        tag: null,
-    },
-    {
-        content: 'The wind blows in the wrong direction.',
-        tag: null,
-        subject: 'BOAT',
-    },
-    {
-        content: 'The Boat sways against the waves.',
-        tag: null,
-        subject: 'BOAT',
-    },
-    {
-        content: `Something surfaces nearby... And then it doesn't.`,
-        tag: null,
-        subject: 'BOAT',
-    },
-    { content: 'Wind howling...', tag: null, subject: 'BOAT' },
-    { content: 'The ocean looks darker today...', tag: null, subject: 'BOAT' },
-    { content: 'The Boat creaks in whispers.', tag: null, subject: 'BOAT' },
-    { content: 'Everyone on The Boat shudders.', tag: null, subject: 'BOAT' },
-    { content: 'God does not reply.', tag: null, subject: 'BOAT' },
-    {
-        content: 'Nobody feels correct all of a sudden.',
-        tag: null,
-        subject: 'BOAT',
-    },
-    { content: 'The brackish water bubbles', tag: 'SLUDGE', subject: 'BOAT' },
-    {
-        content: 'Something in the dark shifts...',
-        tag: 'VOID',
-        subject: 'BOAT',
-    },
-];
+export const flOpenPlayer = [
+    `**"{0}"** {1} mutters under their breath, lost in thought.`,
+    `**"{0}"** {1} exclaims excitedly, eyes wide with enthusiasm.`,
+    `**"{0}"** {1} whispers softly, barely audible.`,
+    `**"{0}"** {1} shouts angrily, fists clenched.`,
+    `**"{0}"** {1} murmurs sleepily, stifling a yawn.`,
+    `**"{0}"** {1} laughs heartily, a grin spreading across their face.`,
+    `**"{0}"** {1} says sternly, their gaze unwavering.`,
+    `**"{0}"** {1} sighs heavily, their shoulders slumping.`,
+    `**"{0}"** {1} ponders aloud, tapping their chin thoughtfully.`,
+    `**"{0}"** {1} groans in frustration, running a hand through their hair.`,
+    `**"{0}"** {1} teases playfully, a mischievous twinkle in their eye.`,
+    `**"{0}"** {1} utters coldly, a chill in their voice.`,
+    `**"{0}"** {1} remarks cheerfully, giving a thumbs-up.`,
+    `**"{0}"** {1} stammers nervously, their cheeks flushing.`,
+    `**"{0}"** {1} declares proudly, chin lifted high.`,
+    `**"{0}"** {1} mumbles distractedly, fiddling with a pen.`,
+    `**"{0}"** {1} shrieks in surprise, jumping back.`,
+    `**"{0}"** {1} chortles, their body shaking with laughter.`,
+    `**"{0}"** {1} quips sarcastically, rolling their eyes.`,
+    `**"{0}"** {1} responds calmly, their voice steady.`,
+    `**"{0}"** {1} mutters impatiently, tapping their foot.`,
+    `**"{0}"** {1} asserts confidently, hands on hips.`,
+    `**"{0}"** {1} hums to themselves, swaying slightly.`,
+    `**"{0}"** {1} confesses quietly, looking away.`,
+    `**"{0}"** {1} inquires curiously, tilting their head to the side.`,
+    `**"{0}"** {1} shivers, their voice quivering with fear.`,
+    `**"{0}"** {1} muses dreamily, staring off into the distance.`,
+    `**"{0}"** {1} bellows loudly, startling everyone around.`,
+    `**"{0}"** {1} snickers, covering their mouth with a hand.`,
+    `**"{0}"** {1} replies coolly, arching an eyebrow.`,
+].map((fl) => ({ content: fl }));
+export const flStormPlayer = [
+    `**"{0}"** {1} shouts over the roar of the storm, barely heard above the wind and rain.`,
+    `**"{0}"** {1} grimaces as a bolt of lightning strikes nearby, the thunder drowning out their words.`,
+    `**"{0}"** {1} clutches their coat tightly, their voice barely carrying over the howling gale.`,
+    `**"{0}"** {1} squints through the driving rain, their words snatched away by the storm.`,
+    `**"{0}"** {1} struggles to be heard over the crashing waves, their voice lost in the tumult.`,
+    `**"{0}"** {1} yells to be heard over the deafening thunder, their words whipped away by the wind.`,
+    `**"{0}"** {1} winces as the boat lurches, their voice rising above the creaking timbers.`,
+    `**"{0}"** {1} shivers as the cold rain lashes their face, their words barely audible.`,
+    `**"{0}"** {1} clings to the railing as the boat pitches, their voice rising and falling with the swell.`,
+    `**"{0}"** {1} struggles to keep their footing on the slick deck, their words snatched away by the storm.`,
+    `**"{0}"** {1} gasps as a wave crashes over the bow, their voice lost in the roar of the sea.`,
+    `**"{0}"** {1} braces against the railing as the boat rolls, their words drowned out by the storm.`,
+    `**"{0}"** {1} shouts to be heard over the crashing waves, their voice barely carrying above the din.`,
+    `**"{0}"** {1} huddles against the mast, their words muffled by the howling wind.`,
+    `**"{0}"** {1} strains to be heard over the deafening thunder, their voice barely audible.`,
+    `**"{0}"** {1} grimaces as the boat shudders, their words lost in the creaking of the timbers.`,
+    `**"{0}"** {1} clutches their hat as the wind snatches at it, their voice rising above the gale.`,
+    `**"{0}"** {1} winces as the rain lashes their face, their words barely carrying over the storm.`,
+].map((fl) => ({ content: fl, tag: 'STORM' }));
+export const flVoidPlayer = [
+    `**"{0}"** {1} whispers, their voice echoing into the endless abyss.`,
+    `**"{0}"** {1} murmurs cautiously, eyes scanning the empty expanse.`,
+    `**"{0}"** {1} shouts defiantly, their voice swallowed by the void's silence.`,
+    `**"{0}"** {1} chuckles nervously, the sound fading into the nothingness.`,
+    `**"{0}"** {1} states flatly, their words hanging in the air with no response.`,
+    `**"{0}"** {1} sighs, their breath forming a fleeting cloud before vanishing.`,
+    `**"{0}"** {1} exclaims eagerly, the vast emptiness offering no reply.`,
+    `**"{0}"** {1} utters softly, their voice barely making a ripple in the stillness.`,
+    `**"{0}"** {1} growls, frustration building in the endless dark.`,
+    `**"{0}"** {1} cackles madly, the sound reverberating through the void.`,
+    `**"{0}"** {1} stammers, overwhelmed by the oppressive emptiness.`,
+    `**"{0}"** {1} questions hesitantly, the silence stretching infinitely before them.`,
+    `**"{0}"** {1} scoffs, the void reflecting nothing of their disdain.`,
+    `**"{0}"** {1} gasps, the vast nothingness offering no comfort.`,
+    `**"{0}"** {1} hums idly, their tune disappearing into the black void.`,
+].map((fl) => ({ content: fl, tag: 'VOID' }));
+export const flSludgePlayer = [
+    `**"{0}"** {1} grimaces, the stench of decay thick in the air.`,
+    `**"{0}"** {1} coughs, the foul sludge clinging to their throat.`,
+    `**"{0}"** {1} shudders, the oily water lapping at the boat's hull.`,
+    `**"{0}"** {1} gags, the noxious fumes overwhelming their senses.`,
+    `**"{0}"** {1} winces, the sludge squelching beneath their boots.`,
+    `**"{0}"** {1} groans, the thick water dragging at the boat's keel.`,
+    `**"{0}"** {1} mutters, the sludge bubbling ominously around the boat.`,
+    `**"{0}"** {1} whispers, the oily film coating their skin.`,
+    `**"{0}"** {1} snarls, the sludge seeping into every crevice.`,
+    `**"{0}"** {1} chuckles darkly, the stench of rot heavy in the air.`,
+    `**"{0}"** {1} sighs, the oily water lapping at the boat's sides.`,
+    `**"{0}"** {1} grumbles, the sludge clinging to the boat's hull.`,
+    `**"{0}"** {1} hisses, the noxious fumes burning their eyes.`,
+    `**"{0}"** {1} growls, the thick water dragging at the boat's keel.`,
+    `**"{0}"** {1} murmurs, the sludge squelching beneath their boots.`,
+].map((fl) => ({ content: fl, tag: 'SLUDGE' }));
+export const flTropicalPlayer = [
+    `**"{0}"** {1} grins, the warm sun on their face.`,
+    `**"{0}"** {1} laughs, the scent of flowers on the breeze.`,
+    `**"{0}"** {1} hums, the crystal waters calming their soul.`,
+    `**"{0}"** {1} sighs contentedly, the gentle waves lulling them.`,
+    `**"{0}"** {1} chuckles, the vibrant coral beneath the surface.`,
+    `**"{0}"** {1} beams, the sun shining brightly overhead.`,
+    `**"{0}"** {1} whispers, the warm air wrapping around them.`,
+    `**"{0}"** {1} exclaims, the tropical birds calling in the distance.`,
+    `**"{0}"** {1} muses, the palm trees swaying gently.`,
+    `**"{0}"** {1} murmurs, the scent of salt and flowers mingling.`,
+    `**"{0}"** {1} grumbles, the heat of the sun beating down.`,
+    `**"{0}"** {1} chuckles, the fish darting playfully below.`,
+    `**"{0}"** {1} sighs, the warm breeze ruffling their hair.`,
+    `**"{0}"** {1} laughs, the sun casting a golden glow.`,
+    `**"{0}"** {1} hums, the crystal waters calming their soul.`,
+].map((fl) => ({
+    content: fl,
+    tag: 'TROPICAL',
+}));
+export const flElectronicPlayer = [].map((fl) => ({
+    content: fl,
+    tag: 'ELECTRONIC',
+}));
+export const flFleshPlayer = [].map((fl) => ({ content: fl, tag: 'FLESH' }));
+export const flMirrorPlayer = [].map((fl) => ({ content: fl, tag: 'MIRROR' }));
+export const flOpenBoat = [
+    'The boat creaks as it drifts, its old wood groaning with every subtle shift of the waves.',
+    'A thick fog rolls in, swallowing the bow of the boat and hiding the water ahead.',
+    "A splash is heard of something heavy hitting the water, but when you look, there's nothing there",
+    'The smell of salt and seaweed hangs in the air, mingling with the scent of damp wood.',
+    'A distant, haunting melody floats over the water, growing louder for a moment before fading away',
+    'Small fish leap out of the water, their silver scales flashing in the dim light before they disappear back into the depths.',
+    'The boat sways gently, lulled by a soft breeze that seems to whisper just out of reach',
+    'A shadow moves beneath the surface, circling the boat once before vanishing into the deep',
+    'The lantern on deck swings with the motion of the boat, casting flickering shadows that dance across the water.',
+    'The sound of a bell rings out from somewhere, though the source is hidden in the fog.',
+    'The water around the boat becomes eerily still, as if holding its breath, waiting for something',
+    'The sun tries to break through the clouds, casting brief rays of light before being swallowed again by the gray.',
+    'A sudden splash sends ripples across the water, but whatever caused it remains unseen.',
+].map((fl) => ({ content: fl, subject: 'BOAT' }));
+export const flStormBoat = [
+    'Thunder rumbles in the distance, a deep, resonant growl that vibrates through the air and the bones of the boat.',
+    'The sky above churns with angry clouds, flashes of lightning illuminating the dark waters in brief, blinding bursts.',
+    'Waves crash against the sides of the boat, sending sprays of cold saltwater into the air, drenching everything it touches.',
+    'The wind howls through the rigging, pulling at the sails like a wild beast determined to tear them free.',
+    'Rain falls in sheets, slapping against the deck and mixing with the churning sea in a never-ending torrent.',
+    'The boat pitches violently with every swell, groaning under the strain as the sea threatens to swallow it whole.',
+    'The sky is a swirl of black and gray, broken only by the occasional bolt of lightning that splits the heavens with a deafening crack.',
+    'The air feels thick and oppressive, charged with the electric energy of the storm, as if the very sky is waiting to strike.',
+    'A monstrous wave rises ahead, towering over the boat before crashing down with a roar, its force shaking the vessel to its core.',
+    'The lantern swings wildly, its light barely cutting through the deluge, casting frantic shadows that flicker and disappear in the rain.',
+    'The once distant rumble of thunder is now a constant, echoing boom, like the drums of some ancient, vengeful god.',
+    'The boat fights against the relentless wind, its sails flapping desperately, as the storm pushes it further off course.',
+    'A jagged streak of lightning illuminates the sea for a moment, revealing the crest of a wave as it curls toward the boat, hungry and unrelenting.',
+    'The air tastes of salt and ozone, a bitter tang that clings to your lips as you struggle to breathe against the wind.',
+    'The water roils beneath the boat, rising and falling in chaotic waves, as if the sea itself is alive and angry.',
+].map((fl) => ({
+    content: fl,
+    subject: 'BOAT',
+    tag: 'STORM',
+}));
+export const flVoidBoat = [
+    'The boat drifts through a sea of darkness, the water black and still as far as the eye can see.',
+    'The sky above is a void, empty of stars or moon, leaving the boat adrift in an endless night.',
+    'The air is cold and heavy, thick with the weight of the void that surrounds the boat on all sides.',
+    'The boat seems to suddenly be pulled sideways, but only for a moment',
+    'A shadow moves beneath the surface, circling the boat once before vanishing into the deep',
+].map((fl) => ({
+    content: fl,
+    subject: 'BOAT',
+    tag: 'VOID',
+}));
+export const flSludgeBoat = [
+    'The water around the boat is thick and oily, clinging to the hull like a noxious film.',
+    'The smell of decay hangs heavy in the air, mingling with the stench of rotting fish and stagnant water.',
+    'A strange sludge clings to the sides of the boat, oozing and bubbling as if alive.',
+    'There are fears that the boat will be stuck in the thickness of the water, but it continues to move',
+    'The water seems to be pulling the boat down, but the boat continues to float',
+].map((fl) => ({
+    content: fl,
+    subject: 'BOAT',
+    tag: 'SLUDGE',
+}));
+export const flTropicalBoat = [
+    'The sun beats down from a brilliant blue sky, casting the water in a dazzling array of colors.',
+    'The air is warm and heavy with humidity, the scent of salt and flowers mingling on the breeze.',
+    'The water is crystal clear, revealing a world of vibrant coral and darting fish beneath the surface.',
+    'The boat glides smoothly through the calm waters, the gentle lapping of the waves a soothing rhythm.',
+    'The sun is so bright it is difficult to see',
+].map((fl) => ({
+    content: fl,
+    subject: 'BOAT',
+    tag: 'TROPICAL',
+}));
+export const flElectronicBoat = [
+    'The water around the boat is littered with strange devices, their lights blinking and screens flickering.',
+    'The air is filled with the hum of electricity, a constant buzz that seems to vibrate through the boat.',
+    'The boat seems to be pulled in a certain direction by the devices, but the crew is able to resist',
+    'The devices in the water seem to be communicating with each other, but the language is unknown',
+].map((fl) => ({
+    content: fl,
+    subject: 'BOAT',
+    tag: 'ELECTRONIC',
+}));
+export const flFleshBoat = [
+    'The water around the boat is tinged with red, the smell of iron and decay heavy in the air.',
+    'The fish that swim beneath the surface are not fish at all, but writhing masses of flesh and muscle.',
+    'The boat seems to be moving through the flesh of the water, but the crew is able to continue',
+    'The flesh in the water seems to be reaching out for the boat, but the boat continues to move',
+].map((fl) => ({
+    content: fl,
+    subject: 'BOAT',
+    tag: 'FLESH',
+}));
+export const flMirrorBoat = [
+    'The water around the boat is perfectly still, reflecting the sky above like a mirror.',
+    'The crew can see their own reflections in the water, but they seem to be moving independently',
+    'The boat seems to be moving in a different direction in the reflection, but the crew is able to continue',
+    'The reflection of the boat seems to be getting closer, but the boat continues to move',
+].map((fl) => ({
+    content: fl,
+    subject: 'BOAT',
+    tag: 'MIRROR',
+}));
+
+export const flavor = () => {
+    return flOpenPlayer.concat(
+        flStormPlayer,
+        flVoidPlayer,
+        flSludgePlayer,
+        flTropicalPlayer,
+        flElectronicPlayer,
+        flFleshPlayer,
+        flMirrorPlayer,
+        flOpenBoat,
+        flStormBoat,
+        flVoidBoat,
+        flSludgeBoat,
+        flTropicalBoat,
+        flElectronicBoat,
+        flFleshBoat,
+        flMirrorBoat,
+    );
+};
 
 export const skill = [
     { key: 'FISH', name: 'Fish' },
@@ -153,7 +296,15 @@ export const biome = [
     },
 ];
 
-export const biomeCoords = [{ biomeKey: 'VOID', xCoord: 0, yCoord: 0 }];
+export const biomeCoords = [
+    { biomeKey: 'TROPICAL', topLeft: [-8, -7], bottomRight: [-3, -2] },
+    { biomeKey: 'VOID', topLeft: [-1, -2], bottomRight: [2, 1] },
+    { biomeKey: 'STORM', topLeft: [1, -9], bottomRight: [4, -6] },
+    { biomeKey: 'SLUDGE', topLeft: [4, -5], bottomRight: [9, -1] },
+    { biomeKey: 'FLESH', topLeft: [-8, 3], bottomRight: [-5, 6] },
+    { biomeKey: 'MIRROR', topLeft: [-1, 4], bottomRight: [3, 8] },
+    { biomeKey: 'ELECTRONIC', topLeft: [6, 1], bottomRight: [8, 5] },
+];
 
 export const item = [
     {
