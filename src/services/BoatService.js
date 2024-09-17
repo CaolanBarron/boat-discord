@@ -53,7 +53,12 @@ class BoatService {
 
     introductionNarrativeMessage() {
         return stripIndent`
-    PENDING
+        The world as you once knew it is gone, all that is left now is the open and endless ocean. 
+        How did this happen? Unclear. 
+        How did you end up on this boat? Nothing in your recollection.
+        Who are these people around you? You get the picture.
+        Physics don't work as good here and some nights when you are quiet you can hear whispers on the waves.
+        Stay the course and keep sailing, keep surviving, maybe theres a way back to the world you left. 
     `;
     }
 
